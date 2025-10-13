@@ -9,7 +9,12 @@ import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
+import { createSIMMERClient } from './services/data/client.ts'
 
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+const supabase = createSIMMERClient(supabaseUrl, supabaseAnonKey)
 // Create a new router instance
 
 const TanStackQueryProviderContext = TanStackQueryProvider.getContext()
@@ -17,6 +22,7 @@ const router = createRouter({
   routeTree,
   context: {
     ...TanStackQueryProviderContext,
+    supabase,
   },
   defaultPreload: 'intent',
   scrollRestoration: true,
