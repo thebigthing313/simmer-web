@@ -36,7 +36,9 @@ function RouteComponent() {
   }
 
   const form = useForm({
-    validators: { onSubmitAsync: selectProfilesSchema },
+    validators: {
+      onSubmit: selectProfilesSchema,
+    },
     defaultValues: defaultValues,
     onSubmit: async ({ value }) => {
       profiles.update(profile_id, (profile) => {
