@@ -9,113 +9,1349 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
-import { Route as DemoFormSimpleRouteImport } from './routes/demo/form.simple'
-import { Route as DemoFormAddressRouteImport } from './routes/demo/form.address'
+import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as NoAccessRouteImport } from './routes/no-access'
+import { Route as userRouteRouteImport } from './routes/(user)/route'
+import { Route as authRouteRouteImport } from './routes/(auth)/route'
+import { Route as GroupSlugRouteRouteImport } from './routes/$groupSlug/route'
+import { Route as userIndexRouteImport } from './routes/(user)/index'
+import { Route as userSettingsRouteImport } from './routes/(user)/settings'
+import { Route as userProfileRouteImport } from './routes/(user)/profile'
+import { Route as userCreateGroupRouteImport } from './routes/(user)/create-group'
+import { Route as authVerifyEmailRouteImport } from './routes/(auth)/verify-email'
+import { Route as authResetPasswordRouteImport } from './routes/(auth)/reset-password'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
+import { Route as authCreateAccountRouteImport } from './routes/(auth)/create-account'
+import { Route as GroupSlugappRouteRouteImport } from './routes/$groupSlug/(app)/route'
+import { Route as GroupSlugappIndexRouteImport } from './routes/$groupSlug/(app)/index'
+import { Route as GroupSlugappSupportRouteImport } from './routes/$groupSlug/(app)/support'
+import { Route as GroupSlugappSettingsRouteImport } from './routes/$groupSlug/(app)/settings'
+import { Route as GroupSlugappNotificationsRouteImport } from './routes/$groupSlug/(app)/notifications'
+import { Route as GroupSlugappChangelogRouteImport } from './routes/$groupSlug/(app)/changelog'
+import { Route as GroupSlugappTrapsIndexRouteImport } from './routes/$groupSlug/(app)/traps/index'
+import { Route as GroupSlugappReportsIndexRouteImport } from './routes/$groupSlug/(app)/reports/index'
+import { Route as GroupSlugappRegionsIndexRouteImport } from './routes/$groupSlug/(app)/regions/index'
+import { Route as GroupSlugappProfilesIndexRouteImport } from './routes/$groupSlug/(app)/profiles/index'
+import { Route as GroupSlugappLocationsIndexRouteImport } from './routes/$groupSlug/(app)/locations/index'
+import { Route as GroupSlugappLarvalHabitatsIndexRouteImport } from './routes/$groupSlug/(app)/larval-habitats/index'
+import { Route as GroupSlugappLandingRatesIndexRouteImport } from './routes/$groupSlug/(app)/landing-rates/index'
+import { Route as GroupSlugappInspectionsIndexRouteImport } from './routes/$groupSlug/(app)/inspections/index'
+import { Route as GroupSlugappImportDataIndexRouteImport } from './routes/$groupSlug/(app)/import-data/index'
+import { Route as GroupSlugappExportDataIndexRouteImport } from './routes/$groupSlug/(app)/export-data/index'
+import { Route as GroupSlugappCollectionsIndexRouteImport } from './routes/$groupSlug/(app)/collections/index'
+import { Route as GroupSlugappTrapsCreateRouteImport } from './routes/$groupSlug/(app)/traps/create'
+import { Route as GroupSlugappTrapsTrapIdRouteImport } from './routes/$groupSlug/(app)/traps/$trapId'
+import { Route as GroupSlugappRegionsViewRouteImport } from './routes/$groupSlug/(app)/regions/view'
+import { Route as GroupSlugappRegionsEditRouteImport } from './routes/$groupSlug/(app)/regions/edit'
+import { Route as GroupSlugappRegionsCreateRouteImport } from './routes/$groupSlug/(app)/regions/create'
+import { Route as GroupSlugappLocationsViewRouteImport } from './routes/$groupSlug/(app)/locations/view'
+import { Route as GroupSlugappLocationsEditRouteImport } from './routes/$groupSlug/(app)/locations/edit'
+import { Route as GroupSlugappLocationsCreateRouteImport } from './routes/$groupSlug/(app)/locations/create'
+import { Route as GroupSlugappLarvalHabitatsViewRouteImport } from './routes/$groupSlug/(app)/larval-habitats/view'
+import { Route as GroupSlugappLarvalHabitatsEditRouteImport } from './routes/$groupSlug/(app)/larval-habitats/edit'
+import { Route as GroupSlugappLarvalHabitatsCreateRouteImport } from './routes/$groupSlug/(app)/larval-habitats/create'
+import { Route as GroupSlugappLandingRatesCreateRouteImport } from './routes/$groupSlug/(app)/landing-rates/create'
+import { Route as GroupSlugappInspectionsEditRouteImport } from './routes/$groupSlug/(app)/inspections/edit'
+import { Route as GroupSlugappInspectionsCreateRouteImport } from './routes/$groupSlug/(app)/inspections/create'
+import { Route as GroupSlugappInspectionsInspectionIdRouteImport } from './routes/$groupSlug/(app)/inspections/$inspectionId'
+import { Route as GroupSlugappCollectionsCollectionIdRouteImport } from './routes/$groupSlug/(app)/collections/$collectionId'
+import { Route as GroupSlugappProfilesProfileIdRouteRouteImport } from './routes/$groupSlug/(app)/profiles/$profileId/route'
+import { Route as GroupSlugappLocationsLocationIdRouteRouteImport } from './routes/$groupSlug/(app)/locations/$locationId/route'
+import { Route as GroupSlugappProfilesProfileIdIndexRouteImport } from './routes/$groupSlug/(app)/profiles/$profileId/index'
+import { Route as GroupSlugappLocationsLocationIdIndexRouteImport } from './routes/$groupSlug/(app)/locations/$locationId/index'
+import { Route as GroupSlugappTrapsTrapIdEditRouteImport } from './routes/$groupSlug/(app)/traps/$trapId.edit'
+import { Route as GroupSlugappProfilesProfileIdStatisticsRouteImport } from './routes/$groupSlug/(app)/profiles/$profileId/statistics'
+import { Route as GroupSlugappProfilesProfileIdEditRouteImport } from './routes/$groupSlug/(app)/profiles/$profileId/edit'
+import { Route as GroupSlugappLocationsLocationIdServiceRequestsRouteImport } from './routes/$groupSlug/(app)/locations/$locationId/service-requests'
+import { Route as GroupSlugappLocationsLocationIdLarvalSurveillanceRouteImport } from './routes/$groupSlug/(app)/locations/$locationId/larval-surveillance'
+import { Route as GroupSlugappLocationsLocationIdAdultSurveillanceRouteImport } from './routes/$groupSlug/(app)/locations/$locationId/adult-surveillance'
 
-const IndexRoute = IndexRouteImport.update({
+const TermsOfServiceRoute = TermsOfServiceRouteImport.update({
+  id: '/terms-of-service',
+  path: '/terms-of-service',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoAccessRoute = NoAccessRouteImport.update({
+  id: '/no-access',
+  path: '/no-access',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const userRouteRoute = userRouteRouteImport.update({
+  id: '/(user)',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authRouteRoute = authRouteRouteImport.update({
+  id: '/(auth)',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GroupSlugRouteRoute = GroupSlugRouteRouteImport.update({
+  id: '/$groupSlug',
+  path: '/$groupSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const userIndexRoute = userIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => userRouteRoute,
 } as any)
-const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
-  id: '/demo/tanstack-query',
-  path: '/demo/tanstack-query',
-  getParentRoute: () => rootRouteImport,
+const userSettingsRoute = userSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => userRouteRoute,
 } as any)
-const DemoFormSimpleRoute = DemoFormSimpleRouteImport.update({
-  id: '/demo/form/simple',
-  path: '/demo/form/simple',
-  getParentRoute: () => rootRouteImport,
+const userProfileRoute = userProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => userRouteRoute,
 } as any)
-const DemoFormAddressRoute = DemoFormAddressRouteImport.update({
-  id: '/demo/form/address',
-  path: '/demo/form/address',
-  getParentRoute: () => rootRouteImport,
+const userCreateGroupRoute = userCreateGroupRouteImport.update({
+  id: '/create-group',
+  path: '/create-group',
+  getParentRoute: () => userRouteRoute,
 } as any)
+const authVerifyEmailRoute = authVerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => authRouteRoute,
+} as any)
+const authResetPasswordRoute = authResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => authRouteRoute,
+} as any)
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => authRouteRoute,
+} as any)
+const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => authRouteRoute,
+} as any)
+const authCreateAccountRoute = authCreateAccountRouteImport.update({
+  id: '/create-account',
+  path: '/create-account',
+  getParentRoute: () => authRouteRoute,
+} as any)
+const GroupSlugappRouteRoute = GroupSlugappRouteRouteImport.update({
+  id: '/(app)',
+  getParentRoute: () => GroupSlugRouteRoute,
+} as any)
+const GroupSlugappIndexRoute = GroupSlugappIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => GroupSlugappRouteRoute,
+} as any)
+const GroupSlugappSupportRoute = GroupSlugappSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => GroupSlugappRouteRoute,
+} as any)
+const GroupSlugappSettingsRoute = GroupSlugappSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => GroupSlugappRouteRoute,
+} as any)
+const GroupSlugappNotificationsRoute =
+  GroupSlugappNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappChangelogRoute = GroupSlugappChangelogRouteImport.update({
+  id: '/changelog',
+  path: '/changelog',
+  getParentRoute: () => GroupSlugappRouteRoute,
+} as any)
+const GroupSlugappTrapsIndexRoute = GroupSlugappTrapsIndexRouteImport.update({
+  id: '/traps/',
+  path: '/traps/',
+  getParentRoute: () => GroupSlugappRouteRoute,
+} as any)
+const GroupSlugappReportsIndexRoute =
+  GroupSlugappReportsIndexRouteImport.update({
+    id: '/reports/',
+    path: '/reports/',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappRegionsIndexRoute =
+  GroupSlugappRegionsIndexRouteImport.update({
+    id: '/regions/',
+    path: '/regions/',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappProfilesIndexRoute =
+  GroupSlugappProfilesIndexRouteImport.update({
+    id: '/profiles/',
+    path: '/profiles/',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappLocationsIndexRoute =
+  GroupSlugappLocationsIndexRouteImport.update({
+    id: '/locations/',
+    path: '/locations/',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappLarvalHabitatsIndexRoute =
+  GroupSlugappLarvalHabitatsIndexRouteImport.update({
+    id: '/larval-habitats/',
+    path: '/larval-habitats/',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappLandingRatesIndexRoute =
+  GroupSlugappLandingRatesIndexRouteImport.update({
+    id: '/landing-rates/',
+    path: '/landing-rates/',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappInspectionsIndexRoute =
+  GroupSlugappInspectionsIndexRouteImport.update({
+    id: '/inspections/',
+    path: '/inspections/',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappImportDataIndexRoute =
+  GroupSlugappImportDataIndexRouteImport.update({
+    id: '/import-data/',
+    path: '/import-data/',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappExportDataIndexRoute =
+  GroupSlugappExportDataIndexRouteImport.update({
+    id: '/export-data/',
+    path: '/export-data/',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappCollectionsIndexRoute =
+  GroupSlugappCollectionsIndexRouteImport.update({
+    id: '/collections/',
+    path: '/collections/',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappTrapsCreateRoute = GroupSlugappTrapsCreateRouteImport.update({
+  id: '/traps/create',
+  path: '/traps/create',
+  getParentRoute: () => GroupSlugappRouteRoute,
+} as any)
+const GroupSlugappTrapsTrapIdRoute = GroupSlugappTrapsTrapIdRouteImport.update({
+  id: '/traps/$trapId',
+  path: '/traps/$trapId',
+  getParentRoute: () => GroupSlugappRouteRoute,
+} as any)
+const GroupSlugappRegionsViewRoute = GroupSlugappRegionsViewRouteImport.update({
+  id: '/regions/view',
+  path: '/regions/view',
+  getParentRoute: () => GroupSlugappRouteRoute,
+} as any)
+const GroupSlugappRegionsEditRoute = GroupSlugappRegionsEditRouteImport.update({
+  id: '/regions/edit',
+  path: '/regions/edit',
+  getParentRoute: () => GroupSlugappRouteRoute,
+} as any)
+const GroupSlugappRegionsCreateRoute =
+  GroupSlugappRegionsCreateRouteImport.update({
+    id: '/regions/create',
+    path: '/regions/create',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappLocationsViewRoute =
+  GroupSlugappLocationsViewRouteImport.update({
+    id: '/locations/view',
+    path: '/locations/view',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappLocationsEditRoute =
+  GroupSlugappLocationsEditRouteImport.update({
+    id: '/locations/edit',
+    path: '/locations/edit',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappLocationsCreateRoute =
+  GroupSlugappLocationsCreateRouteImport.update({
+    id: '/locations/create',
+    path: '/locations/create',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappLarvalHabitatsViewRoute =
+  GroupSlugappLarvalHabitatsViewRouteImport.update({
+    id: '/larval-habitats/view',
+    path: '/larval-habitats/view',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappLarvalHabitatsEditRoute =
+  GroupSlugappLarvalHabitatsEditRouteImport.update({
+    id: '/larval-habitats/edit',
+    path: '/larval-habitats/edit',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappLarvalHabitatsCreateRoute =
+  GroupSlugappLarvalHabitatsCreateRouteImport.update({
+    id: '/larval-habitats/create',
+    path: '/larval-habitats/create',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappLandingRatesCreateRoute =
+  GroupSlugappLandingRatesCreateRouteImport.update({
+    id: '/landing-rates/create',
+    path: '/landing-rates/create',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappInspectionsEditRoute =
+  GroupSlugappInspectionsEditRouteImport.update({
+    id: '/inspections/edit',
+    path: '/inspections/edit',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappInspectionsCreateRoute =
+  GroupSlugappInspectionsCreateRouteImport.update({
+    id: '/inspections/create',
+    path: '/inspections/create',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappInspectionsInspectionIdRoute =
+  GroupSlugappInspectionsInspectionIdRouteImport.update({
+    id: '/inspections/$inspectionId',
+    path: '/inspections/$inspectionId',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappCollectionsCollectionIdRoute =
+  GroupSlugappCollectionsCollectionIdRouteImport.update({
+    id: '/collections/$collectionId',
+    path: '/collections/$collectionId',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappProfilesProfileIdRouteRoute =
+  GroupSlugappProfilesProfileIdRouteRouteImport.update({
+    id: '/profiles/$profileId',
+    path: '/profiles/$profileId',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappLocationsLocationIdRouteRoute =
+  GroupSlugappLocationsLocationIdRouteRouteImport.update({
+    id: '/locations/$locationId',
+    path: '/locations/$locationId',
+    getParentRoute: () => GroupSlugappRouteRoute,
+  } as any)
+const GroupSlugappProfilesProfileIdIndexRoute =
+  GroupSlugappProfilesProfileIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => GroupSlugappProfilesProfileIdRouteRoute,
+  } as any)
+const GroupSlugappLocationsLocationIdIndexRoute =
+  GroupSlugappLocationsLocationIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => GroupSlugappLocationsLocationIdRouteRoute,
+  } as any)
+const GroupSlugappTrapsTrapIdEditRoute =
+  GroupSlugappTrapsTrapIdEditRouteImport.update({
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => GroupSlugappTrapsTrapIdRoute,
+  } as any)
+const GroupSlugappProfilesProfileIdStatisticsRoute =
+  GroupSlugappProfilesProfileIdStatisticsRouteImport.update({
+    id: '/statistics',
+    path: '/statistics',
+    getParentRoute: () => GroupSlugappProfilesProfileIdRouteRoute,
+  } as any)
+const GroupSlugappProfilesProfileIdEditRoute =
+  GroupSlugappProfilesProfileIdEditRouteImport.update({
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => GroupSlugappProfilesProfileIdRouteRoute,
+  } as any)
+const GroupSlugappLocationsLocationIdServiceRequestsRoute =
+  GroupSlugappLocationsLocationIdServiceRequestsRouteImport.update({
+    id: '/service-requests',
+    path: '/service-requests',
+    getParentRoute: () => GroupSlugappLocationsLocationIdRouteRoute,
+  } as any)
+const GroupSlugappLocationsLocationIdLarvalSurveillanceRoute =
+  GroupSlugappLocationsLocationIdLarvalSurveillanceRouteImport.update({
+    id: '/larval-surveillance',
+    path: '/larval-surveillance',
+    getParentRoute: () => GroupSlugappLocationsLocationIdRouteRoute,
+  } as any)
+const GroupSlugappLocationsLocationIdAdultSurveillanceRoute =
+  GroupSlugappLocationsLocationIdAdultSurveillanceRouteImport.update({
+    id: '/adult-surveillance',
+    path: '/adult-surveillance',
+    getParentRoute: () => GroupSlugappLocationsLocationIdRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/demo/form/address': typeof DemoFormAddressRoute
-  '/demo/form/simple': typeof DemoFormSimpleRoute
+  '/$groupSlug': typeof GroupSlugRouteRouteWithChildren
+  '/': typeof userIndexRoute
+  '/no-access': typeof NoAccessRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
+  '/$groupSlug/': typeof GroupSlugappIndexRoute
+  '/create-account': typeof authCreateAccountRoute
+  '/forgot-password': typeof authForgotPasswordRoute
+  '/login': typeof authLoginRoute
+  '/reset-password': typeof authResetPasswordRoute
+  '/verify-email': typeof authVerifyEmailRoute
+  '/create-group': typeof userCreateGroupRoute
+  '/profile': typeof userProfileRoute
+  '/settings': typeof userSettingsRoute
+  '/$groupSlug/changelog': typeof GroupSlugappChangelogRoute
+  '/$groupSlug/notifications': typeof GroupSlugappNotificationsRoute
+  '/$groupSlug/settings': typeof GroupSlugappSettingsRoute
+  '/$groupSlug/support': typeof GroupSlugappSupportRoute
+  '/$groupSlug/locations/$locationId': typeof GroupSlugappLocationsLocationIdRouteRouteWithChildren
+  '/$groupSlug/profiles/$profileId': typeof GroupSlugappProfilesProfileIdRouteRouteWithChildren
+  '/$groupSlug/collections/$collectionId': typeof GroupSlugappCollectionsCollectionIdRoute
+  '/$groupSlug/inspections/$inspectionId': typeof GroupSlugappInspectionsInspectionIdRoute
+  '/$groupSlug/inspections/create': typeof GroupSlugappInspectionsCreateRoute
+  '/$groupSlug/inspections/edit': typeof GroupSlugappInspectionsEditRoute
+  '/$groupSlug/landing-rates/create': typeof GroupSlugappLandingRatesCreateRoute
+  '/$groupSlug/larval-habitats/create': typeof GroupSlugappLarvalHabitatsCreateRoute
+  '/$groupSlug/larval-habitats/edit': typeof GroupSlugappLarvalHabitatsEditRoute
+  '/$groupSlug/larval-habitats/view': typeof GroupSlugappLarvalHabitatsViewRoute
+  '/$groupSlug/locations/create': typeof GroupSlugappLocationsCreateRoute
+  '/$groupSlug/locations/edit': typeof GroupSlugappLocationsEditRoute
+  '/$groupSlug/locations/view': typeof GroupSlugappLocationsViewRoute
+  '/$groupSlug/regions/create': typeof GroupSlugappRegionsCreateRoute
+  '/$groupSlug/regions/edit': typeof GroupSlugappRegionsEditRoute
+  '/$groupSlug/regions/view': typeof GroupSlugappRegionsViewRoute
+  '/$groupSlug/traps/$trapId': typeof GroupSlugappTrapsTrapIdRouteWithChildren
+  '/$groupSlug/traps/create': typeof GroupSlugappTrapsCreateRoute
+  '/$groupSlug/collections': typeof GroupSlugappCollectionsIndexRoute
+  '/$groupSlug/export-data': typeof GroupSlugappExportDataIndexRoute
+  '/$groupSlug/import-data': typeof GroupSlugappImportDataIndexRoute
+  '/$groupSlug/inspections': typeof GroupSlugappInspectionsIndexRoute
+  '/$groupSlug/landing-rates': typeof GroupSlugappLandingRatesIndexRoute
+  '/$groupSlug/larval-habitats': typeof GroupSlugappLarvalHabitatsIndexRoute
+  '/$groupSlug/locations': typeof GroupSlugappLocationsIndexRoute
+  '/$groupSlug/profiles': typeof GroupSlugappProfilesIndexRoute
+  '/$groupSlug/regions': typeof GroupSlugappRegionsIndexRoute
+  '/$groupSlug/reports': typeof GroupSlugappReportsIndexRoute
+  '/$groupSlug/traps': typeof GroupSlugappTrapsIndexRoute
+  '/$groupSlug/locations/$locationId/adult-surveillance': typeof GroupSlugappLocationsLocationIdAdultSurveillanceRoute
+  '/$groupSlug/locations/$locationId/larval-surveillance': typeof GroupSlugappLocationsLocationIdLarvalSurveillanceRoute
+  '/$groupSlug/locations/$locationId/service-requests': typeof GroupSlugappLocationsLocationIdServiceRequestsRoute
+  '/$groupSlug/profiles/$profileId/edit': typeof GroupSlugappProfilesProfileIdEditRoute
+  '/$groupSlug/profiles/$profileId/statistics': typeof GroupSlugappProfilesProfileIdStatisticsRoute
+  '/$groupSlug/traps/$trapId/edit': typeof GroupSlugappTrapsTrapIdEditRoute
+  '/$groupSlug/locations/$locationId/': typeof GroupSlugappLocationsLocationIdIndexRoute
+  '/$groupSlug/profiles/$profileId/': typeof GroupSlugappProfilesProfileIdIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/demo/form/address': typeof DemoFormAddressRoute
-  '/demo/form/simple': typeof DemoFormSimpleRoute
+  '/': typeof userIndexRoute
+  '/no-access': typeof NoAccessRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
+  '/create-account': typeof authCreateAccountRoute
+  '/forgot-password': typeof authForgotPasswordRoute
+  '/login': typeof authLoginRoute
+  '/reset-password': typeof authResetPasswordRoute
+  '/verify-email': typeof authVerifyEmailRoute
+  '/create-group': typeof userCreateGroupRoute
+  '/profile': typeof userProfileRoute
+  '/settings': typeof userSettingsRoute
+  '/$groupSlug/changelog': typeof GroupSlugappChangelogRoute
+  '/$groupSlug/notifications': typeof GroupSlugappNotificationsRoute
+  '/$groupSlug/settings': typeof GroupSlugappSettingsRoute
+  '/$groupSlug/support': typeof GroupSlugappSupportRoute
+  '/$groupSlug': typeof GroupSlugappIndexRoute
+  '/$groupSlug/collections/$collectionId': typeof GroupSlugappCollectionsCollectionIdRoute
+  '/$groupSlug/inspections/$inspectionId': typeof GroupSlugappInspectionsInspectionIdRoute
+  '/$groupSlug/inspections/create': typeof GroupSlugappInspectionsCreateRoute
+  '/$groupSlug/inspections/edit': typeof GroupSlugappInspectionsEditRoute
+  '/$groupSlug/landing-rates/create': typeof GroupSlugappLandingRatesCreateRoute
+  '/$groupSlug/larval-habitats/create': typeof GroupSlugappLarvalHabitatsCreateRoute
+  '/$groupSlug/larval-habitats/edit': typeof GroupSlugappLarvalHabitatsEditRoute
+  '/$groupSlug/larval-habitats/view': typeof GroupSlugappLarvalHabitatsViewRoute
+  '/$groupSlug/locations/create': typeof GroupSlugappLocationsCreateRoute
+  '/$groupSlug/locations/edit': typeof GroupSlugappLocationsEditRoute
+  '/$groupSlug/locations/view': typeof GroupSlugappLocationsViewRoute
+  '/$groupSlug/regions/create': typeof GroupSlugappRegionsCreateRoute
+  '/$groupSlug/regions/edit': typeof GroupSlugappRegionsEditRoute
+  '/$groupSlug/regions/view': typeof GroupSlugappRegionsViewRoute
+  '/$groupSlug/traps/$trapId': typeof GroupSlugappTrapsTrapIdRouteWithChildren
+  '/$groupSlug/traps/create': typeof GroupSlugappTrapsCreateRoute
+  '/$groupSlug/collections': typeof GroupSlugappCollectionsIndexRoute
+  '/$groupSlug/export-data': typeof GroupSlugappExportDataIndexRoute
+  '/$groupSlug/import-data': typeof GroupSlugappImportDataIndexRoute
+  '/$groupSlug/inspections': typeof GroupSlugappInspectionsIndexRoute
+  '/$groupSlug/landing-rates': typeof GroupSlugappLandingRatesIndexRoute
+  '/$groupSlug/larval-habitats': typeof GroupSlugappLarvalHabitatsIndexRoute
+  '/$groupSlug/locations': typeof GroupSlugappLocationsIndexRoute
+  '/$groupSlug/profiles': typeof GroupSlugappProfilesIndexRoute
+  '/$groupSlug/regions': typeof GroupSlugappRegionsIndexRoute
+  '/$groupSlug/reports': typeof GroupSlugappReportsIndexRoute
+  '/$groupSlug/traps': typeof GroupSlugappTrapsIndexRoute
+  '/$groupSlug/locations/$locationId/adult-surveillance': typeof GroupSlugappLocationsLocationIdAdultSurveillanceRoute
+  '/$groupSlug/locations/$locationId/larval-surveillance': typeof GroupSlugappLocationsLocationIdLarvalSurveillanceRoute
+  '/$groupSlug/locations/$locationId/service-requests': typeof GroupSlugappLocationsLocationIdServiceRequestsRoute
+  '/$groupSlug/profiles/$profileId/edit': typeof GroupSlugappProfilesProfileIdEditRoute
+  '/$groupSlug/profiles/$profileId/statistics': typeof GroupSlugappProfilesProfileIdStatisticsRoute
+  '/$groupSlug/traps/$trapId/edit': typeof GroupSlugappTrapsTrapIdEditRoute
+  '/$groupSlug/locations/$locationId': typeof GroupSlugappLocationsLocationIdIndexRoute
+  '/$groupSlug/profiles/$profileId': typeof GroupSlugappProfilesProfileIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/demo/form/address': typeof DemoFormAddressRoute
-  '/demo/form/simple': typeof DemoFormSimpleRoute
+  '/$groupSlug': typeof GroupSlugRouteRouteWithChildren
+  '/(auth)': typeof authRouteRouteWithChildren
+  '/(user)': typeof userRouteRouteWithChildren
+  '/no-access': typeof NoAccessRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
+  '/$groupSlug/(app)': typeof GroupSlugappRouteRouteWithChildren
+  '/(auth)/create-account': typeof authCreateAccountRoute
+  '/(auth)/forgot-password': typeof authForgotPasswordRoute
+  '/(auth)/login': typeof authLoginRoute
+  '/(auth)/reset-password': typeof authResetPasswordRoute
+  '/(auth)/verify-email': typeof authVerifyEmailRoute
+  '/(user)/create-group': typeof userCreateGroupRoute
+  '/(user)/profile': typeof userProfileRoute
+  '/(user)/settings': typeof userSettingsRoute
+  '/(user)/': typeof userIndexRoute
+  '/$groupSlug/(app)/changelog': typeof GroupSlugappChangelogRoute
+  '/$groupSlug/(app)/notifications': typeof GroupSlugappNotificationsRoute
+  '/$groupSlug/(app)/settings': typeof GroupSlugappSettingsRoute
+  '/$groupSlug/(app)/support': typeof GroupSlugappSupportRoute
+  '/$groupSlug/(app)/': typeof GroupSlugappIndexRoute
+  '/$groupSlug/(app)/locations/$locationId': typeof GroupSlugappLocationsLocationIdRouteRouteWithChildren
+  '/$groupSlug/(app)/profiles/$profileId': typeof GroupSlugappProfilesProfileIdRouteRouteWithChildren
+  '/$groupSlug/(app)/collections/$collectionId': typeof GroupSlugappCollectionsCollectionIdRoute
+  '/$groupSlug/(app)/inspections/$inspectionId': typeof GroupSlugappInspectionsInspectionIdRoute
+  '/$groupSlug/(app)/inspections/create': typeof GroupSlugappInspectionsCreateRoute
+  '/$groupSlug/(app)/inspections/edit': typeof GroupSlugappInspectionsEditRoute
+  '/$groupSlug/(app)/landing-rates/create': typeof GroupSlugappLandingRatesCreateRoute
+  '/$groupSlug/(app)/larval-habitats/create': typeof GroupSlugappLarvalHabitatsCreateRoute
+  '/$groupSlug/(app)/larval-habitats/edit': typeof GroupSlugappLarvalHabitatsEditRoute
+  '/$groupSlug/(app)/larval-habitats/view': typeof GroupSlugappLarvalHabitatsViewRoute
+  '/$groupSlug/(app)/locations/create': typeof GroupSlugappLocationsCreateRoute
+  '/$groupSlug/(app)/locations/edit': typeof GroupSlugappLocationsEditRoute
+  '/$groupSlug/(app)/locations/view': typeof GroupSlugappLocationsViewRoute
+  '/$groupSlug/(app)/regions/create': typeof GroupSlugappRegionsCreateRoute
+  '/$groupSlug/(app)/regions/edit': typeof GroupSlugappRegionsEditRoute
+  '/$groupSlug/(app)/regions/view': typeof GroupSlugappRegionsViewRoute
+  '/$groupSlug/(app)/traps/$trapId': typeof GroupSlugappTrapsTrapIdRouteWithChildren
+  '/$groupSlug/(app)/traps/create': typeof GroupSlugappTrapsCreateRoute
+  '/$groupSlug/(app)/collections/': typeof GroupSlugappCollectionsIndexRoute
+  '/$groupSlug/(app)/export-data/': typeof GroupSlugappExportDataIndexRoute
+  '/$groupSlug/(app)/import-data/': typeof GroupSlugappImportDataIndexRoute
+  '/$groupSlug/(app)/inspections/': typeof GroupSlugappInspectionsIndexRoute
+  '/$groupSlug/(app)/landing-rates/': typeof GroupSlugappLandingRatesIndexRoute
+  '/$groupSlug/(app)/larval-habitats/': typeof GroupSlugappLarvalHabitatsIndexRoute
+  '/$groupSlug/(app)/locations/': typeof GroupSlugappLocationsIndexRoute
+  '/$groupSlug/(app)/profiles/': typeof GroupSlugappProfilesIndexRoute
+  '/$groupSlug/(app)/regions/': typeof GroupSlugappRegionsIndexRoute
+  '/$groupSlug/(app)/reports/': typeof GroupSlugappReportsIndexRoute
+  '/$groupSlug/(app)/traps/': typeof GroupSlugappTrapsIndexRoute
+  '/$groupSlug/(app)/locations/$locationId/adult-surveillance': typeof GroupSlugappLocationsLocationIdAdultSurveillanceRoute
+  '/$groupSlug/(app)/locations/$locationId/larval-surveillance': typeof GroupSlugappLocationsLocationIdLarvalSurveillanceRoute
+  '/$groupSlug/(app)/locations/$locationId/service-requests': typeof GroupSlugappLocationsLocationIdServiceRequestsRoute
+  '/$groupSlug/(app)/profiles/$profileId/edit': typeof GroupSlugappProfilesProfileIdEditRoute
+  '/$groupSlug/(app)/profiles/$profileId/statistics': typeof GroupSlugappProfilesProfileIdStatisticsRoute
+  '/$groupSlug/(app)/traps/$trapId/edit': typeof GroupSlugappTrapsTrapIdEditRoute
+  '/$groupSlug/(app)/locations/$locationId/': typeof GroupSlugappLocationsLocationIdIndexRoute
+  '/$groupSlug/(app)/profiles/$profileId/': typeof GroupSlugappProfilesProfileIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/$groupSlug'
     | '/'
-    | '/demo/tanstack-query'
-    | '/demo/form/address'
-    | '/demo/form/simple'
+    | '/no-access'
+    | '/privacy-policy'
+    | '/terms-of-service'
+    | '/$groupSlug/'
+    | '/create-account'
+    | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/verify-email'
+    | '/create-group'
+    | '/profile'
+    | '/settings'
+    | '/$groupSlug/changelog'
+    | '/$groupSlug/notifications'
+    | '/$groupSlug/settings'
+    | '/$groupSlug/support'
+    | '/$groupSlug/locations/$locationId'
+    | '/$groupSlug/profiles/$profileId'
+    | '/$groupSlug/collections/$collectionId'
+    | '/$groupSlug/inspections/$inspectionId'
+    | '/$groupSlug/inspections/create'
+    | '/$groupSlug/inspections/edit'
+    | '/$groupSlug/landing-rates/create'
+    | '/$groupSlug/larval-habitats/create'
+    | '/$groupSlug/larval-habitats/edit'
+    | '/$groupSlug/larval-habitats/view'
+    | '/$groupSlug/locations/create'
+    | '/$groupSlug/locations/edit'
+    | '/$groupSlug/locations/view'
+    | '/$groupSlug/regions/create'
+    | '/$groupSlug/regions/edit'
+    | '/$groupSlug/regions/view'
+    | '/$groupSlug/traps/$trapId'
+    | '/$groupSlug/traps/create'
+    | '/$groupSlug/collections'
+    | '/$groupSlug/export-data'
+    | '/$groupSlug/import-data'
+    | '/$groupSlug/inspections'
+    | '/$groupSlug/landing-rates'
+    | '/$groupSlug/larval-habitats'
+    | '/$groupSlug/locations'
+    | '/$groupSlug/profiles'
+    | '/$groupSlug/regions'
+    | '/$groupSlug/reports'
+    | '/$groupSlug/traps'
+    | '/$groupSlug/locations/$locationId/adult-surveillance'
+    | '/$groupSlug/locations/$locationId/larval-surveillance'
+    | '/$groupSlug/locations/$locationId/service-requests'
+    | '/$groupSlug/profiles/$profileId/edit'
+    | '/$groupSlug/profiles/$profileId/statistics'
+    | '/$groupSlug/traps/$trapId/edit'
+    | '/$groupSlug/locations/$locationId/'
+    | '/$groupSlug/profiles/$profileId/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo/tanstack-query' | '/demo/form/address' | '/demo/form/simple'
+  to:
+    | '/'
+    | '/no-access'
+    | '/privacy-policy'
+    | '/terms-of-service'
+    | '/create-account'
+    | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/verify-email'
+    | '/create-group'
+    | '/profile'
+    | '/settings'
+    | '/$groupSlug/changelog'
+    | '/$groupSlug/notifications'
+    | '/$groupSlug/settings'
+    | '/$groupSlug/support'
+    | '/$groupSlug'
+    | '/$groupSlug/collections/$collectionId'
+    | '/$groupSlug/inspections/$inspectionId'
+    | '/$groupSlug/inspections/create'
+    | '/$groupSlug/inspections/edit'
+    | '/$groupSlug/landing-rates/create'
+    | '/$groupSlug/larval-habitats/create'
+    | '/$groupSlug/larval-habitats/edit'
+    | '/$groupSlug/larval-habitats/view'
+    | '/$groupSlug/locations/create'
+    | '/$groupSlug/locations/edit'
+    | '/$groupSlug/locations/view'
+    | '/$groupSlug/regions/create'
+    | '/$groupSlug/regions/edit'
+    | '/$groupSlug/regions/view'
+    | '/$groupSlug/traps/$trapId'
+    | '/$groupSlug/traps/create'
+    | '/$groupSlug/collections'
+    | '/$groupSlug/export-data'
+    | '/$groupSlug/import-data'
+    | '/$groupSlug/inspections'
+    | '/$groupSlug/landing-rates'
+    | '/$groupSlug/larval-habitats'
+    | '/$groupSlug/locations'
+    | '/$groupSlug/profiles'
+    | '/$groupSlug/regions'
+    | '/$groupSlug/reports'
+    | '/$groupSlug/traps'
+    | '/$groupSlug/locations/$locationId/adult-surveillance'
+    | '/$groupSlug/locations/$locationId/larval-surveillance'
+    | '/$groupSlug/locations/$locationId/service-requests'
+    | '/$groupSlug/profiles/$profileId/edit'
+    | '/$groupSlug/profiles/$profileId/statistics'
+    | '/$groupSlug/traps/$trapId/edit'
+    | '/$groupSlug/locations/$locationId'
+    | '/$groupSlug/profiles/$profileId'
   id:
     | '__root__'
-    | '/'
-    | '/demo/tanstack-query'
-    | '/demo/form/address'
-    | '/demo/form/simple'
+    | '/$groupSlug'
+    | '/(auth)'
+    | '/(user)'
+    | '/no-access'
+    | '/privacy-policy'
+    | '/terms-of-service'
+    | '/$groupSlug/(app)'
+    | '/(auth)/create-account'
+    | '/(auth)/forgot-password'
+    | '/(auth)/login'
+    | '/(auth)/reset-password'
+    | '/(auth)/verify-email'
+    | '/(user)/create-group'
+    | '/(user)/profile'
+    | '/(user)/settings'
+    | '/(user)/'
+    | '/$groupSlug/(app)/changelog'
+    | '/$groupSlug/(app)/notifications'
+    | '/$groupSlug/(app)/settings'
+    | '/$groupSlug/(app)/support'
+    | '/$groupSlug/(app)/'
+    | '/$groupSlug/(app)/locations/$locationId'
+    | '/$groupSlug/(app)/profiles/$profileId'
+    | '/$groupSlug/(app)/collections/$collectionId'
+    | '/$groupSlug/(app)/inspections/$inspectionId'
+    | '/$groupSlug/(app)/inspections/create'
+    | '/$groupSlug/(app)/inspections/edit'
+    | '/$groupSlug/(app)/landing-rates/create'
+    | '/$groupSlug/(app)/larval-habitats/create'
+    | '/$groupSlug/(app)/larval-habitats/edit'
+    | '/$groupSlug/(app)/larval-habitats/view'
+    | '/$groupSlug/(app)/locations/create'
+    | '/$groupSlug/(app)/locations/edit'
+    | '/$groupSlug/(app)/locations/view'
+    | '/$groupSlug/(app)/regions/create'
+    | '/$groupSlug/(app)/regions/edit'
+    | '/$groupSlug/(app)/regions/view'
+    | '/$groupSlug/(app)/traps/$trapId'
+    | '/$groupSlug/(app)/traps/create'
+    | '/$groupSlug/(app)/collections/'
+    | '/$groupSlug/(app)/export-data/'
+    | '/$groupSlug/(app)/import-data/'
+    | '/$groupSlug/(app)/inspections/'
+    | '/$groupSlug/(app)/landing-rates/'
+    | '/$groupSlug/(app)/larval-habitats/'
+    | '/$groupSlug/(app)/locations/'
+    | '/$groupSlug/(app)/profiles/'
+    | '/$groupSlug/(app)/regions/'
+    | '/$groupSlug/(app)/reports/'
+    | '/$groupSlug/(app)/traps/'
+    | '/$groupSlug/(app)/locations/$locationId/adult-surveillance'
+    | '/$groupSlug/(app)/locations/$locationId/larval-surveillance'
+    | '/$groupSlug/(app)/locations/$locationId/service-requests'
+    | '/$groupSlug/(app)/profiles/$profileId/edit'
+    | '/$groupSlug/(app)/profiles/$profileId/statistics'
+    | '/$groupSlug/(app)/traps/$trapId/edit'
+    | '/$groupSlug/(app)/locations/$locationId/'
+    | '/$groupSlug/(app)/profiles/$profileId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
-  DemoFormAddressRoute: typeof DemoFormAddressRoute
-  DemoFormSimpleRoute: typeof DemoFormSimpleRoute
+  GroupSlugRouteRoute: typeof GroupSlugRouteRouteWithChildren
+  authRouteRoute: typeof authRouteRouteWithChildren
+  userRouteRoute: typeof userRouteRouteWithChildren
+  NoAccessRoute: typeof NoAccessRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  TermsOfServiceRoute: typeof TermsOfServiceRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/terms-of-service': {
+      id: '/terms-of-service'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service'
+      preLoaderRoute: typeof TermsOfServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/no-access': {
+      id: '/no-access'
+      path: '/no-access'
+      fullPath: '/no-access'
+      preLoaderRoute: typeof NoAccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(user)': {
+      id: '/(user)'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof userRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/tanstack-query': {
-      id: '/demo/tanstack-query'
-      path: '/demo/tanstack-query'
-      fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof DemoTanstackQueryRouteImport
+    '/(auth)': {
+      id: '/(auth)'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof authRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/form/simple': {
-      id: '/demo/form/simple'
-      path: '/demo/form/simple'
-      fullPath: '/demo/form/simple'
-      preLoaderRoute: typeof DemoFormSimpleRouteImport
+    '/$groupSlug': {
+      id: '/$groupSlug'
+      path: '/$groupSlug'
+      fullPath: '/$groupSlug'
+      preLoaderRoute: typeof GroupSlugRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/form/address': {
-      id: '/demo/form/address'
-      path: '/demo/form/address'
-      fullPath: '/demo/form/address'
-      preLoaderRoute: typeof DemoFormAddressRouteImport
-      parentRoute: typeof rootRouteImport
+    '/(user)/': {
+      id: '/(user)/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof userIndexRouteImport
+      parentRoute: typeof userRouteRoute
+    }
+    '/(user)/settings': {
+      id: '/(user)/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof userSettingsRouteImport
+      parentRoute: typeof userRouteRoute
+    }
+    '/(user)/profile': {
+      id: '/(user)/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof userProfileRouteImport
+      parentRoute: typeof userRouteRoute
+    }
+    '/(user)/create-group': {
+      id: '/(user)/create-group'
+      path: '/create-group'
+      fullPath: '/create-group'
+      preLoaderRoute: typeof userCreateGroupRouteImport
+      parentRoute: typeof userRouteRoute
+    }
+    '/(auth)/verify-email': {
+      id: '/(auth)/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof authVerifyEmailRouteImport
+      parentRoute: typeof authRouteRoute
+    }
+    '/(auth)/reset-password': {
+      id: '/(auth)/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof authResetPasswordRouteImport
+      parentRoute: typeof authRouteRoute
+    }
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof authRouteRoute
+    }
+    '/(auth)/forgot-password': {
+      id: '/(auth)/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof authForgotPasswordRouteImport
+      parentRoute: typeof authRouteRoute
+    }
+    '/(auth)/create-account': {
+      id: '/(auth)/create-account'
+      path: '/create-account'
+      fullPath: '/create-account'
+      preLoaderRoute: typeof authCreateAccountRouteImport
+      parentRoute: typeof authRouteRoute
+    }
+    '/$groupSlug/(app)': {
+      id: '/$groupSlug/(app)'
+      path: '/'
+      fullPath: '/$groupSlug/'
+      preLoaderRoute: typeof GroupSlugappRouteRouteImport
+      parentRoute: typeof GroupSlugRouteRoute
+    }
+    '/$groupSlug/(app)/': {
+      id: '/$groupSlug/(app)/'
+      path: '/'
+      fullPath: '/$groupSlug/'
+      preLoaderRoute: typeof GroupSlugappIndexRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/support': {
+      id: '/$groupSlug/(app)/support'
+      path: '/support'
+      fullPath: '/$groupSlug/support'
+      preLoaderRoute: typeof GroupSlugappSupportRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/settings': {
+      id: '/$groupSlug/(app)/settings'
+      path: '/settings'
+      fullPath: '/$groupSlug/settings'
+      preLoaderRoute: typeof GroupSlugappSettingsRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/notifications': {
+      id: '/$groupSlug/(app)/notifications'
+      path: '/notifications'
+      fullPath: '/$groupSlug/notifications'
+      preLoaderRoute: typeof GroupSlugappNotificationsRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/changelog': {
+      id: '/$groupSlug/(app)/changelog'
+      path: '/changelog'
+      fullPath: '/$groupSlug/changelog'
+      preLoaderRoute: typeof GroupSlugappChangelogRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/traps/': {
+      id: '/$groupSlug/(app)/traps/'
+      path: '/traps'
+      fullPath: '/$groupSlug/traps'
+      preLoaderRoute: typeof GroupSlugappTrapsIndexRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/reports/': {
+      id: '/$groupSlug/(app)/reports/'
+      path: '/reports'
+      fullPath: '/$groupSlug/reports'
+      preLoaderRoute: typeof GroupSlugappReportsIndexRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/regions/': {
+      id: '/$groupSlug/(app)/regions/'
+      path: '/regions'
+      fullPath: '/$groupSlug/regions'
+      preLoaderRoute: typeof GroupSlugappRegionsIndexRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/profiles/': {
+      id: '/$groupSlug/(app)/profiles/'
+      path: '/profiles'
+      fullPath: '/$groupSlug/profiles'
+      preLoaderRoute: typeof GroupSlugappProfilesIndexRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/locations/': {
+      id: '/$groupSlug/(app)/locations/'
+      path: '/locations'
+      fullPath: '/$groupSlug/locations'
+      preLoaderRoute: typeof GroupSlugappLocationsIndexRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/larval-habitats/': {
+      id: '/$groupSlug/(app)/larval-habitats/'
+      path: '/larval-habitats'
+      fullPath: '/$groupSlug/larval-habitats'
+      preLoaderRoute: typeof GroupSlugappLarvalHabitatsIndexRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/landing-rates/': {
+      id: '/$groupSlug/(app)/landing-rates/'
+      path: '/landing-rates'
+      fullPath: '/$groupSlug/landing-rates'
+      preLoaderRoute: typeof GroupSlugappLandingRatesIndexRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/inspections/': {
+      id: '/$groupSlug/(app)/inspections/'
+      path: '/inspections'
+      fullPath: '/$groupSlug/inspections'
+      preLoaderRoute: typeof GroupSlugappInspectionsIndexRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/import-data/': {
+      id: '/$groupSlug/(app)/import-data/'
+      path: '/import-data'
+      fullPath: '/$groupSlug/import-data'
+      preLoaderRoute: typeof GroupSlugappImportDataIndexRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/export-data/': {
+      id: '/$groupSlug/(app)/export-data/'
+      path: '/export-data'
+      fullPath: '/$groupSlug/export-data'
+      preLoaderRoute: typeof GroupSlugappExportDataIndexRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/collections/': {
+      id: '/$groupSlug/(app)/collections/'
+      path: '/collections'
+      fullPath: '/$groupSlug/collections'
+      preLoaderRoute: typeof GroupSlugappCollectionsIndexRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/traps/create': {
+      id: '/$groupSlug/(app)/traps/create'
+      path: '/traps/create'
+      fullPath: '/$groupSlug/traps/create'
+      preLoaderRoute: typeof GroupSlugappTrapsCreateRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/traps/$trapId': {
+      id: '/$groupSlug/(app)/traps/$trapId'
+      path: '/traps/$trapId'
+      fullPath: '/$groupSlug/traps/$trapId'
+      preLoaderRoute: typeof GroupSlugappTrapsTrapIdRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/regions/view': {
+      id: '/$groupSlug/(app)/regions/view'
+      path: '/regions/view'
+      fullPath: '/$groupSlug/regions/view'
+      preLoaderRoute: typeof GroupSlugappRegionsViewRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/regions/edit': {
+      id: '/$groupSlug/(app)/regions/edit'
+      path: '/regions/edit'
+      fullPath: '/$groupSlug/regions/edit'
+      preLoaderRoute: typeof GroupSlugappRegionsEditRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/regions/create': {
+      id: '/$groupSlug/(app)/regions/create'
+      path: '/regions/create'
+      fullPath: '/$groupSlug/regions/create'
+      preLoaderRoute: typeof GroupSlugappRegionsCreateRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/locations/view': {
+      id: '/$groupSlug/(app)/locations/view'
+      path: '/locations/view'
+      fullPath: '/$groupSlug/locations/view'
+      preLoaderRoute: typeof GroupSlugappLocationsViewRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/locations/edit': {
+      id: '/$groupSlug/(app)/locations/edit'
+      path: '/locations/edit'
+      fullPath: '/$groupSlug/locations/edit'
+      preLoaderRoute: typeof GroupSlugappLocationsEditRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/locations/create': {
+      id: '/$groupSlug/(app)/locations/create'
+      path: '/locations/create'
+      fullPath: '/$groupSlug/locations/create'
+      preLoaderRoute: typeof GroupSlugappLocationsCreateRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/larval-habitats/view': {
+      id: '/$groupSlug/(app)/larval-habitats/view'
+      path: '/larval-habitats/view'
+      fullPath: '/$groupSlug/larval-habitats/view'
+      preLoaderRoute: typeof GroupSlugappLarvalHabitatsViewRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/larval-habitats/edit': {
+      id: '/$groupSlug/(app)/larval-habitats/edit'
+      path: '/larval-habitats/edit'
+      fullPath: '/$groupSlug/larval-habitats/edit'
+      preLoaderRoute: typeof GroupSlugappLarvalHabitatsEditRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/larval-habitats/create': {
+      id: '/$groupSlug/(app)/larval-habitats/create'
+      path: '/larval-habitats/create'
+      fullPath: '/$groupSlug/larval-habitats/create'
+      preLoaderRoute: typeof GroupSlugappLarvalHabitatsCreateRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/landing-rates/create': {
+      id: '/$groupSlug/(app)/landing-rates/create'
+      path: '/landing-rates/create'
+      fullPath: '/$groupSlug/landing-rates/create'
+      preLoaderRoute: typeof GroupSlugappLandingRatesCreateRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/inspections/edit': {
+      id: '/$groupSlug/(app)/inspections/edit'
+      path: '/inspections/edit'
+      fullPath: '/$groupSlug/inspections/edit'
+      preLoaderRoute: typeof GroupSlugappInspectionsEditRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/inspections/create': {
+      id: '/$groupSlug/(app)/inspections/create'
+      path: '/inspections/create'
+      fullPath: '/$groupSlug/inspections/create'
+      preLoaderRoute: typeof GroupSlugappInspectionsCreateRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/inspections/$inspectionId': {
+      id: '/$groupSlug/(app)/inspections/$inspectionId'
+      path: '/inspections/$inspectionId'
+      fullPath: '/$groupSlug/inspections/$inspectionId'
+      preLoaderRoute: typeof GroupSlugappInspectionsInspectionIdRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/collections/$collectionId': {
+      id: '/$groupSlug/(app)/collections/$collectionId'
+      path: '/collections/$collectionId'
+      fullPath: '/$groupSlug/collections/$collectionId'
+      preLoaderRoute: typeof GroupSlugappCollectionsCollectionIdRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/profiles/$profileId': {
+      id: '/$groupSlug/(app)/profiles/$profileId'
+      path: '/profiles/$profileId'
+      fullPath: '/$groupSlug/profiles/$profileId'
+      preLoaderRoute: typeof GroupSlugappProfilesProfileIdRouteRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/locations/$locationId': {
+      id: '/$groupSlug/(app)/locations/$locationId'
+      path: '/locations/$locationId'
+      fullPath: '/$groupSlug/locations/$locationId'
+      preLoaderRoute: typeof GroupSlugappLocationsLocationIdRouteRouteImport
+      parentRoute: typeof GroupSlugappRouteRoute
+    }
+    '/$groupSlug/(app)/profiles/$profileId/': {
+      id: '/$groupSlug/(app)/profiles/$profileId/'
+      path: '/'
+      fullPath: '/$groupSlug/profiles/$profileId/'
+      preLoaderRoute: typeof GroupSlugappProfilesProfileIdIndexRouteImport
+      parentRoute: typeof GroupSlugappProfilesProfileIdRouteRoute
+    }
+    '/$groupSlug/(app)/locations/$locationId/': {
+      id: '/$groupSlug/(app)/locations/$locationId/'
+      path: '/'
+      fullPath: '/$groupSlug/locations/$locationId/'
+      preLoaderRoute: typeof GroupSlugappLocationsLocationIdIndexRouteImport
+      parentRoute: typeof GroupSlugappLocationsLocationIdRouteRoute
+    }
+    '/$groupSlug/(app)/traps/$trapId/edit': {
+      id: '/$groupSlug/(app)/traps/$trapId/edit'
+      path: '/edit'
+      fullPath: '/$groupSlug/traps/$trapId/edit'
+      preLoaderRoute: typeof GroupSlugappTrapsTrapIdEditRouteImport
+      parentRoute: typeof GroupSlugappTrapsTrapIdRoute
+    }
+    '/$groupSlug/(app)/profiles/$profileId/statistics': {
+      id: '/$groupSlug/(app)/profiles/$profileId/statistics'
+      path: '/statistics'
+      fullPath: '/$groupSlug/profiles/$profileId/statistics'
+      preLoaderRoute: typeof GroupSlugappProfilesProfileIdStatisticsRouteImport
+      parentRoute: typeof GroupSlugappProfilesProfileIdRouteRoute
+    }
+    '/$groupSlug/(app)/profiles/$profileId/edit': {
+      id: '/$groupSlug/(app)/profiles/$profileId/edit'
+      path: '/edit'
+      fullPath: '/$groupSlug/profiles/$profileId/edit'
+      preLoaderRoute: typeof GroupSlugappProfilesProfileIdEditRouteImport
+      parentRoute: typeof GroupSlugappProfilesProfileIdRouteRoute
+    }
+    '/$groupSlug/(app)/locations/$locationId/service-requests': {
+      id: '/$groupSlug/(app)/locations/$locationId/service-requests'
+      path: '/service-requests'
+      fullPath: '/$groupSlug/locations/$locationId/service-requests'
+      preLoaderRoute: typeof GroupSlugappLocationsLocationIdServiceRequestsRouteImport
+      parentRoute: typeof GroupSlugappLocationsLocationIdRouteRoute
+    }
+    '/$groupSlug/(app)/locations/$locationId/larval-surveillance': {
+      id: '/$groupSlug/(app)/locations/$locationId/larval-surveillance'
+      path: '/larval-surveillance'
+      fullPath: '/$groupSlug/locations/$locationId/larval-surveillance'
+      preLoaderRoute: typeof GroupSlugappLocationsLocationIdLarvalSurveillanceRouteImport
+      parentRoute: typeof GroupSlugappLocationsLocationIdRouteRoute
+    }
+    '/$groupSlug/(app)/locations/$locationId/adult-surveillance': {
+      id: '/$groupSlug/(app)/locations/$locationId/adult-surveillance'
+      path: '/adult-surveillance'
+      fullPath: '/$groupSlug/locations/$locationId/adult-surveillance'
+      preLoaderRoute: typeof GroupSlugappLocationsLocationIdAdultSurveillanceRouteImport
+      parentRoute: typeof GroupSlugappLocationsLocationIdRouteRoute
     }
   }
 }
 
+interface GroupSlugappLocationsLocationIdRouteRouteChildren {
+  GroupSlugappLocationsLocationIdAdultSurveillanceRoute: typeof GroupSlugappLocationsLocationIdAdultSurveillanceRoute
+  GroupSlugappLocationsLocationIdLarvalSurveillanceRoute: typeof GroupSlugappLocationsLocationIdLarvalSurveillanceRoute
+  GroupSlugappLocationsLocationIdServiceRequestsRoute: typeof GroupSlugappLocationsLocationIdServiceRequestsRoute
+  GroupSlugappLocationsLocationIdIndexRoute: typeof GroupSlugappLocationsLocationIdIndexRoute
+}
+
+const GroupSlugappLocationsLocationIdRouteRouteChildren: GroupSlugappLocationsLocationIdRouteRouteChildren =
+  {
+    GroupSlugappLocationsLocationIdAdultSurveillanceRoute:
+      GroupSlugappLocationsLocationIdAdultSurveillanceRoute,
+    GroupSlugappLocationsLocationIdLarvalSurveillanceRoute:
+      GroupSlugappLocationsLocationIdLarvalSurveillanceRoute,
+    GroupSlugappLocationsLocationIdServiceRequestsRoute:
+      GroupSlugappLocationsLocationIdServiceRequestsRoute,
+    GroupSlugappLocationsLocationIdIndexRoute:
+      GroupSlugappLocationsLocationIdIndexRoute,
+  }
+
+const GroupSlugappLocationsLocationIdRouteRouteWithChildren =
+  GroupSlugappLocationsLocationIdRouteRoute._addFileChildren(
+    GroupSlugappLocationsLocationIdRouteRouteChildren,
+  )
+
+interface GroupSlugappProfilesProfileIdRouteRouteChildren {
+  GroupSlugappProfilesProfileIdEditRoute: typeof GroupSlugappProfilesProfileIdEditRoute
+  GroupSlugappProfilesProfileIdStatisticsRoute: typeof GroupSlugappProfilesProfileIdStatisticsRoute
+  GroupSlugappProfilesProfileIdIndexRoute: typeof GroupSlugappProfilesProfileIdIndexRoute
+}
+
+const GroupSlugappProfilesProfileIdRouteRouteChildren: GroupSlugappProfilesProfileIdRouteRouteChildren =
+  {
+    GroupSlugappProfilesProfileIdEditRoute:
+      GroupSlugappProfilesProfileIdEditRoute,
+    GroupSlugappProfilesProfileIdStatisticsRoute:
+      GroupSlugappProfilesProfileIdStatisticsRoute,
+    GroupSlugappProfilesProfileIdIndexRoute:
+      GroupSlugappProfilesProfileIdIndexRoute,
+  }
+
+const GroupSlugappProfilesProfileIdRouteRouteWithChildren =
+  GroupSlugappProfilesProfileIdRouteRoute._addFileChildren(
+    GroupSlugappProfilesProfileIdRouteRouteChildren,
+  )
+
+interface GroupSlugappTrapsTrapIdRouteChildren {
+  GroupSlugappTrapsTrapIdEditRoute: typeof GroupSlugappTrapsTrapIdEditRoute
+}
+
+const GroupSlugappTrapsTrapIdRouteChildren: GroupSlugappTrapsTrapIdRouteChildren =
+  {
+    GroupSlugappTrapsTrapIdEditRoute: GroupSlugappTrapsTrapIdEditRoute,
+  }
+
+const GroupSlugappTrapsTrapIdRouteWithChildren =
+  GroupSlugappTrapsTrapIdRoute._addFileChildren(
+    GroupSlugappTrapsTrapIdRouteChildren,
+  )
+
+interface GroupSlugappRouteRouteChildren {
+  GroupSlugappChangelogRoute: typeof GroupSlugappChangelogRoute
+  GroupSlugappNotificationsRoute: typeof GroupSlugappNotificationsRoute
+  GroupSlugappSettingsRoute: typeof GroupSlugappSettingsRoute
+  GroupSlugappSupportRoute: typeof GroupSlugappSupportRoute
+  GroupSlugappIndexRoute: typeof GroupSlugappIndexRoute
+  GroupSlugappLocationsLocationIdRouteRoute: typeof GroupSlugappLocationsLocationIdRouteRouteWithChildren
+  GroupSlugappProfilesProfileIdRouteRoute: typeof GroupSlugappProfilesProfileIdRouteRouteWithChildren
+  GroupSlugappCollectionsCollectionIdRoute: typeof GroupSlugappCollectionsCollectionIdRoute
+  GroupSlugappInspectionsInspectionIdRoute: typeof GroupSlugappInspectionsInspectionIdRoute
+  GroupSlugappInspectionsCreateRoute: typeof GroupSlugappInspectionsCreateRoute
+  GroupSlugappInspectionsEditRoute: typeof GroupSlugappInspectionsEditRoute
+  GroupSlugappLandingRatesCreateRoute: typeof GroupSlugappLandingRatesCreateRoute
+  GroupSlugappLarvalHabitatsCreateRoute: typeof GroupSlugappLarvalHabitatsCreateRoute
+  GroupSlugappLarvalHabitatsEditRoute: typeof GroupSlugappLarvalHabitatsEditRoute
+  GroupSlugappLarvalHabitatsViewRoute: typeof GroupSlugappLarvalHabitatsViewRoute
+  GroupSlugappLocationsCreateRoute: typeof GroupSlugappLocationsCreateRoute
+  GroupSlugappLocationsEditRoute: typeof GroupSlugappLocationsEditRoute
+  GroupSlugappLocationsViewRoute: typeof GroupSlugappLocationsViewRoute
+  GroupSlugappRegionsCreateRoute: typeof GroupSlugappRegionsCreateRoute
+  GroupSlugappRegionsEditRoute: typeof GroupSlugappRegionsEditRoute
+  GroupSlugappRegionsViewRoute: typeof GroupSlugappRegionsViewRoute
+  GroupSlugappTrapsTrapIdRoute: typeof GroupSlugappTrapsTrapIdRouteWithChildren
+  GroupSlugappTrapsCreateRoute: typeof GroupSlugappTrapsCreateRoute
+  GroupSlugappCollectionsIndexRoute: typeof GroupSlugappCollectionsIndexRoute
+  GroupSlugappExportDataIndexRoute: typeof GroupSlugappExportDataIndexRoute
+  GroupSlugappImportDataIndexRoute: typeof GroupSlugappImportDataIndexRoute
+  GroupSlugappInspectionsIndexRoute: typeof GroupSlugappInspectionsIndexRoute
+  GroupSlugappLandingRatesIndexRoute: typeof GroupSlugappLandingRatesIndexRoute
+  GroupSlugappLarvalHabitatsIndexRoute: typeof GroupSlugappLarvalHabitatsIndexRoute
+  GroupSlugappLocationsIndexRoute: typeof GroupSlugappLocationsIndexRoute
+  GroupSlugappProfilesIndexRoute: typeof GroupSlugappProfilesIndexRoute
+  GroupSlugappRegionsIndexRoute: typeof GroupSlugappRegionsIndexRoute
+  GroupSlugappReportsIndexRoute: typeof GroupSlugappReportsIndexRoute
+  GroupSlugappTrapsIndexRoute: typeof GroupSlugappTrapsIndexRoute
+}
+
+const GroupSlugappRouteRouteChildren: GroupSlugappRouteRouteChildren = {
+  GroupSlugappChangelogRoute: GroupSlugappChangelogRoute,
+  GroupSlugappNotificationsRoute: GroupSlugappNotificationsRoute,
+  GroupSlugappSettingsRoute: GroupSlugappSettingsRoute,
+  GroupSlugappSupportRoute: GroupSlugappSupportRoute,
+  GroupSlugappIndexRoute: GroupSlugappIndexRoute,
+  GroupSlugappLocationsLocationIdRouteRoute:
+    GroupSlugappLocationsLocationIdRouteRouteWithChildren,
+  GroupSlugappProfilesProfileIdRouteRoute:
+    GroupSlugappProfilesProfileIdRouteRouteWithChildren,
+  GroupSlugappCollectionsCollectionIdRoute:
+    GroupSlugappCollectionsCollectionIdRoute,
+  GroupSlugappInspectionsInspectionIdRoute:
+    GroupSlugappInspectionsInspectionIdRoute,
+  GroupSlugappInspectionsCreateRoute: GroupSlugappInspectionsCreateRoute,
+  GroupSlugappInspectionsEditRoute: GroupSlugappInspectionsEditRoute,
+  GroupSlugappLandingRatesCreateRoute: GroupSlugappLandingRatesCreateRoute,
+  GroupSlugappLarvalHabitatsCreateRoute: GroupSlugappLarvalHabitatsCreateRoute,
+  GroupSlugappLarvalHabitatsEditRoute: GroupSlugappLarvalHabitatsEditRoute,
+  GroupSlugappLarvalHabitatsViewRoute: GroupSlugappLarvalHabitatsViewRoute,
+  GroupSlugappLocationsCreateRoute: GroupSlugappLocationsCreateRoute,
+  GroupSlugappLocationsEditRoute: GroupSlugappLocationsEditRoute,
+  GroupSlugappLocationsViewRoute: GroupSlugappLocationsViewRoute,
+  GroupSlugappRegionsCreateRoute: GroupSlugappRegionsCreateRoute,
+  GroupSlugappRegionsEditRoute: GroupSlugappRegionsEditRoute,
+  GroupSlugappRegionsViewRoute: GroupSlugappRegionsViewRoute,
+  GroupSlugappTrapsTrapIdRoute: GroupSlugappTrapsTrapIdRouteWithChildren,
+  GroupSlugappTrapsCreateRoute: GroupSlugappTrapsCreateRoute,
+  GroupSlugappCollectionsIndexRoute: GroupSlugappCollectionsIndexRoute,
+  GroupSlugappExportDataIndexRoute: GroupSlugappExportDataIndexRoute,
+  GroupSlugappImportDataIndexRoute: GroupSlugappImportDataIndexRoute,
+  GroupSlugappInspectionsIndexRoute: GroupSlugappInspectionsIndexRoute,
+  GroupSlugappLandingRatesIndexRoute: GroupSlugappLandingRatesIndexRoute,
+  GroupSlugappLarvalHabitatsIndexRoute: GroupSlugappLarvalHabitatsIndexRoute,
+  GroupSlugappLocationsIndexRoute: GroupSlugappLocationsIndexRoute,
+  GroupSlugappProfilesIndexRoute: GroupSlugappProfilesIndexRoute,
+  GroupSlugappRegionsIndexRoute: GroupSlugappRegionsIndexRoute,
+  GroupSlugappReportsIndexRoute: GroupSlugappReportsIndexRoute,
+  GroupSlugappTrapsIndexRoute: GroupSlugappTrapsIndexRoute,
+}
+
+const GroupSlugappRouteRouteWithChildren =
+  GroupSlugappRouteRoute._addFileChildren(GroupSlugappRouteRouteChildren)
+
+interface GroupSlugRouteRouteChildren {
+  GroupSlugappRouteRoute: typeof GroupSlugappRouteRouteWithChildren
+}
+
+const GroupSlugRouteRouteChildren: GroupSlugRouteRouteChildren = {
+  GroupSlugappRouteRoute: GroupSlugappRouteRouteWithChildren,
+}
+
+const GroupSlugRouteRouteWithChildren = GroupSlugRouteRoute._addFileChildren(
+  GroupSlugRouteRouteChildren,
+)
+
+interface authRouteRouteChildren {
+  authCreateAccountRoute: typeof authCreateAccountRoute
+  authForgotPasswordRoute: typeof authForgotPasswordRoute
+  authLoginRoute: typeof authLoginRoute
+  authResetPasswordRoute: typeof authResetPasswordRoute
+  authVerifyEmailRoute: typeof authVerifyEmailRoute
+}
+
+const authRouteRouteChildren: authRouteRouteChildren = {
+  authCreateAccountRoute: authCreateAccountRoute,
+  authForgotPasswordRoute: authForgotPasswordRoute,
+  authLoginRoute: authLoginRoute,
+  authResetPasswordRoute: authResetPasswordRoute,
+  authVerifyEmailRoute: authVerifyEmailRoute,
+}
+
+const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
+  authRouteRouteChildren,
+)
+
+interface userRouteRouteChildren {
+  userCreateGroupRoute: typeof userCreateGroupRoute
+  userProfileRoute: typeof userProfileRoute
+  userSettingsRoute: typeof userSettingsRoute
+  userIndexRoute: typeof userIndexRoute
+}
+
+const userRouteRouteChildren: userRouteRouteChildren = {
+  userCreateGroupRoute: userCreateGroupRoute,
+  userProfileRoute: userProfileRoute,
+  userSettingsRoute: userSettingsRoute,
+  userIndexRoute: userIndexRoute,
+}
+
+const userRouteRouteWithChildren = userRouteRoute._addFileChildren(
+  userRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  DemoTanstackQueryRoute: DemoTanstackQueryRoute,
-  DemoFormAddressRoute: DemoFormAddressRoute,
-  DemoFormSimpleRoute: DemoFormSimpleRoute,
+  GroupSlugRouteRoute: GroupSlugRouteRouteWithChildren,
+  authRouteRoute: authRouteRouteWithChildren,
+  userRouteRoute: userRouteRouteWithChildren,
+  NoAccessRoute: NoAccessRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
+  TermsOfServiceRoute: TermsOfServiceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
