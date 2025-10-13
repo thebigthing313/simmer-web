@@ -8,6 +8,7 @@ import { NameSchema } from '@/types/form-schemas'
 import { eq } from '@tanstack/db'
 import { useLiveQuery } from '@tanstack/react-db'
 import { useForm } from '@tanstack/react-form'
+import { toast } from 'sonner'
 
 export const Route = createFileRoute('/(user)/profile')({
   component: RouteComponent,
@@ -45,6 +46,7 @@ function RouteComponent() {
         profile.avatar_url = value.avatar_url
         profile.profile_photo_url = value.profile_photo_url
       })
+      toast.success('Profile updated successfully')
     },
   })
 
