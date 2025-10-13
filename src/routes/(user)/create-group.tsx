@@ -8,6 +8,7 @@ import { AddressInput } from '@/components/form-fields/address-input'
 import { PhoneInput } from '@/components/form-fields/phone-input'
 import { SubmitButton } from '@/components/form-fields/submit-button'
 import { toast } from 'sonner'
+import { selectGroupsSchema } from '@/types/db-schemas'
 
 export const Route = createFileRoute('/(user)/create-group')({
   beforeLoad: async ({ context }) => {
@@ -51,37 +52,36 @@ function RouteComponent() {
       message: 'Short name is already taken',
     })
 
-  const CreateGroupSchema = z.object({
-    groupName: GroupNameSchema,
-    address: z
-      .string()
-      .min(5, 'Address must be at least 5 characters long')
-      .max(100, 'Address cannot exceed 100 characters'),
-    phone: PhoneNumberSchema,
-    shortName: ShortNameSchema,
-  })
+  const formSchema = selectGroupsSchema.omit({ id: true })
+  type FormSchemaType = z.input<typeof formSchema>
+
+  const emptyFormValues: FormSchemaType = {
+    group_name: '',
+    address: '',
+    phone: '',
+    short_name: '',
+    fax: null,
+    website_url: null,
+    logo_url: null,
+  }
 
   const form = useForm({
-    validators: { onSubmitAsync: CreateGroupSchema },
-    defaultValues: {
-      groupName: '',
-      address: '',
-      phone: '',
-      shortName: '',
-    },
+    validators: { onSubmit: formSchema },
+    defaultValues: emptyFormValues,
     onSubmit: async ({ value }) => {
-      //use new tanstack db mutation
       const transaction = groups.insert(
         {
           id: crypto.randomUUID().toString(),
-          group_name: value.groupName,
+          group_name: value.group_name,
           address: value.address,
           phone: value.phone,
-          short_name: value.shortName,
+          short_name: value.short_name,
+          fax: value.fax,
+          website_url: value.website_url,
+          logo_url: value.logo_url,
         },
         { optimistic: false },
       )
-      //await persist
       try {
         await transaction.isPersisted.promise
       } catch (error: unknown) {
@@ -91,11 +91,8 @@ function RouteComponent() {
           toast.error(`Failed to create group: ${String(error)}`)
         }
       }
-
-      //refresh session for new claims
       await auth.refresh()
-      //navigate if yes
-      navigate({ to: '/$groupSlug', params: { groupSlug: value.shortName } })
+      navigate({ to: '/$groupSlug', params: { groupSlug: value.short_name } })
     },
   })
   return (
@@ -109,11 +106,12 @@ function RouteComponent() {
       <div className="grid gap-2">
         <form.Field
           validators={{ onChange: GroupNameSchema }}
-          name="groupName"
+          name="group_name"
           children={(field) => {
             return (
               <TextInput
-                id="groupName"
+                required
+                id="group_name"
                 label="Group Name"
                 placeholder="Enter group name"
                 value={field.state.value}
@@ -129,6 +127,7 @@ function RouteComponent() {
           children={(field) => {
             return (
               <AddressInput
+                required
                 id="address"
                 label="Address"
                 placeholder="Enter address"
@@ -145,6 +144,7 @@ function RouteComponent() {
           children={(field) => {
             return (
               <PhoneInput
+                required
                 id="phone"
                 label="Phone"
                 placeholder="Enter phone number"
@@ -157,15 +157,53 @@ function RouteComponent() {
           }}
         />
         <form.Field
+          validators={{ onBlur: PhoneNumberSchema }}
+          name="fax"
+          children={(field) => {
+            return (
+              <PhoneInput
+                id="fax"
+                label="Fax"
+                placeholder="Enter fax number"
+                value={field.state.value}
+                errors={field.state.meta.errors}
+                onChange={(stored) => field.handleChange(stored)}
+                onBlur={() => field.handleBlur()}
+              />
+            )
+          }}
+        />
+        <form.Field
           validators={{ onBlurAsync: ShortNameSchema }}
-          name="shortName"
+          name="short_name"
           children={(field) => {
             return (
               <TextInput
-                id="shortName"
+                required
+                id="short_name"
                 label="Short Name"
                 description="This short name will be used in URLs to access the group data."
                 value={field.state.value}
+                errors={field.state.meta.errors}
+                onChange={(e) => field.handleChange(e.target.value)}
+                onBlur={() => field.handleBlur()}
+                isValid={field.state.meta.isDirty && field.state.meta.isValid}
+                isLoading={
+                  field.state.meta.isDirty && field.state.meta.isValidating
+                }
+              />
+            )
+          }}
+        />
+        <form.Field
+          validators={{ onBlurAsync: ShortNameSchema }}
+          name="website_url"
+          children={(field) => {
+            return (
+              <TextInput
+                id="website_url"
+                label="Website URL"
+                value={field.state.value ?? ''}
                 errors={field.state.meta.errors}
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={() => field.handleBlur()}
