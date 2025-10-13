@@ -1,46 +1,23 @@
 /* eslint-disable react/no-children-prop */
-import { NameSchema } from '@repo/shared-types/form-schemas'
-import { Update } from '@repo/supabase/db/data-types'
-import { profileByIdQueryOptions } from '@repo/supabase/db/profiles'
-import { TextInput } from '@repo/ui/form-fields/text-input'
+import { TextInput } from '@/components/form-fields/text-input'
 import { useForm } from '@tanstack/react-form'
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { useRouteContext } from '@tanstack/react-router'
-import { FieldSet, FieldLegend, FieldGroup } from '@repo/ui/components/field'
-import z from 'zod'
-import { SubmitButton } from '@repo/ui/form-fields/submit-button'
+import { FieldSet, FieldLegend, FieldGroup } from '@/components/ui/field'
+import { SubmitButton } from '@/components/form-fields/submit-button'
 import { selectProfilesSchema } from '@/types/db-schemas'
-import { useLiveQuery } from 'node_modules/@tanstack/react-db/dist/esm/useLiveQuery'
+import { useLiveQuery } from '@tanstack/react-db'
 import { eq } from '@tanstack/db'
 import { profilesCollection } from '@/collections/profiles'
+import { NameSchema } from '@/types/form-schemas'
 
-type ProfileUpdate = Update<'profiles'>
-// (parameter) data: {
-//     avatar_url?: string | null | undefined;
-//     created_at?: string | undefined;
-//     created_by?: string | null | undefined;
-//     deleted_at?: string | null | undefined;
-//     deleted_by?: string | null | undefined;
-//     first_name?: string | undefined;
-//     group_id?: string | null | undefined;
-//     id?: string | undefined;
-//     last_name?: string | undefined;
-//     profile_photo_url?: string | null | undefined;
-//     updated_at?: string | null | undefined;
-//     updated_by?: string | null | undefined;
-//     user_id?: string | null | undefined;
-
-interface ProfileFormProps {
-  onUpdateProfile: (data: ProfileUpdate, id: string) => void
-}
-
-export function ProfileForm({ onUpdateProfile }: ProfileFormProps) {
+export function ProfileForm() {
   const { supabase, queryClient, profile_id } = useRouteContext({
     from: '/(user)',
   })
+  const profiles = profilesCollection(supabase, queryClient)
   const { data } = useLiveQuery((q) =>
     q
-      .from({ profile: profilesCollection(supabase, queryClient) })
+      .from({ profile: profiles })
       .where(({ profile }) => eq(profile.id, profile_id)),
   )
 
@@ -58,14 +35,13 @@ export function ProfileForm({ onUpdateProfile }: ProfileFormProps) {
     validators: { onSubmitAsync: selectProfilesSchema },
     defaultValues: defaultValues,
     onSubmit: async ({ value }) => {
-      const profile: ProfileUpdate = {
-        first_name: value.first_name,
-        last_name: value.last_name,
-        bio: value.bio,
-        avatar_url: value.avatar_url,
-        profile_photo_url: value.profile_photo_url,
-      }
-      onUpdateProfile(profile, profile_id)
+      profiles.update(profile_id, (profile) => {
+        profile.first_name = value.first_name
+        profile.last_name = value.last_name
+        profile.bio = value.bio
+        profile.avatar_url = value.avatar_url
+        profile.profile_photo_url = value.profile_photo_url
+      })
     },
   })
 
