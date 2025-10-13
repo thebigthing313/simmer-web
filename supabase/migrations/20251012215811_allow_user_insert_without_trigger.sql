@@ -1,6 +1,11 @@
-create or replace function simmer.account_creation_profile_insert () returns trigger language plpgsql
-set
-    search_path='' security definer as $$
+set check_function_bodies = off;
+
+CREATE OR REPLACE FUNCTION simmer.account_creation_profile_insert()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO ''
+AS $function$
 declare
     v_first text;
     v_last text;
@@ -23,8 +28,7 @@ begin
 
     return new;
 end;
-$$;
+$function$
+;
 
-create trigger account_creation_profile_insert_trigger
-after insert on auth.users for each row
-execute procedure simmer.account_creation_profile_insert ();
+

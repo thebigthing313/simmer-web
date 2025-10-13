@@ -2,35 +2,29 @@ create table if not exists public.profiles (
     "id" uuid not null default gen_random_uuid() primary key,
     "first_name" text not null,
     "last_name" text not null,
-    "user_id" uuid references auth.users(id) on delete restrict,
+    "user_id" uuid references auth.users (id) on delete restrict,
     "profile_photo_url" text,
     "avatar_url" text,
-    "group_id" uuid references public.groups(id) on delete restrict,
+    "bio" text,
     "created_at" timestamp with time zone not null default now(),
-    "created_by" uuid references auth.users(id) on delete restrict,
+    "created_by" uuid references auth.users (id) on delete restrict,
     "updated_at" timestamp with time zone,
-    "updated_by" uuid references auth.users(id) on delete restrict,
+    "updated_by" uuid references auth.users (id) on delete restrict,
     "deleted_at" timestamp with time zone,
-    "deleted_by" uuid references auth.users(id) on delete restrict,
+    "deleted_by" uuid references auth.users (id) on delete restrict,
     unique (user_id)
 );
 
-create trigger handle_created_trigger
-    before insert on public.profiles
-    for each row execute function public.set_created_by();
+create trigger handle_created_trigger before insert on public.profiles for each row
+execute function public.set_created_by ();
 
-create trigger handle_updated_trigger
-    before update on public.profiles
-    for each row
-    when (old.* is distinct from new.*)
-    execute function public.set_updated_record_fields();
+create trigger handle_updated_trigger before
+update on public.profiles for each row when (old.* is distinct from new.*)
+execute function public.set_updated_record_fields ();
 
-create function simmer.profile_to_app_metadata()
-returns trigger
-language plpgsql
-security definer
-set search_path = ''
-as $$
+create function simmer.profile_to_app_metadata () returns trigger language plpgsql security definer
+set
+    search_path='' as $$
     declare
         v_app_meta jsonb;
         v_user_id uuid;
@@ -71,5 +65,8 @@ as $$
 $$;
 
 create trigger profile_to_app_metadata_trigger
-    after insert or update or delete on public.profiles
-    for each row execute function simmer.profile_to_app_metadata();
+after insert
+or
+update
+or delete on public.profiles for each row
+execute function simmer.profile_to_app_metadata ();

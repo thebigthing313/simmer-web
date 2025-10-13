@@ -8,15 +8,13 @@ create table public.groups (
     "website_url" text,
     "logo_url" text,
     "created_at" timestamp with time zone not null default now(),
-    "created_by" uuid references auth.users(id) on delete restrict,
+    "created_by" uuid references auth.users (id) on delete restrict,
     "updated_at" timestamp with time zone,
-    "updated_by" uuid references auth.users(id) on delete restrict,
+    "updated_by" uuid references auth.users (id) on delete restrict,
     "deleted_at" timestamp with time zone,
-    "deleted_by" uuid references auth.users(id) on delete restrict
+    "deleted_by" uuid references auth.users (id) on delete restrict
 );
 
-create trigger handle_updated_trigger
-    before update on public.groups
-    for each row
-    when (old.* is distinct from new.*)
-    execute function public.set_updated_record_fields();
+create trigger handle_updated_trigger before
+update on public.groups for each row when (old.* is distinct from new.*)
+execute function public.set_updated_record_fields ();

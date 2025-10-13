@@ -1,9 +1,6 @@
-create or replace function public.set_created_by()
-returns trigger
-language plpgsql
-set search_path = ''
-security invoker
-as $$
+create or replace function public.set_created_by () returns trigger language plpgsql
+set
+    search_path = '' security invoker as $$
 begin
 
     if TG_OP = 'UPDATE' then
