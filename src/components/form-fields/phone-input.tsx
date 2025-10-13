@@ -55,7 +55,7 @@ interface PhoneInputProps
     'type' | 'value' | 'onChange'
   > {
   /** stored phone value (E.164) with optional extension separated by `x`, e.g. +17325490665x12 - when provided, component is controlled */
-  value?: string
+  value?: string | null
   label?: string
   description?: string
   errors?: ({ message?: string } | undefined)[]
