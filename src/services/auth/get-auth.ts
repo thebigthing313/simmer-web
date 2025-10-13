@@ -47,11 +47,18 @@ export async function getAuth(supabase: SIMMERClient): Promise<Auth> {
   }
 
   async function fetchClaims(): Promise<AuthStatus & { error?: Error }> {
+    const { data: session, error: sessionError } =
+      await supabase.auth.getSession()
+
+    if (sessionError || !session?.session) {
+      return { error: sessionError ?? new Error('No session found') }
+    }
+
     const { data, error: supabaseError } = await supabase.auth.getClaims()
 
     if (supabaseError || !data?.claims) {
       return {
-        error: supabaseError ?? new Error('Session or claims not found.'),
+        error: supabaseError ?? new Error('No session or claims found'),
       }
     }
 
