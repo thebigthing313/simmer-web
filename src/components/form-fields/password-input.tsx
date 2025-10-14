@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, Ref } from 'react'
+import { InputHTMLAttributes, Ref } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import {
   Field,

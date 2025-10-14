@@ -1,5 +1,5 @@
 import { MailIcon } from 'lucide-react'
-import type { InputHTMLAttributes, Ref } from 'react'
+import { InputHTMLAttributes, Ref } from 'react'
 import {
   InputGroup,
   InputGroupAddon,

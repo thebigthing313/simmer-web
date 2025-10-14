@@ -5,7 +5,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from '@/components/ui/item'
-import type { MouseEvent as ReactMouseEvent } from 'react'
+import { MouseEvent as ReactMouseEvent } from 'react'
 import { cn } from '@/lib/utils'
 
 interface GroupCardProps {

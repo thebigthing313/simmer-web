@@ -10,7 +10,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group'
-import type { InputHTMLAttributes, Ref } from 'react'
+import { InputHTMLAttributes, Ref } from 'react'
 import { Spinner } from '@/components/ui/spinner'
 
 interface TextInputProps

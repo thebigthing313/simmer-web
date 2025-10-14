@@ -1,4 +1,4 @@
-import type { SIMMERClient } from './client'
+import { SIMMERClient } from './client'
 
 export async function acceptGroupInvite(
   supabase: SIMMERClient,

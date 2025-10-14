@@ -1,5 +1,5 @@
-import type { QueryOptions } from '@tanstack/react-query'
-import type { Database } from '@/types/supabase-types'
+import { QueryOptions } from '@tanstack/react-query'
+import { Database } from '@/types/supabase-types'
 
 export type Table = keyof Database['public']['Tables']
 export type Row<T extends Table> = Database['public']['Tables'][T]['Row']

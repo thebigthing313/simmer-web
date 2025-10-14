@@ -10,7 +10,7 @@ import {
   parsePhoneNumberFromString,
   getCountryCallingCode,
 } from 'libphonenumber-js/min'
-import type { CountryCode } from 'libphonenumber-js'
+import { CountryCode } from 'libphonenumber-js'
 import {
   Popover,
   PopoverContent,

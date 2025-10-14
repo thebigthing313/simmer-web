@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import type { ButtonHTMLAttributes, Ref } from 'react'
+import { ButtonHTMLAttributes, Ref } from 'react'
 import { Spinner } from '@/components/ui/spinner'
 
 interface SubmitButtonProps
