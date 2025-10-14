@@ -10,7 +10,8 @@
     "lint": "eslint",
     "format": "prettier",
     "check": "prettier --write . && eslint --fix",
-    "db-types": "pnpx supabase gen types typescript --local > ./src/types/supabase-types.ts"
+    "db-types": "pnpx supabase gen types typescript --local > ./src/types/supabase-types.ts -Encoding utf8",
+    "db-schemas": "pnpm supazod -i ./src/types/supabase-types.ts -o ./src/types/db-schemas.ts -t ./src/types/db-schemas.d.ts -s public"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -86,6 +87,7 @@
     "@vitejs/plugin-react": "^5.0.4",
     "jsdom": "^27.0.0",
     "prettier": "^3.5.3",
+    "supazod": "^4.1.0",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
     "vitest": "^3.0.5",
