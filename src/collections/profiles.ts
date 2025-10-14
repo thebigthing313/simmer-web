@@ -1,8 +1,8 @@
 import { QueryClient } from '@tanstack/query-core'
 import { createCollection } from '@tanstack/db'
 import { queryCollectionOptions } from '@tanstack/query-db-collection'
-import type { SIMMERClient } from '@/services/data/client'
-import { selectProfilesSchema } from '@/types/db-schemas'
+import { SIMMERClient } from '@/services/data/client'
+import { publicProfilesRowSchema } from '@/types/db-schemas'
 
 export const profilesCollection = (
   supabase: SIMMERClient,
@@ -14,27 +14,25 @@ export const profilesCollection = (
       queryFn: async () => {
         const { data } = await supabase.from('profiles').select('*')
         if (!data) return []
-        return data.map((profile) => ({
-          ...profile,
-          created_at: new Date(profile.created_at),
-          updated_at: profile.updated_at ? new Date(profile.updated_at) : null,
-          deleted_at: profile.deleted_at ? new Date(profile.deleted_at) : null,
-        }))
+        return data
       },
       queryClient,
       staleTime: 1000 * 60 * 60 * 24, // 1 day
       getKey: (item) => item.id,
-      schema: selectProfilesSchema,
+      schema: publicProfilesRowSchema,
       onInsert: async ({ transaction }) => {
         const { modified: newProfile } = transaction.mutations[0]
         await supabase.from('profiles').insert(newProfile)
       },
       onUpdate: async ({ transaction }) => {
         const { modified: updatedProfile } = transaction.mutations[0]
-        await supabase
+        const { data, error } = await supabase
           .from('profiles')
           .update(updatedProfile)
           .eq('id', updatedProfile.id)
+          .select()
+        if (error) throw error
+        return data
       },
       onDelete: async ({ transaction }) => {
         const { original: deletedProfile } = transaction.mutations[0]

@@ -1,8 +1,8 @@
 import { QueryClient } from '@tanstack/query-core'
 import { createCollection } from '@tanstack/db'
 import { queryCollectionOptions } from '@tanstack/query-db-collection'
-import type { SIMMERClient } from '@/services/data/client'
-import { selectGroupsSchema } from '@/types/db-schemas'
+import { SIMMERClient } from '@/services/data/client'
+import { publicGroupsRowSchema } from '@/types/db-schemas'
 
 export const groupsCollection = (
   supabase: SIMMERClient,
@@ -12,31 +12,26 @@ export const groupsCollection = (
 ) =>
   createCollection(
     queryCollectionOptions({
-      queryKey: ['groups'],
+      queryKey: ['groups', `user_id:${user_id}`, `profile_id:${profile_id}`],
       queryFn: async () => {
         const { data: joinedGroups } = await supabase
           .from('groups')
-          .select('*')
+          .select('*, group_profiles(profile_id)')
           .eq('group_profiles.profile_id', profile_id)
 
         const { data: invitedGroups } = await supabase
           .from('groups')
-          .select('*')
+          .select('*, group_invites(user_id)')
           .eq('group_invites.user_id', user_id)
 
         if (!joinedGroups && !invitedGroups) return []
         const groups = [...(joinedGroups ?? []), ...(invitedGroups ?? [])]
-        return groups.map((group) => ({
-          ...group,
-          created_at: new Date(group.created_at),
-          updated_at: group.updated_at ? new Date(group.updated_at) : null,
-          deleted_at: group.deleted_at ? new Date(group.deleted_at) : null,
-        }))
+        return groups
       },
       queryClient,
       staleTime: 1000 * 60 * 60 * 24, //1 day
       getKey: (item) => item.id,
-      schema: selectGroupsSchema,
+      schema: publicGroupsRowSchema,
       onInsert: async ({ transaction }) => {
         const { modified: newGroup } = transaction.mutations[0]
         await supabase.from('groups').insert(newGroup)
