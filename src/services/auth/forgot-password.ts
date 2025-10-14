@@ -1,4 +1,4 @@
-import type { SIMMERClient } from '@/services/data/client'
+import { SIMMERClient } from '@/services/data/client'
 
 /**
  * Sends a password reset email to the specified user using Supabase authentication.

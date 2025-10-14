@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { SIMMERClient } from '@/services/data/client'
+import { SIMMERClient } from '@/services/data/client'
 
 // add this helper near the top with fetchGroupIdBySlug
 async function fetchGroupSlugById(
