@@ -42,18 +42,21 @@ with
 create policy "update: own or group admin for group dummy profiles" on public.profiles
 for update
     to authenticated using (
-        user_id=(
-            select
-                auth.uid ()
-        )
-        or exists (
-            select
-                1
-            from
-                public.group_profiles gp
-            where
-                gp.profile_id=public.profiles.id
-                and public.user_has_group_role (gp.group_id, 'admin')
+        deleted_at is null
+        and (
+            user_id=(
+                select
+                    auth.uid ()
+            )
+            or exists (
+                select
+                    1
+                from
+                    public.group_profiles gp
+                where
+                    gp.profile_id=public.profiles.id
+                    and public.user_has_group_role (gp.group_id, 'admin')
+            )
         )
     )
 with

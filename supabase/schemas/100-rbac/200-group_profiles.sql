@@ -15,6 +15,8 @@ create table public.group_profiles (
     created_by uuid references auth.users (id) on delete restrict,
     updated_at timestamp with time zone,
     updated_by uuid references auth.users (id) on delete restrict,
+    deleted_at timestamp with time zone,
+    deleted_by uuid references auth.users (id) on delete restrict,
     is_active boolean not null default true,
     unique (group_id, profile_id, role)
 );

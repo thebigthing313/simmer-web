@@ -6,7 +6,11 @@ create table public.group_invites (
     "expiration_date" timestamp with time zone,
     "is_accepted" boolean not null default false,
     "created_at" timestamp with time zone not null default now(),
-    "created_by" uuid references auth.users (id) on delete restrict
+    "created_by" uuid references auth.users (id) on delete restrict,
+    "updated_at" timestamp with time zone,
+    "updated_by" uuid references auth.users (id) on delete restrict,
+    "deleted_at" timestamp with time zone,
+    "deleted_by" uuid references auth.users (id) on delete restrict
 );
 
 -- prevent multiple invites for the same user in the same group
@@ -14,6 +18,10 @@ create unique index on public.group_invites (group_id, user_id);
 
 create trigger handle_created_trigger before insert on public.group_invites for each row
 execute function public.set_created_by ();
+
+create trigger handle_updated_trigger before
+update on public.group_invites for each row when (old.* is distinct from new.*)
+execute function public.set_updated_record_fields ();
 
 create or replace function simmer.handle_group_invite_accept () returns trigger language plpgsql security definer
 set
