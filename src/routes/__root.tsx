@@ -1,5 +1,3 @@
-import type { SIMMERClient } from '@/services/data/client'
-import type { QueryClient } from '@tanstack/react-query'
 import {
   Outlet,
   createRootRouteWithContext,
@@ -7,12 +5,15 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { Info } from 'lucide-react'
+import type { SIMMERClient } from '@/services/data/client'
+import type { QueryClient } from '@tanstack/react-query'
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
 
 import { getAuth } from '@/services/auth/get-auth'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Toaster } from '@/components/ui/sonner'
 
 interface MyRouterContext {
   supabase: SIMMERClient
@@ -27,6 +28,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <>
       <Outlet />
+      <Toaster />
       <TanStackDevtools
         config={{
           position: 'bottom-right',
