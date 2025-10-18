@@ -1,15 +1,26 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js'
-import { Database } from '@/types/supabase-types'
+import { createClient } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
+import type { Database } from '@/db/supabase-types'
 
 export type SIMMERClient = SupabaseClient<Database>
+
 /**
- * Creates and returns a SIMMERDatabase client instance using the provided Supabase URL and API key.
- *
- * @param url - The Supabase project URL.
- * @param key - The Supabase API key.
- * @returns A configured instance of SIMMERDatabase for interacting with the database.
+ * Factory to create a SIMMER Supabase client. This returns a new client instance.
+ * Prefer importing the shared `supabase` singleton below to avoid multiple
+ * GoTrueClient instances sharing the same browser storage key.
  */
 export function createSIMMERClient(url: string, key: string): SIMMERClient {
-  const supabase = createClient<Database>(url, key)
-  return supabase
+  return createClient<Database>(url, key, {
+    // Use an explicit storage key to avoid conflicts if multiple clients are
+    // ever created unintentionally. Prefer the exported singleton instead.
+    auth: { storageKey: 'simmer-auth' },
+  })
 }
+
+// Export a shared supabase client instance created from Vite env vars.
+// Import this singleton where possible so only one GoTrueClient is created
+// in the same browser context.
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+export const supabase: SIMMERClient = createSIMMERClient(supabaseUrl, supabaseAnonKey)
