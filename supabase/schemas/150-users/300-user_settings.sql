@@ -1,20 +1,28 @@
-create type public.setting_names as enum (
-    'user_default_group_id'
-);
+create type public.setting_names as enum('user_default_group_id');
 
 create table public.user_settings (
     id uuid primary key default gen_random_uuid(),
-    user_id uuid not null references auth.users(id) on delete cascade,
+    user_id uuid not null references auth.users (id) on delete cascade,
     setting_name public.setting_names not null,
-    setting_value text
+    setting_value text,
+    "created_at" timestamp with time zone not null default now(),
+    "created_by" uuid references auth.users (id) on delete restrict,
+    "updated_at" timestamp with time zone,
+    "updated_by" uuid references auth.users (id) on delete restrict,
+    "deleted_at" timestamp with time zone,
+    "deleted_by" uuid references auth.users (id) on delete restrict
 );
 
-create or replace function simmer.default_group_to_app_metadata()
-returns trigger
-language plpgsql
-security definer
-set search_path = ''
-as $$
+create trigger handle_created_trigger before insert on public.user_settings for each row
+execute function public.set_created_by ();
+
+create trigger handle_updated_trigger before
+update on public.user_settings for each row when (old.* is distinct from new.*)
+execute function public.set_updated_record_fields ();
+
+create or replace function simmer.default_group_to_app_metadata () returns trigger language plpgsql security definer
+set
+    search_path='' as $$
     declare
         v_app_meta jsonb;
         v_user_id uuid;
@@ -64,5 +72,8 @@ as $$
 $$;
 
 create trigger default_group_to_app_metadata_trigger
-    after insert or update or delete on public.user_settings
-    for each row execute function simmer.default_group_to_app_metadata();
+after insert
+or
+update
+or delete on public.user_settings for each row
+execute function simmer.default_group_to_app_metadata ();
