@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { getAuth } from '@/services/auth/get-auth'
 import Logo from '@/assets/simmer-logo.svg?url'
 

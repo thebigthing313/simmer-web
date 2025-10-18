@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { ErrorAlert } from './-components/error-alert'
 import { useState } from 'react'
-import { ForgotPasswordForm } from './-components/forgot-password-form'
-import { forgotPassword } from '@/services/auth/forgot-password'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { ErrorAlert } from './-components/error-alert'
+import { ForgotPasswordForm } from './-components/forgot-password-form'
+import { forgotPassword } from '@/services/auth/forgot-password'
 
 export const Route = createFileRoute('/(auth)/forgot-password')({
   component: RouteComponent,

@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { ResetPasswordForm } from './-components/reset-password-form'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
-import { resetPassword } from '@/services/auth/reset-password'
-import { ErrorAlert } from './-components/error-alert'
 import { useState } from 'react'
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import { CircleCheck } from 'lucide-react'
+import { ResetPasswordForm } from './-components/reset-password-form'
+import { ErrorAlert } from './-components/error-alert'
+import { resetPassword } from '@/services/auth/reset-password'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 export const Route = createFileRoute('/(auth)/reset-password')({
   component: RouteComponent,
@@ -23,8 +23,8 @@ function RouteComponent() {
     mutationFn: async (newPassword: string) => {
       await resetPassword(supabase, newPassword)
     },
-    onError: (error: Error) => {
-      setErrorMsg(error.message)
+    onError: (mutationError: Error) => {
+      setErrorMsg(mutationError.message)
     },
     onSuccess: async () => {
       setErrorMsg(null)
