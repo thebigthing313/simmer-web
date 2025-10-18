@@ -3,11 +3,14 @@ alter table public.profiles enable row level security;
 create policy "select: own and groupmates" on public.profiles for
 select
     to authenticated using (
-        user_id=(
-            select
-                auth.uid ()
+        deleted_at is null
+        and (
+            user_id=(
+                select
+                    auth.uid ()
+            )
+            or public.is_group_mate (id, 'profile')
         )
-        or public.is_group_mate (id, 'profile')
     );
 
 create policy "insert: own, or group owner for group dummy profiles" on public.profiles for insert to authenticated
