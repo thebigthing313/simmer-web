@@ -1,79 +1,29 @@
+import { Link, useNavigate, useRouteContext } from '@tanstack/react-router'
+import { PlusIcon } from 'lucide-react'
+import { Children } from 'react'
 import { acceptGroupInvite } from '@/services/data/accept-group-invite'
 import { GroupCard } from '@/components/blocks/group-card'
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
 } from '@/components/ui/card'
 import { Empty, EmptyDescription, EmptyTitle } from '@/components/ui/empty'
-import { Link, useNavigate, useRouteContext } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
-import { PlusIcon } from 'lucide-react'
-import { Children } from 'react'
-import { groupInvitesCollection } from '@/collections/group_invites'
-import { groupsCollection } from '@/collections/groups'
-import {
-  createLiveQueryCollection,
-  eq,
-  gte,
-  and,
-  or,
-  useLiveQuery,
-} from '@tanstack/react-db'
+import { useGroupInvites } from '@/db/hooks/use-group-invites'
 
 export function MyInvitesCard() {
+  const { supabase, user_id } = useRouteContext({ from: '/(user)' })
+  const { query, collection } = useGroupInvites(user_id)
   const navigate = useNavigate()
-  const { supabase, queryClient, user_id, profile_id } = useRouteContext({
-    from: '/(user)',
-  })
 
-  const group_invites = groupInvitesCollection(supabase, queryClient)
-  const groups = groupsCollection(supabase, queryClient, user_id, profile_id)
-
-  const invites = createLiveQueryCollection((q) =>
-    q
-      .from({ group_invite: group_invites })
-      .innerJoin({ group: groups }, ({ group_invite, group }) =>
-        eq(group.id, group_invite.group_id),
-      )
-      .select(({ group, group_invite }) => ({
-        id: group_invite.id,
-        group_name: group.group_name,
-        address: group.address,
-        logo_url: group.logo_url,
-        short_name: group.short_name,
-        role: group_invite.role,
-        expiration_date: group_invite.expiration_date,
-        is_accepted: group_invite.is_accepted,
-      })),
-  )
-
-  const { data: activeInvites } = useLiveQuery((q) =>
-    q
-      .from({ invite: invites })
-      .select(({ invite }) => ({
-        id: invite.id,
-        group_name: invite.group_name,
-        address: invite.address,
-        logo_url: invite.logo_url,
-        short_name: invite.short_name,
-        role: invite.role,
-      }))
-      .where(({ invite }) =>
-        and(
-          eq(invite.is_accepted, false),
-          or(
-            eq(invite.expiration_date, null),
-            gte(invite.expiration_date, new Date()),
-          ),
-        ),
-      ),
-  )
+  const invites = query.data
 
   async function handleAccept(id: string, slug: string) {
     await acceptGroupInvite(supabase, id)
+    await collection.utils.refetch()
     navigate({ to: '/$groupSlug', params: { groupSlug: slug } })
   }
 
@@ -85,23 +35,16 @@ export function MyInvitesCard() {
       </CardHeader>
       <CardContent>
         <GroupCardGroup key="user-groups">
-          {activeInvites &&
-            activeInvites.length > 0 &&
-            activeInvites.map((invite) => {
-              const { id, group_name, address, logo_url, short_name, role } =
-                invite
-              return (
-                <GroupCard
-                  key={`gc-${invite.id}`}
-                  id={id}
-                  name={group_name}
-                  address={address}
-                  role={role}
-                  logo={logo_url || undefined}
-                  onSelect={() => handleAccept(invite.id, short_name)}
-                />
-              )
-            })}
+          {invites.map((invite) => {
+            const { group_invite, group } = invite
+            return (
+              <Button
+                onClick={() => handleAccept(group_invite.id, group.short_name)}
+              >
+                <GroupCard key={`gc-${group_invite.id}`} group_id={group.id} />
+              </Button>
+            )
+          })}
         </GroupCardGroup>
       </CardContent>
     </Card>

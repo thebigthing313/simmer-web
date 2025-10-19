@@ -1,5 +1,6 @@
 import { Children } from 'react'
-import { Link, useRouteContext } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
+import { PlusIcon } from 'lucide-react'
 import {
   Card,
   CardContent,
@@ -9,43 +10,17 @@ import {
 } from '@/components/ui/card'
 import {
   Empty,
-  EmptyTitle,
-  EmptyDescription,
   EmptyContent,
+  EmptyDescription,
+  EmptyTitle,
 } from '@/components/ui/empty'
 import { Button } from '@/components/ui/button'
 import { GroupCard } from '@/components/blocks/group-card'
-import { PlusIcon } from 'lucide-react'
-import { groupsCollection } from '@/collections/groups'
-import { groupProfilesCollection } from '@/collections/group_profiles'
-import { createLiveQueryCollection, eq, useLiveQuery } from '@tanstack/react-db'
+import { useGroups } from '@/db/hooks/use-groups'
 
 export function MyGroupsCard() {
-  const { supabase, queryClient, user_id, profile_id } = useRouteContext({
-    from: '/(user)',
-  })
-  const groups = groupsCollection(supabase, queryClient, user_id, profile_id)
-  const group_profiles = groupProfilesCollection(supabase, queryClient)
-
-  const activeGroupCollection = createLiveQueryCollection((q) =>
-    q
-      .from({ group_profile: group_profiles })
-      .innerJoin({ group: groups }, ({ group_profile, group }) =>
-        eq(group.id, group_profile.group_id),
-      )
-      .select(({ group, group_profile }) => ({
-        id: group.id,
-        group_name: group.group_name,
-        address: group.address,
-        logo_url: group.logo_url,
-        short_name: group.short_name,
-        role: group_profile.role,
-      })),
-  )
-
-  const { data: active_groups } = useLiveQuery((q) =>
-    q.from({ active_group: activeGroupCollection }),
-  )
+  const { query } = useGroups()
+  const groups = query.data
 
   return (
     <Card>
@@ -57,27 +32,17 @@ export function MyGroupsCard() {
       </CardHeader>
       <CardContent>
         <GroupCardGroup key="user-groups">
-          {active_groups &&
-            active_groups.length > 0 &&
-            active_groups.map((group) => {
-              const { id, group_name, address, logo_url, short_name } = group
-              return (
-                <Link
-                  key={`link-${id}`}
-                  to="/$groupSlug"
-                  params={{ groupSlug: short_name }}
-                >
-                  <GroupCard
-                    key={`gc-${id}`}
-                    id={id}
-                    name={group_name}
-                    address={address}
-                    role={group.role}
-                    logo={logo_url || undefined}
-                  />
-                </Link>
-              )
-            })}
+          {groups.map((group) => {
+            return (
+              <Link
+                key={`link-${group.id}`}
+                to="/$groupSlug"
+                params={{ groupSlug: group.short_name }}
+              >
+                <GroupCard key={`gc-${group.id}`} group_id={group.id} />
+              </Link>
+            )
+          })}
         </GroupCardGroup>
       </CardContent>
     </Card>
