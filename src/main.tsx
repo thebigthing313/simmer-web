@@ -9,13 +9,19 @@ import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
-import { createSIMMERClient } from './services/data/client.ts'
+import { supabase } from './services/data/client.ts'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+import { useGroupStore } from './stores/group-stores.ts'
 
-const supabase = createSIMMERClient(supabaseUrl, supabaseAnonKey)
+// Re-export the singleton so other modules that import from `@/main.tsx`
+// continue to work without creating additional Supabase client instances.
+export { supabase }
+
+// `supabase` singleton is imported from services/data/client.ts
 // Create a new router instance
+
+// Set the supabase client in the group store for access in collections
+useGroupStore.getState().setDb(supabase)
 
 const TanStackQueryProviderContext = TanStackQueryProvider.getContext()
 const router = createRouter({
@@ -24,10 +30,10 @@ const router = createRouter({
     ...TanStackQueryProviderContext,
     supabase,
   },
-  defaultPreload: 'intent',
+  // defaultPreload: 'intent',
   scrollRestoration: true,
   defaultStructuralSharing: true,
-  defaultPreloadStaleTime: 0,
+  // defaultPreloadStaleTime: 0,
 })
 
 // Register the router instance for type safety
