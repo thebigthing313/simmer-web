@@ -1,22 +1,24 @@
-import type { MenuGroup } from '@/components/layout/app-sidebar'
-import { SidebarWithInset } from '@/components/layout/sidebar-with-inset'
 import {
-  createFileRoute,
   Outlet,
+  createFileRoute,
   redirect,
   useLocation,
 } from '@tanstack/react-router'
 import { UserIcon } from 'lucide-react'
+import type { MenuGroup } from '@/components/layout/app-sidebar'
+import { SidebarWithInset } from '@/components/layout/sidebar-with-inset'
 import Logo from '@/assets/simmer-logo.svg?url'
 import Favicon from '@/assets/simmer-favicon.svg?url'
 import { useSidebar } from '@/components/ui/sidebar'
-import { profilesCollection } from '@/collections/profiles'
-import { groupsCollection } from '@/collections/groups'
-import { groupInvitesCollection } from '@/collections/group_invites'
-import { groupProfilesCollection } from '@/collections/group_profiles'
+import {
+  groupInvitesCollection,
+  groupProfilesCollection,
+  groupsCollection,
+  profilesCollection,
+} from '@/db/collections'
 
 export const Route = createFileRoute('/(user)')({
-  beforeLoad: async ({ context }) => {
+  beforeLoad: ({ context }) => {
     const { auth } = context
     if (!auth.user_id || !auth.profile_id) throw redirect({ to: '/login' })
     return {
@@ -27,17 +29,12 @@ export const Route = createFileRoute('/(user)')({
     }
   },
   component: RouteComponent,
-  loader: async ({ context }) => {
-    await Promise.all([
-      profilesCollection(context.supabase, context.queryClient).preload(),
-      groupsCollection(
-        context.supabase,
-        context.queryClient,
-        context.user_id,
-        context.profile_id,
-      ).preload(),
-      groupInvitesCollection(context.supabase, context.queryClient).preload(),
-      groupProfilesCollection(context.supabase, context.queryClient).preload(),
+  loader: async () => {
+    await Promise.allSettled([
+      profilesCollection.preload(),
+      groupsCollection.preload(),
+      groupInvitesCollection.preload(),
+      groupProfilesCollection.preload(),
     ])
   },
 })
@@ -54,6 +51,11 @@ function RouteComponent() {
           icon: <UserIcon />,
           subItems: [
             {
+              title: 'Home',
+              link: { to: '/' },
+              isActive: pathname === '/',
+            },
+            {
               title: 'Personal Information',
               link: { to: '/profile' },
               isActive: pathname === '/profile',
@@ -62,11 +64,6 @@ function RouteComponent() {
               title: 'Settings',
               link: { to: '/settings' },
               isActive: pathname === '/settings',
-            },
-            {
-              title: 'Groups',
-              link: { to: '/' },
-              isActive: pathname === '/',
             },
           ],
         },
