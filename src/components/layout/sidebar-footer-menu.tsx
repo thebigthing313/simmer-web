@@ -1,3 +1,4 @@
+import { HelpCircleIcon, InfoIcon } from 'lucide-react'
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -5,7 +6,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { HelpCircleIcon, InfoIcon } from 'lucide-react'
 
 export function SidebarFooterMenu() {
   return (
