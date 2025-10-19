@@ -1,5 +1,7 @@
-import { InputHTMLAttributes, Ref } from 'react'
+import { EyeIcon } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import type { InputHTMLAttributes, Ref } from 'react'
+
 import {
   Field,
   FieldDescription,
@@ -8,17 +10,16 @@ import {
 } from '@/components/ui/field'
 import {
   InputGroup,
-  InputGroupInput,
   InputGroupAddon,
+  InputGroupInput,
 } from '@/components/ui/input-group'
 import { Button } from '@/components/ui/button'
-import { EyeIcon } from 'lucide-react'
 
 interface PasswordInputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label?: string
   description?: string
-  errors?: ({ message?: string } | undefined)[]
+  errors?: Array<{ message?: string } | undefined>
   ref?: Ref<HTMLInputElement>
   className?: string
 }

@@ -1,29 +1,29 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import {
+  AsYouType,
+  getCountries,
+  getCountryCallingCode,
+  parsePhoneNumberFromString,
+} from 'libphonenumber-js/min'
+import { ChevronsUpDown } from 'lucide-react'
+import type { CountryCode } from 'libphonenumber-js'
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group'
 import {
-  getCountries,
-  AsYouType,
-  parsePhoneNumberFromString,
-  getCountryCallingCode,
-} from 'libphonenumber-js/min'
-import { CountryCode } from 'libphonenumber-js'
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { ChevronsUpDown } from 'lucide-react'
 import {
   Command,
   CommandEmpty,
+  CommandInput,
   CommandItem,
   CommandList,
-  CommandInput,
 } from '@/components/ui/command'
 import {
   Field,
@@ -58,7 +58,7 @@ interface PhoneInputProps
   value?: string | null
   label?: string
   description?: string
-  errors?: ({ message?: string } | undefined)[]
+  errors?: Array<{ message?: string } | undefined>
   /** called with the stored value (E.164 + optional `x` + ext) whenever user changes input */
   onChange?: (stored: string) => void
   className?: string
@@ -113,7 +113,7 @@ export function PhoneInput({
           setDisplayValue(parsed.formatNational())
           // Only overwrite the selected country when the source was canonical E.164
           if (e164.startsWith('+') && parsed.country)
-            setSelectedCountry(parsed.country as CountryCode)
+            setSelectedCountry(parsed.country)
           return
         }
       }
@@ -264,8 +264,8 @@ export function PhoneInput({
                         <CommandItem
                           key={country}
                           value={country}
-                          onSelect={(value) => {
-                            handleCountrySelect(value as CountryCode)
+                          onSelect={(v) => {
+                            handleCountrySelect(v as CountryCode)
                             setOpen(false)
                           }}
                         >

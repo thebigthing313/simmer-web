@@ -1,5 +1,5 @@
 import { MailIcon } from 'lucide-react'
-import { InputHTMLAttributes, Ref } from 'react'
+import type { InputHTMLAttributes, Ref } from 'react'
 import {
   InputGroup,
   InputGroupAddon,
@@ -16,7 +16,7 @@ interface EmailInputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label?: string
   description?: string
-  errors?: ({ message?: string } | undefined)[]
+  errors?: Array<{ message?: string } | undefined>
   ref?: Ref<HTMLInputElement>
   className?: string
 }
