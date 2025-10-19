@@ -1,3 +1,4 @@
+import { parsePhoneNumber } from 'libphonenumber-js/min'
 import {
   Item,
   ItemContent,
@@ -5,49 +6,32 @@ import {
   ItemMedia,
   ItemTitle,
 } from '@/components/ui/item'
-import { MouseEvent as ReactMouseEvent } from 'react'
-import { cn } from '@/lib/utils'
+import { useGroup } from '@/db/hooks/use-group'
 
 interface GroupCardProps {
-  id: string
-  name: string
-  address: string
-  role?: string
-  logo?: string
-  default?: boolean
-  onSelect?: (id: string, e?: ReactMouseEvent<HTMLDivElement>) => void
+  group_id: string
   className?: string
 }
 
-export function GroupCard({
-  id,
-  name,
-  role,
-  address,
-  logo,
-  onSelect,
-  className,
-  default: isDefault,
-}: GroupCardProps) {
+export function GroupCard({ group_id, className }: GroupCardProps) {
+  const { query } = useGroup(group_id)
+  const { logo_url, group_name, address, phone } = query.data[0]
+
   return (
     <Item
-      key={id}
+      key={`group-card-${group_id}`}
       variant="outline"
-      className={cn(
-        'transition-colors duration-300 ease-in-out hover:cursor-pointer hover:bg-accent',
-        className,
-      )}
-      onClick={(e) => onSelect?.(id, e)}
+      className={className}
     >
       <ItemMedia className="size-20" variant="image">
-        <img src={logo || undefined} alt={name} />
+        <img src={logo_url || undefined} alt={group_name} />
       </ItemMedia>
 
       <ItemContent>
-        <ItemTitle>{name}</ItemTitle>
+        <ItemTitle>{group_name}</ItemTitle>
         <ItemDescription className="tracking-tight">{address}</ItemDescription>
-        <ItemDescription className="text-xs text-muted-foreground">
-          role: {role} {isDefault && ' · default'}
+        <ItemDescription className="tracking-tight">
+          {parsePhoneNumber(phone, 'US').formatNational()}
         </ItemDescription>
       </ItemContent>
     </Item>
