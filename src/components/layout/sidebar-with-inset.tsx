@@ -1,6 +1,7 @@
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
-import { AppSidebar, type MenuGroup } from './app-sidebar'
+import { AppSidebar } from './app-sidebar'
 import { SiteHeader } from './site-header'
+import type { MenuGroup } from './app-sidebar'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 
 interface SidebarWithInsetProps {
   header?: React.ReactNode
