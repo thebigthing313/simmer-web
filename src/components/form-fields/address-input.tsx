@@ -1,4 +1,6 @@
-import { Ref } from 'react'
+import { HomeIcon, SearchIcon } from 'lucide-react'
+import { toast } from 'sonner'
+import type { Ref } from 'react'
 import {
   InputGroup,
   InputGroupAddon,
@@ -11,13 +13,11 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 import { Spinner } from '@/components/ui/spinner'
-import { HomeIcon, SearchIcon } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { toast } from 'sonner'
 
 interface AddressInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
