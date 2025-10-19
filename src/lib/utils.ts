@@ -1,7 +1,9 @@
-import { clsx, type ClassValue } from 'clsx'
+/* eslint-disable @typescript-eslint/naming-convention */
+import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import type { ClassValue } from 'clsx'
 
-export function cn(...inputs: ClassValue[]) {
+export function cn(...inputs: Array<ClassValue>) {
   return twMerge(clsx(inputs))
 }
 
@@ -16,5 +18,40 @@ export function cn(...inputs: ClassValue[]) {
  * type B = Prettify<A>; // { a: number; b: string }
  */
 export type Prettify<T> = {
-  [K in keyof T]: T[K];
-} & {};
+  [K in keyof T]: T[K]
+} & {}
+
+export function buildChangedFields<T extends Record<string, any>>(
+  value: Partial<T>,
+  defaults: Partial<T>,
+) {
+  const keys = new Set<string>([
+    ...Object.keys(defaults),
+    ...Object.keys(value),
+  ])
+  const changed: Partial<T> = {}
+  keys.forEach((k) => {
+    const newVal = (value as any)[k]
+    const oldVal = (defaults as any)[k]
+    if (newVal !== oldVal) {
+      ;(changed as any)[k] = newVal
+    }
+  })
+  return changed
+}
+
+export type IsSuperset<A, B> = B extends A ? A : B
+export type IsIdentical<A, B> =
+  IsSuperset<A, B> extends A
+    ? IsSuperset<B, A> extends B
+      ? A
+      : {
+          ERROR: 'Zod type is missing a Supabase field or Zod field is narrower'
+          Supabase: A
+          Zod: B
+        }
+    : {
+        ERROR: 'Zod type is missing a Supabase field or Zod field is wider'
+        Supabase: A
+        Zod: B
+      }
