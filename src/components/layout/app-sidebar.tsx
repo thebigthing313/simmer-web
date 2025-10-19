@@ -1,3 +1,7 @@
+import { Link } from '@tanstack/react-router'
+import { ChevronRight } from 'lucide-react'
+import { SidebarFooterMenu } from './sidebar-footer-menu'
+import type { LinkProps } from '@tanstack/react-router'
 import {
   Sidebar,
   SidebarContent,
@@ -17,9 +21,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
-import { SidebarFooterMenu } from './sidebar-footer-menu'
-import { Link, type LinkProps } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
 
 type SubMenuItem = {
   title: string
