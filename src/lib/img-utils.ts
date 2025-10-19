@@ -13,44 +13,44 @@ export async function resizeImage(
   file: File,
   maxWidth: number,
   maxHeight: number,
-  maxFileSize?: number
+  maxFileSize?: number,
 ): Promise<File> {
   if (!file.type.startsWith('image/')) {
     // Return a new File with the same content if not an image
-    return new File([file], file.name, { type: file.type });
+    return new File([file], file.name, { type: file.type })
   }
 
-  let img: ImageBitmap;
+  let img: ImageBitmap
   try {
-    img = await createImageBitmap(file);
+    img = await createImageBitmap(file)
   } catch (err) {
-    throw new Error('Failed to decode image');
+    throw new Error('Failed to decode image')
   }
 
-  let width = img.width;
-  let height = img.height;
+  let width = img.width
+  let height = img.height
 
   if (width > height) {
     if (width > maxWidth) {
-      height *= maxWidth / width;
-      width = maxWidth;
+      height *= maxWidth / width
+      width = maxWidth
     }
   } else {
     if (height > maxHeight) {
-      width *= maxHeight / height;
-      height = maxHeight;
+      width *= maxHeight / height
+      height = maxHeight
     }
   }
 
-  const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
+  const canvas = document.createElement('canvas')
+  canvas.width = width
+  canvas.height = height
 
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d')
   if (!ctx) {
-    throw new Error('Canvas context not supported');
+    throw new Error('Canvas context not supported')
   }
-  ctx.drawImage(img, 0, 0, width, height);
+  ctx.drawImage(img, 0, 0, width, height)
 
   // Helper to create a File at a given quality
   const toFile = (quality: number): Promise<File> =>
@@ -59,31 +59,31 @@ export async function resizeImage(
         (blob) => {
           if (blob) {
             // Create a new File from the Blob
-            resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+            resolve(new File([blob], file.name, { type: 'image/jpeg' }))
           } else {
-            reject(new Error('Canvas toBlob failed'));
+            reject(new Error('Canvas toBlob failed'))
           }
         },
         'image/jpeg',
-        quality
-      );
-    });
+        quality,
+      )
+    })
 
   // If no maxFileSize, just return at default quality
   if (!maxFileSize) {
-    return toFile(0.9);
+    return toFile(0.9)
   }
 
   // Try reducing quality to fit maxFileSize
-  let quality = 0.9;
-  let minQuality = 0.4;
-  let step = 0.1;
-  let result: File = await toFile(quality);
+  let quality = 0.9
+  const minQuality = 0.4
+  const step = 0.1
+  let result: File = await toFile(quality)
 
   while (result.size > maxFileSize && quality > minQuality) {
-    quality -= step;
-    result = await toFile(quality);
+    quality -= step
+    result = await toFile(quality)
   }
 
-  return result;
+  return result
 }
