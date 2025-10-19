@@ -1,17 +1,18 @@
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
-import { groupsCollection } from '@/collections/groups'
 import z from 'zod'
-import { GroupNameSchema, PhoneNumberSchema } from '@/types/form-schemas'
 import { useForm } from '@tanstack/react-form'
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
+import { toast } from 'sonner'
+import type { ZodGroupInsertType, ZodGroupRowType } from '@/db/schemas/groups'
+import { groupsCollection } from '@/db/collections'
+import { GroupNameSchema, PhoneNumberSchema } from '@/types/form-schemas'
 import { TextInput } from '@/components/form-fields/text-input'
 import { AddressInput } from '@/components/form-fields/address-input'
 import { PhoneInput } from '@/components/form-fields/phone-input'
 import { SubmitButton } from '@/components/form-fields/submit-button'
-import { toast } from 'sonner'
-import { selectGroupsSchema } from '@/types/db-schemas'
+import { ZodGroupInsert } from '@/db/schemas/groups'
 
 export const Route = createFileRoute('/(user)/create-group')({
-  beforeLoad: async ({ context }) => {
+  beforeLoad: ({ context }) => {
     const { auth } = context
     if (!auth.user_id) {
       throw redirect({ to: '/login' })
@@ -23,9 +24,8 @@ export const Route = createFileRoute('/(user)/create-group')({
 })
 
 function RouteComponent() {
-  const { supabase, queryClient, auth, profile_id, user_id } =
-    Route.useRouteContext()
-  const groups = groupsCollection(supabase, queryClient, user_id, profile_id)
+  const { supabase, auth } = Route.useRouteContext()
+  const groups = groupsCollection
   const navigate = useNavigate()
 
   // local validator that uses route context; allow override via prop
@@ -52,10 +52,7 @@ function RouteComponent() {
       message: 'Short name is already taken',
     })
 
-  const formSchema = selectGroupsSchema.omit({ id: true })
-  type FormSchemaType = z.input<typeof formSchema>
-
-  const emptyFormValues: FormSchemaType = {
+  const emptyFormValues: ZodGroupInsertType = {
     group_name: '',
     address: '',
     phone: '',
@@ -66,22 +63,11 @@ function RouteComponent() {
   }
 
   const form = useForm({
-    validators: { onSubmit: formSchema },
+    validators: { onSubmit: ZodGroupInsert },
     defaultValues: emptyFormValues,
     onSubmit: async ({ value }) => {
-      const transaction = groups.insert(
-        {
-          id: crypto.randomUUID().toString(),
-          group_name: value.group_name,
-          address: value.address,
-          phone: value.phone,
-          short_name: value.short_name,
-          fax: value.fax,
-          website_url: value.website_url,
-          logo_url: value.logo_url,
-        },
-        { optimistic: false },
-      )
+      const insertValue = value as ZodGroupRowType
+      const transaction = groups.insert(insertValue, { optimistic: false })
       try {
         await transaction.isPersisted.promise
       } catch (error: unknown) {
