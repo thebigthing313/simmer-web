@@ -1,8 +1,8 @@
-import { useId, forwardRef, useRef, useState, useCallback } from 'react';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { FieldInfo } from '@/components/blocks/field-info';
-import { cn } from '@/lib/utils';
+import { forwardRef, useCallback, useId, useRef, useState } from 'react'
+import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
+// import { FieldInfo } from '@/components/blocks/field-info';
+import { cn } from '@/lib/utils'
 
 /**
  * Props for the PhotoInput component.
@@ -19,14 +19,14 @@ type PhotoInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   'id' | 'type' | 'value' | 'onChange'
 > & {
-  label?: string;
-  errorMsg?: string | string[];
-  helperMsg?: string | string[];
-  id?: string;
-  className?: string;
-  value?: File | null;
-  onChange: (file: File | null) => void;
-};
+  label?: string
+  errorMsg?: string | Array<string>
+  helperMsg?: string | Array<string>
+  id?: string
+  className?: string
+  value?: File | null
+  onChange: (file: File | null) => void
+}
 
 /**
  * PhotoInput component allows users to upload a photo via drag-and-drop or file picker.
@@ -48,19 +48,19 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
       value,
       ...rest
     },
-    ref
+    ref,
   ) => {
-    const generatedId = useId();
-    const id = idProp || generatedId;
-    const hasHelper = helperMsg && !errorMsg;
-    const hasError = !!errorMsg;
+    const generatedId = useId()
+    const id = idProp || generatedId
+    const hasHelper = helperMsg && !errorMsg
+    const hasError = !!errorMsg
     const descIds =
       [hasHelper ? `${id}-helper` : null, hasError ? `${id}-error` : null]
         .filter(Boolean)
-        .join(' ') || undefined;
+        .join(' ') || undefined
 
-    const [dragActive, setDragActive] = useState(false);
-    const inputRef = useRef<HTMLInputElement>(null);
+    const [dragActive, setDragActive] = useState(false)
+    const inputRef = useRef<HTMLInputElement>(null)
 
     /**
      * Sets both the local and forwarded refs.
@@ -68,23 +68,22 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
      */
     const setRefs = useCallback(
       (node: HTMLInputElement) => {
-        inputRef.current = node;
-        if (typeof ref === 'function') ref(node);
+        inputRef.current = node
+        if (typeof ref === 'function') ref(node)
         else if (ref)
           (ref as React.MutableRefObject<HTMLInputElement | null>).current =
-            node;
+            node
       },
-      [ref]
-    );
+      [ref],
+    )
 
     /**
      * Handles file input change event.
      * @param {React.ChangeEvent<HTMLInputElement>} e
      */
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-      const file =
-        e.target.files && e.target.files[0] ? e.target.files[0] : null;
-      onChange(file); // Call the parent's onChange directly with the File object
+      const file = e.target.files && e.target.files[0]
+      onChange(file) // Call the parent's onChange directly with the File object
     }
 
     /**
@@ -92,15 +91,12 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
      * @param {React.DragEvent<HTMLDivElement>} e
      */
     function handleDrop(e: React.DragEvent<HTMLDivElement>) {
-      e.preventDefault();
-      setDragActive(false);
-      const file =
-        e.dataTransfer.files && e.dataTransfer.files[0] ?
-          e.dataTransfer.files[0]
-        : null;
+      e.preventDefault()
+      setDragActive(false)
+      const file = e.dataTransfer.files[0]
 
-      if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
-        onChange(file); // Call the parent's onChange directly
+      if (file.type === 'image/jpeg' || file.type === 'image/png') {
+        onChange(file) // Call the parent's onChange directly
       }
     }
 
@@ -109,8 +105,8 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
      * @param {React.DragEvent<HTMLDivElement>} e
      */
     function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
-      e.preventDefault();
-      setDragActive(true);
+      e.preventDefault()
+      setDragActive(true)
     }
 
     /**
@@ -118,28 +114,28 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
      * @param {React.DragEvent<HTMLDivElement>} e
      */
     function handleDragLeave(e: React.DragEvent<HTMLDivElement>) {
-      e.preventDefault();
-      setDragActive(false);
+      e.preventDefault()
+      setDragActive(false)
     }
 
     /**
      * Triggers the file input click.
      */
     function handleBrowseClick() {
-      inputRef.current?.click();
+      inputRef.current?.click()
     }
 
     return (
       <div className={cn('flex flex-col gap-2', className)}>
         {label && (
-          <Label htmlFor={id} className='w-full'>
+          <Label htmlFor={id} className="w-full">
             {label}
           </Label>
         )}
         <div
           className={cn(
             'relative flex flex-col items-center justify-center w-full h-full min-h-[180px] rounded-md border-3 border-dashed transition-colors cursor-pointer',
-            dragActive ? 'border-primary bg-muted/30' : 'border-primary/15'
+            dragActive ? 'border-primary bg-muted/30' : 'border-primary/15',
           )}
           tabIndex={0}
           onClick={handleBrowseClick}
@@ -152,41 +148,42 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
           <input
             id={id}
             ref={setRefs}
-            type='file'
-            accept='image/jpeg, image/png'
-            className='hidden'
+            type="file"
+            accept="image/jpeg, image/png"
+            className="hidden"
             onChange={handleChange}
             tabIndex={-1}
             {...Object.fromEntries(
-              Object.entries(rest).filter(([k]) => k !== 'value')
+              Object.entries(rest).filter(([k]) => k !== 'value'),
             )}
           />
 
-          {value ?
+          {value ? (
             <PhotoPreview file={value} />
-          : <div className='flex flex-col items-center gap-2 text-center px-4'>
-              <span className='text-muted-foreground'>
+          ) : (
+            <div className="flex flex-col items-center gap-2 text-center px-4">
+              <span className="text-muted-foreground">
                 Drag and drop your JPG or PNG file or...
               </span>
               <Button
-                variant='outline'
-                size='sm'
+                variant="outline"
+                size="sm"
                 onClick={(e) => {
-                  e.stopPropagation();
-                  handleBrowseClick();
+                  e.stopPropagation()
+                  handleBrowseClick()
                 }}
               >
                 Browse for file
               </Button>
             </div>
-          }
+          )}
         </div>
-        <FieldInfo helperMsg={helperMsg} errorMsg={errorMsg} />
+        {/* <FieldInfo helperMsg={helperMsg} errorMsg={errorMsg} /> */}
       </div>
-    );
-  }
-);
-PhotoInput.displayName = 'PhotoInput';
+    )
+  },
+)
+PhotoInput.displayName = 'PhotoInput'
 
 /**
  * Props for the PhotoPreview component.
@@ -194,7 +191,7 @@ PhotoInput.displayName = 'PhotoInput';
  * @property {File|null} file - The file to preview.
  */
 interface PhotoPreviewProps {
-  file: File | null;
+  file: File | null
 }
 
 /**
@@ -203,12 +200,12 @@ interface PhotoPreviewProps {
  * @returns {JSX.Element|null}
  */
 function PhotoPreview({ file }: PhotoPreviewProps) {
-  if (!file) return null;
+  if (!file) return null
   return (
     <img
-      className='object-cover rounded-md w-full h-full max-h-[320px] max-w-[320px]'
+      className="object-cover rounded-md w-full h-full max-h-[320px] max-w-[320px]"
       src={URL.createObjectURL(file)}
-      alt='Preview'
+      alt="Preview"
     />
-  );
+  )
 }
