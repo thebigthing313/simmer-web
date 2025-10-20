@@ -23,38 +23,45 @@ export async function dbInsert<T extends Table>(
 
 export async function dbUpdate<T extends Table>(
   table: T,
-  changes: Array<{ id: string; change: Update<T> }>,
-): Promise<{
-  success: Array<Row<T>>
-  failed: Array<{ id: string; error: Error }>
-}> {
-  const updatePromises = changes.map(({ id, change }) =>
-    supabase
+  items: Array<{ id: string; changes: Update<T> }>,
+): Promise<Array<{ data: Array<Row<T>> | null; error: any }>> {
+  const persistUpdate = async ({
+    id,
+    changes,
+  }: {
+    id: string
+    changes: Update<T>
+  }) => {
+    // This inner function should NOT throw, but rather return the {data, error} tuple.
+    const { data, error } = await supabase
       .from(table)
-      .update(change as any)
+      .update(changes as any)
       .eq('id', id as any)
       .select()
-      .then((result) => ({ id, result })),
+
+    return { data: (data ?? []) as unknown as Array<Row<T>>, error }
+  }
+
+  // Use Promise.allSettled to wait for all, and extract the fulfillment value.
+  const results = await Promise.allSettled(
+    items.map((item) => persistUpdate(item)),
   )
 
-  const results = await Promise.allSettled(updatePromises)
-  const success: Array<Row<T>> = []
-  const failed: Array<{ id: string; error: Error }> = []
-
-  results.forEach((result, index) => {
+  // Map the settled results to your desired array format {data, error}
+  return results.map((result) => {
     if (result.status === 'fulfilled') {
-      const { id, result: queryResult } = result.value
-      if (queryResult.error) {
-        failed.push({ id, error: queryResult.error })
-      } else {
-        success.push(...(queryResult.data as unknown as Array<Row<T>>))
+      // result.value is { data, error } from persistUpdate
+      return {
+        data: result.value.error ? null : result.value.data,
+        error: result.value.error,
       }
-    } else {
-      failed.push({ id: changes[index].id, error: result.reason })
+    }
+    // This handles cases where persistUpdate itself failed to execute (e.g., network down)
+    return {
+      data: null,
+      error: result.reason,
     }
   })
-
-  return { success, failed }
 }
 
 export async function dbDelete<T extends Table>(
