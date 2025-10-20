@@ -3,7 +3,7 @@ import { useForm } from '@tanstack/react-form'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import type { ZodGroupInsertType, ZodGroupRowType } from '@/db/schemas/groups'
-import { groupsCollection } from '@/db/collections'
+import { groupProfilesCollection, groupsCollection } from '@/db/collections'
 import { GroupNameSchema, PhoneNumberSchema } from '@/types/form-schemas'
 import { TextInput } from '@/components/form-fields/text-input'
 import { AddressInput } from '@/components/form-fields/address-input'
@@ -26,6 +26,7 @@ export const Route = createFileRoute('/(user)/create-group')({
 function RouteComponent() {
   const { supabase, auth } = Route.useRouteContext()
   const groups = groupsCollection
+  const group_profiles = groupProfilesCollection
   const navigate = useNavigate()
 
   // local validator that uses route context; allow override via prop
@@ -57,15 +58,16 @@ function RouteComponent() {
     address: '',
     phone: '',
     short_name: '',
-    fax: null,
-    website_url: null,
-    logo_url: null,
+    fax: '',
+    website_url: '',
+    logo_url: '',
   }
 
   const form = useForm({
     validators: { onSubmit: ZodGroupInsert },
     defaultValues: emptyFormValues,
     onSubmit: async ({ value }) => {
+      toast.info('Attempting to create group...')
       const insertValue = value as ZodGroupRowType
       const transaction = groups.insert(insertValue, { optimistic: false })
       try {
@@ -77,6 +79,8 @@ function RouteComponent() {
           toast.error(`Failed to create group: ${String(error)}`)
         }
       }
+      groups.utils.refetch()
+      group_profiles.utils.refetch()
       await auth.refresh()
       navigate({ to: '/$groupSlug', params: { groupSlug: value.short_name } })
     },
@@ -182,7 +186,6 @@ function RouteComponent() {
           }}
         />
         <form.Field
-          validators={{ onBlurAsync: ShortNameSchema }}
           name="website_url"
           children={(field) => {
             return (
