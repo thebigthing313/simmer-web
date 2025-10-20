@@ -1,5 +1,6 @@
 import { useForm } from '@tanstack/react-form'
 import { createFileRoute, useRouteContext } from '@tanstack/react-router'
+import { toast } from 'sonner'
 import type { ZodProfileUpdateType } from '@/db/schemas/profiles'
 import { SubmitButton } from '@/components/form-fields/submit-button'
 import { TextInput } from '@/components/form-fields/text-input'
@@ -41,6 +42,9 @@ function RouteComponent() {
           Object.assign(draft, changed)
           Object.assign(defaultValues, changed)
         })
+        toast.success('Profile updated successfully.')
+      } else {
+        toast.info('No changes to save.')
       }
     },
   })
