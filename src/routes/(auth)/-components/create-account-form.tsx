@@ -1,11 +1,10 @@
-/* eslint-disable react/no-children-prop */
 import z from 'zod'
-import { FormLayout } from './form-layout'
 import { useForm } from '@tanstack/react-form'
+import { FormLayout } from './form-layout'
+import type { CreateAccountArgs } from '@/services/auth/create-account'
 import { TextInput } from '@/components/form-fields/text-input'
 import { SubmitButton } from '@/components/form-fields/submit-button'
-import { CreateAccountArgs } from '@/services/auth/create-account'
-import { EmailSchema, PasswordSchema, NameSchema } from '@/types/form-schemas'
+import { EmailSchema, NameSchema, PasswordSchema } from '@/types/form-schemas'
 import { EmailInput } from '@/components/form-fields/email-input'
 import { PasswordInput } from '@/components/form-fields/password-input'
 
@@ -36,7 +35,7 @@ export function CreateAccountForm({ onCreateAccount }: CreateAccountFormProps) {
       password: '',
       confirmPassword: '',
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: ({ value }) => {
       onCreateAccount({
         email: value.email,
         password: value.password,
@@ -114,7 +113,7 @@ export function CreateAccountForm({ onCreateAccount }: CreateAccountFormProps) {
           <form.Field
             name="confirmPassword"
             children={(field) => (
-              <TextInput
+              <PasswordInput
                 id="confirm-password"
                 label="Confirm Password"
                 value={field.state.value}
