@@ -6,8 +6,8 @@ import {
   redirect,
   useNavigate,
 } from '@tanstack/react-router'
-import type { SIMMERClient } from '@/services/data/client'
-import { getAuth } from '@/services/auth/get-auth'
+import type { SIMMERClient } from '@/db/client'
+import { getAuth } from '@/db/auth/get-auth'
 import { useGroupStore } from '@/stores/group-stores'
 
 export const Route = createFileRoute('/$groupSlug/(app)')({

@@ -1,16 +1,16 @@
+import type { InputHTMLAttributes, Ref } from 'react'
 import {
   Field,
-  FieldLabel,
+  FieldContent,
   FieldDescription,
   FieldError,
-  FieldContent,
+  FieldLabel,
 } from '@/components/ui/field'
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group'
-import { InputHTMLAttributes, Ref } from 'react'
 import { Spinner } from '@/components/ui/spinner'
 
 interface TextInputProps

@@ -1,5 +1,8 @@
 import { and, eq, gte, or, useLiveQuery } from '@tanstack/react-db'
-import { groupInvitesCollection, groupsCollection } from '../collections'
+import {
+  groupInvitesCollection,
+  groupsCollection,
+} from '../collections/collections'
 
 /**
  * A React hook that fetches pending group invites for a specific user.

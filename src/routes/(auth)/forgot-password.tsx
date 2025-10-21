@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { ErrorAlert } from './-components/error-alert'
 import { ForgotPasswordForm } from './-components/forgot-password-form'
-import { forgotPassword } from '@/services/auth/forgot-password'
+import { forgotPassword } from '@/db/auth/forgot-password'
 
 export const Route = createFileRoute('/(auth)/forgot-password')({
   component: RouteComponent,

@@ -3,13 +3,38 @@ import { useForm } from '@tanstack/react-form'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import type { ZodGroupInsertType, ZodGroupRowType } from '@/db/schemas/groups'
-import { groupProfilesCollection, groupsCollection } from '@/db/collections'
-import { GroupNameSchema, PhoneNumberSchema } from '@/types/form-schemas'
+import {
+  groupProfilesCollection,
+  groupsCollection,
+} from '@/db/collections/collections'
+import {
+  AddressSchema,
+  GroupNameSchema,
+  PhoneNumberSchema,
+  URLSchema,
+} from '@/types/form-schemas'
 import { TextInput } from '@/components/form-fields/text-input'
 import { AddressInput } from '@/components/form-fields/address-input'
 import { PhoneInput } from '@/components/form-fields/phone-input'
 import { SubmitButton } from '@/components/form-fields/submit-button'
 import { ZodGroupInsert } from '@/db/schemas/groups'
+import { FormErrorAlert } from '@/components/blocks/form-error-alert'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from '@/components/ui/input-group'
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from '@/components/ui/field'
+import { Spinner } from '@/components/ui/spinner'
+import { CheckCircle, XCircle } from 'lucide-react'
+import { InputHTMLAttributes } from 'react'
+import { PhotoInput } from '@/components/form-fields/photo-input'
 
 export const Route = createFileRoute('/(user)/create-group')({
   beforeLoad: ({ context }) => {
@@ -58,31 +83,31 @@ function RouteComponent() {
     address: '',
     phone: '',
     short_name: '',
-    fax: '',
-    website_url: '',
-    logo_url: '',
+    fax: undefined,
+    website_url: undefined,
+    logo_url: undefined,
   }
 
   const form = useForm({
     validators: { onSubmit: ZodGroupInsert },
     defaultValues: emptyFormValues,
-    onSubmit: async ({ value }) => {
+    onSubmit: ({ value }) => {
       toast.info('Attempting to create group...')
-      const insertValue = value as ZodGroupRowType
-      const transaction = groups.insert(insertValue, { optimistic: false })
-      try {
-        await transaction.isPersisted.promise
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          toast.error(`Failed to create group: ${error.message}`)
-        } else {
-          toast.error(`Failed to create group: ${String(error)}`)
-        }
-      }
-      groups.utils.refetch()
-      group_profiles.utils.refetch()
-      await auth.refresh()
-      navigate({ to: '/$groupSlug', params: { groupSlug: value.short_name } })
+      // const insertValue = value as ZodGroupRowType
+      // const transaction = groups.insert(insertValue, { optimistic: false })
+      // try {
+      //   await transaction.isPersisted.promise
+      // } catch (error: unknown) {
+      //   if (error instanceof Error) {
+      //     toast.error(`Failed to create group: ${error.message}`)
+      //   } else {
+      //     toast.error(`Failed to create group: ${String(error)}`)
+      //   }
+      // }
+      // groups.utils.refetch()
+      // group_profiles.utils.refetch()
+      // await auth.refresh()
+      // navigate({ to: '/$groupSlug', params: { groupSlug: value.short_name } })
     },
   })
   return (
@@ -94,36 +119,43 @@ function RouteComponent() {
       }}
     >
       <div className="grid gap-2">
+        {form.state.errors.length > 0 && (
+          <FormErrorAlert errors={form.state.errors} />
+        )}
         <form.Field
           validators={{ onChange: GroupNameSchema }}
           name="group_name"
           children={(field) => {
             return (
               <TextInput
-                required
                 id="group_name"
                 label="Group Name"
                 placeholder="Enter group name"
                 value={field.state.value}
                 errors={field.state.meta.errors}
                 onChange={(e) => field.handleChange(e.target.value)}
-                isValid={field.state.meta.isDirty && field.state.meta.isValid}
+                isValid={
+                  field.state.meta.isPristine || field.state.meta.isValid
+                }
               />
             )
           }}
         />
         <form.Field
+          validators={{ onChange: AddressSchema }}
           name="address"
           children={(field) => {
             return (
               <AddressInput
-                required
                 id="address"
                 label="Address"
                 placeholder="Enter address"
                 value={field.state.value}
                 errors={field.state.meta.errors}
                 onChange={(e) => field.handleChange(e.target.value)}
+                isValid={
+                  field.state.meta.isPristine || field.state.meta.isValid
+                }
               />
             )
           }}
@@ -134,7 +166,6 @@ function RouteComponent() {
           children={(field) => {
             return (
               <PhoneInput
-                required
                 id="phone"
                 label="Phone"
                 placeholder="Enter phone number"
@@ -147,7 +178,7 @@ function RouteComponent() {
           }}
         />
         <form.Field
-          validators={{ onBlur: PhoneNumberSchema }}
+          validators={{ onBlur: PhoneNumberSchema.optional() }}
           name="fax"
           children={(field) => {
             return (
@@ -164,39 +195,42 @@ function RouteComponent() {
           }}
         />
         <form.Field
-          validators={{ onBlurAsync: ShortNameSchema }}
+          validators={{ onChangeAsync: ShortNameSchema }}
+          asyncDebounceMs={300}
           name="short_name"
           children={(field) => {
             return (
-              <TextInput
-                required
-                id="short_name"
-                label="Short Name"
-                description="This short name will be used in URLs to access the group data."
+              <ShortNameField
                 value={field.state.value}
                 errors={field.state.meta.errors}
                 onChange={(e) => field.handleChange(e.target.value)}
-                onBlur={() => field.handleBlur()}
-                isValid={field.state.meta.isDirty && field.state.meta.isValid}
+                isValid={
+                  field.state.meta.isPristine || field.state.meta.isValid
+                }
                 isLoading={
                   field.state.meta.isDirty && field.state.meta.isValidating
+                }
+                isAvailable={
+                  field.state.meta.isDirty && field.state.meta.isValid
                 }
               />
             )
           }}
         />
         <form.Field
+          validators={{ onChange: URLSchema.optional() }}
           name="website_url"
           children={(field) => {
             return (
               <TextInput
                 id="website_url"
                 label="Website URL"
-                value={field.state.value ?? ''}
+                value={field.state.value ?? undefined}
                 errors={field.state.meta.errors}
                 onChange={(e) => field.handleChange(e.target.value)}
-                onBlur={() => field.handleBlur()}
-                isValid={field.state.meta.isDirty && field.state.meta.isValid}
+                isValid={
+                  field.state.meta.isPristine || field.state.meta.isValid
+                }
                 isLoading={
                   field.state.meta.isDirty && field.state.meta.isValidating
                 }
@@ -204,6 +238,29 @@ function RouteComponent() {
             )
           }}
         />
+
+        <form.Field
+          validators={{ onChange: URLSchema.optional() }}
+          name="logo_url"
+          children={(field) => {
+            return (
+              <PhotoInput
+                id="logo_url"
+                label="Logo"
+                value={field.state.value ?? undefined}
+                errors={field.state.meta.errors}
+                onChange={(e) => field.handleChange(e.target.value)}
+                isValid={
+                  field.state.meta.isPristine || field.state.meta.isValid
+                }
+                isLoading={
+                  field.state.meta.isDirty && field.state.meta.isValidating
+                }
+              />
+            )
+          }}
+        />
+
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => (
@@ -217,5 +274,55 @@ function RouteComponent() {
         />
       </div>
     </form>
+  )
+}
+
+interface ShortNameFieldProps
+  extends Omit<
+    InputHTMLAttributes<HTMLInputElement>,
+    'type' | 'id' | 'aria-invalid'
+  > {
+  isLoading?: boolean
+  isValid?: boolean
+  isAvailable?: boolean
+  errors?: Array<{ message?: string } | undefined>
+}
+function ShortNameField({
+  isLoading = false,
+  isAvailable = false,
+  isValid = true,
+  errors,
+  ...props
+}: ShortNameFieldProps) {
+  return (
+    <Field data-invalid={!isValid}>
+      <FieldContent>
+        <FieldLabel htmlFor="short_name">Short Name</FieldLabel>
+        <FieldDescription>
+          This will be used your group's unique URL.
+        </FieldDescription>
+      </FieldContent>
+      <InputGroup>
+        <InputGroupAddon className="bg-muted" align="inline-start">
+          <span className="mr-2">https://skeeter.app/</span>
+        </InputGroupAddon>
+        <InputGroupInput
+          id="short_name"
+          type="text"
+          aria-invalid={!isValid}
+          {...props}
+        />
+        <InputGroupAddon align="inline-end">
+          {isLoading ? (
+            <Spinner />
+          ) : isAvailable ? (
+            <CheckCircle className="text-primary" />
+          ) : (
+            <XCircle className="text-destructive" />
+          )}
+        </InputGroupAddon>
+      </InputGroup>
+      {errors && <FieldError errors={errors} />}
+    </Field>
   )
 }

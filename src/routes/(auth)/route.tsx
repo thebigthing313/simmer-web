@@ -1,5 +1,5 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
-import { getAuth } from '@/services/auth/get-auth'
+import { getAuth } from '@/db/auth/get-auth'
 import Logo from '@/assets/simmer-logo.svg?url'
 
 export const Route = createFileRoute('/(auth)')({

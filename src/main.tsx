@@ -9,15 +9,10 @@ import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
-import { supabase } from './services/data/client.ts'
-
+// Supabase singleton client
 import { useGroupStore } from './stores/group-stores.ts'
+import { supabase } from '@/db/client'
 
-// Re-export the singleton so other modules that import from `@/main.tsx`
-// continue to work without creating additional Supabase client instances.
-export { supabase }
-
-// `supabase` singleton is imported from services/data/client.ts
 // Create a new router instance
 
 // Set the supabase client in the group store for access in collections

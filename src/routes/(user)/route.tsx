@@ -15,7 +15,7 @@ import {
   groupProfilesCollection,
   groupsCollection,
   profilesCollection,
-} from '@/db/collections'
+} from '@/db/collections/collections'
 
 export const Route = createFileRoute('/(user)')({
   beforeLoad: ({ context }) => {

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { CircleCheck } from 'lucide-react'
 import { ResetPasswordForm } from './-components/reset-password-form'
 import { ErrorAlert } from './-components/error-alert'
-import { resetPassword } from '@/services/auth/reset-password'
+import { resetPassword } from '@/db/auth/reset-password'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 export const Route = createFileRoute('/(auth)/reset-password')({

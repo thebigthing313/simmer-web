@@ -1,7 +1,7 @@
 import z from 'zod'
 import { useForm } from '@tanstack/react-form'
 import { FormLayout } from './form-layout'
-import type { CreateAccountArgs } from '@/services/auth/create-account'
+import type { CreateAccountArgs } from '@/db/auth/create-account'
 import { TextInput } from '@/components/form-fields/text-input'
 import { SubmitButton } from '@/components/form-fields/submit-button'
 import { EmailSchema, NameSchema, PasswordSchema } from '@/types/form-schemas'

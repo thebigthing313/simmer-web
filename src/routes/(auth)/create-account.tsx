@@ -3,8 +3,8 @@ import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { ErrorAlert } from './-components/error-alert'
 import { CreateAccountForm } from './-components/create-account-form'
-import type { CreateAccountArgs } from '@/services/auth/create-account'
-import { createAccount } from '@/services/auth/create-account'
+import type { CreateAccountArgs } from '@/db/auth/create-account'
+import { createAccount } from '@/db/auth/create-account'
 
 export const Route = createFileRoute('/(auth)/create-account')({
   beforeLoad: ({ context }) => {
