@@ -1,10 +1,10 @@
 # Test Results: db-generic-crud-functions
 
 **Test Suite:** `db-generic-crud-functions.test.ts`  
-**Date:** October 18, 2025  
+**Date:** October 20, 2025  
 **Status:** ✅ All Tests Passing  
 **Total Tests:** 31  
-**Duration:** 21ms
+**Duration:** 19ms
 
 ---
 
@@ -16,8 +16,8 @@
 | **Total Tests**       | 31 passed                |
 | **Failed Tests**      | 0                        |
 | **Skipped Tests**     | 0                        |
-| **Test Duration**     | 21ms                     |
-| **Environment Setup** | 881ms                    |
+| **Test Duration**     | 19ms                     |
+| **Environment Setup** | 892ms                    |
 | **Coverage**          | 100% of functions tested |
 
 ---
@@ -28,7 +28,7 @@
 
 **Updated Functions:**
 
-- ✅ `dbUpdate` - Now returns `{ success, failed }` instead of throwing on first error
+- ✅ `dbUpdate` - Now returns `Array<{data, error}>` instead of throwing on first error
 - ✅ `dbDelete` - Now returns `{ success, failed }` instead of throwing on first error
 
 **Benefits:**
@@ -123,28 +123,38 @@ Tests the functionality for updating existing records with **partial failure sup
 **Return Type:**
 
 ```typescript
-Promise<{
-  success: Array<Row<T>> // Successfully updated records
-  failed: Array<{ id: string; error: Error }> // Failed updates with IDs
-}>
+Promise<
+  Array<{
+    data: Array<Row<T>> | null // Successfully updated records or null on error
+    error: any // Error object or null on success
+  }>
+>
 ```
 
 **Example Usage:**
 
 ```typescript
-const result = await dbUpdate('users', [
-  { id: '1', change: { name: 'Alice' } },
-  { id: '2', change: { name: 'Bob' } },
-  { id: '3', change: { name: 'Charlie' } },
+const results = await dbUpdate('users', [
+  { id: '1', changes: { name: 'Alice' } },
+  { id: '2', changes: { name: 'Bob' } },
+  { id: '3', changes: { name: 'Charlie' } },
 ])
 
-console.log(`Updated: ${result.success.length} records`)
-console.log(`Failed: ${result.failed.length} records`)
-
-// Handle failed updates
-result.failed.forEach(({ id, error }) => {
-  console.error(`Failed to update ${id}: ${error.message}`)
+// Process each result
+results.forEach((result, index) => {
+  if (result.error) {
+    console.error(`Update ${index + 1} failed:`, result.error)
+  } else {
+    console.log(`Update ${index + 1} succeeded:`, result.data)
+  }
 })
+
+// Or filter for success/failure
+const successful = results.filter((r) => r.error === null)
+const failed = results.filter((r) => r.error !== null)
+
+console.log(`Updated: ${successful.length} records`)
+console.log(`Failed: ${failed.length} records`)
 ```
 
 ---
@@ -270,14 +280,16 @@ async function dbInsert<T extends Table>(
 ```typescript
 async function dbUpdate<T extends Table>(
   table: T,
-  changes: Array<{ id: string; change: Update<T> }>,
-): Promise<{
-  success: Array<Row<T>>
-  failed: Array<{ id: string; error: Error }>
-}>
+  items: Array<{ id: string; changes: Update<T> }>,
+): Promise<
+  Array<{
+    data: Array<Row<T>> | null
+    error: any
+  }>
+>
 ```
 
-- **Behavior:** Uses `Promise.allSettled` for partial failure support
+- **Behavior:** Uses `Promise.allSettled` for partial failure support, returns array of results
 - **Use Case:** Updating multiple records with individual error tracking
 - **Tanstack DB:** Perfect for optimistic update reconciliation
 
@@ -313,10 +325,10 @@ function useUpdateUsers() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (changes: Array<{ id: string; change: any }>) =>
-      dbUpdate('users', changes),
+    mutationFn: (items: Array<{ id: string; changes: any }>) =>
+      dbUpdate('users', items),
 
-    onMutate: async (changes) => {
+    onMutate: async (items) => {
       // Cancel outgoing refetches
       await queryClient.cancelQueries({ queryKey: ['users'] })
 
@@ -326,24 +338,29 @@ function useUpdateUsers() {
       // Optimistically update
       queryClient.setQueryData(['users'], (old: any[]) =>
         old.map((user) => {
-          const change = changes.find((c) => c.id === user.id)
-          return change ? { ...user, ...change.change } : user
+          const item = items.find((i) => i.id === user.id)
+          return item ? { ...user, ...item.changes } : user
         }),
       )
 
       return { previousUsers }
     },
 
-    onSuccess: (result) => {
+    onSuccess: (results, variables, context) => {
       // Handle partial failures
-      if (result.failed.length > 0) {
+      const failedResults = results.filter((r) => r.error !== null)
+      if (failedResults.length > 0) {
         // Rollback failed updates
         queryClient.setQueryData(['users'], (old: any[]) =>
           old.map((user) => {
-            const failed = result.failed.find((f) => f.id === user.id)
-            if (failed) {
+            const failedIndex = failedResults.findIndex(
+              (r, index) => variables[index]?.id === user.id && r.error,
+            )
+            if (failedIndex !== -1) {
               // Find original user data to rollback
-              const original = previousUsers.find((u) => u.id === user.id)
+              const original = context?.previousUsers?.find(
+                (u: any) => u.id === user.id,
+              )
               return original || user
             }
             return user
@@ -351,8 +368,12 @@ function useUpdateUsers() {
         )
 
         // Show errors
-        result.failed.forEach(({ id, error }) => {
-          toast.error(`Failed to update user ${id}: ${error.message}`)
+        failedResults.forEach((result, index) => {
+          const itemId =
+            variables[results.findIndex((r, i) => r === result)]?.id
+          toast.error(
+            `Failed to update user ${itemId}: ${result.error.message}`,
+          )
         })
       }
     },
@@ -489,15 +510,15 @@ pnpm test db-generic-crud-functions.test.ts --watch
 The test suite for `db-generic-crud-functions.ts` provides comprehensive coverage with:
 
 - ✅ **100% function coverage** - All 4 functions tested
-- ✅ **31 passing tests** (+3 from previous version)
-- ✅ **Fast execution** - 21ms total test time
+- ✅ **31 passing tests**
+- ✅ **Fast execution** - 19ms total test time
 - ✅ **Type safety** - Full TypeScript support
 - ✅ **Partial failure support** - Optimistic update compatible ⭐
-- ✅ **Tanstack DB ready** - Returns success/failed arrays ⭐
+- ✅ **Tanstack DB ready** - Returns detailed result arrays ⭐
 
 ### Key Benefits
 
-1. **Non-blocking Operations**: Update/delete operations continue even if some fail
+1. **Non-blocking Operations**: Update operations continue even if some fail
 2. **Granular Error Handling**: Know exactly which records succeeded/failed
 3. **Optimistic Update Support**: Perfect integration with Tanstack Query
 4. **Production Ready**: Robust error handling and edge case coverage

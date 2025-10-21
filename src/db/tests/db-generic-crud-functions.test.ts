@@ -4,15 +4,15 @@ import {
   dbInsert,
   dbSelectAll,
   dbUpdate,
-} from './db-generic-crud-functions'
+} from '../db-generic-crud-functions'
 import type { Mock } from 'vitest'
 
 import type { Table } from '@/types/data-types'
 
-import { supabase } from '@/main.tsx'
+import { supabase } from '@/db/client'
 
 // Mock the supabase client
-vi.mock('@/main.tsx', () => ({
+vi.mock('@/db/client', () => ({
   supabase: {
     from: vi.fn(),
     rpc: vi.fn(),
@@ -211,7 +211,7 @@ describe('db-generic-crud-functions', () => {
       const changes = [
         {
           id: '123',
-          change: { name: 'Updated Name' },
+          changes: { name: 'Updated Name' },
         },
       ]
       const mockReturnedData = [
@@ -229,15 +229,16 @@ describe('db-generic-crud-functions', () => {
       expect(mockUpdate).toHaveBeenCalledWith({ name: 'Updated Name' })
       expect(mockEq).toHaveBeenCalledWith('id', '123')
       expect(mockSelect).toHaveBeenCalled()
-      expect(result.success).toEqual(mockReturnedData)
-      expect(result.failed).toEqual([])
+      expect(result).toHaveLength(1)
+      expect(result[0].data).toEqual(mockReturnedData)
+      expect(result[0].error).toBeNull()
     })
 
     it('should update multiple records successfully', async () => {
       const changes = [
-        { id: '1', change: { name: 'Name 1' } },
-        { id: '2', change: { name: 'Name 2' } },
-        { id: '3', change: { name: 'Name 3' } },
+        { id: '1', changes: { name: 'Name 1' } },
+        { id: '2', changes: { name: 'Name 2' } },
+        { id: '3', changes: { name: 'Name 3' } },
       ]
 
       // Mock responses for each update
@@ -262,15 +263,16 @@ describe('db-generic-crud-functions', () => {
       expect(mockEq).toHaveBeenNthCalledWith(1, 'id', '1')
       expect(mockEq).toHaveBeenNthCalledWith(2, 'id', '2')
       expect(mockEq).toHaveBeenNthCalledWith(3, 'id', '3')
-      expect(result.success).toHaveLength(3)
-      expect(result.failed).toEqual([])
+      expect(result).toHaveLength(3)
+      expect(result.every((r) => r.error === null)).toBe(true)
+      expect(result.map((r) => r.data![0].id)).toEqual(['1', '2', '3'])
     })
 
     it('should handle partial failures when some updates fail', async () => {
       const changes = [
-        { id: '1', change: { name: 'Name 1' } },
-        { id: '2', change: { name: 'Name 2' } },
-        { id: '3', change: { name: 'Name 3' } },
+        { id: '1', changes: { name: 'Name 1' } },
+        { id: '2', changes: { name: 'Name 2' } },
+        { id: '3', changes: { name: 'Name 3' } },
       ]
 
       mockSelect
@@ -289,26 +291,27 @@ describe('db-generic-crud-functions', () => {
 
       const result = await dbUpdate('users' as Table, changes as any)
 
-      expect(result.success).toHaveLength(2)
-      expect(result.success.map((r: any) => r.id)).toEqual(['1', '3'])
-      expect(result.failed).toHaveLength(1)
-      expect(result.failed[0].id).toBe('2')
-      expect(result.failed[0].error.message).toBe('Update failed')
+      expect(result).toHaveLength(3)
+      const successful = result.filter((r) => r.error === null)
+      const failed = result.filter((r) => r.error !== null)
+      expect(successful).toHaveLength(2)
+      expect(successful.map((r) => r.data![0].id)).toEqual(['1', '3'])
+      expect(failed).toHaveLength(1)
+      expect(failed[0].error.message).toBe('Update failed')
     })
 
     it('should handle empty changes array', async () => {
       const result = await dbUpdate('users' as Table, [] as any)
 
       expect(mockUpdate).not.toHaveBeenCalled()
-      expect(result.success).toEqual([])
-      expect(result.failed).toEqual([])
+      expect(result).toEqual([])
     })
 
     it('should update records with complex change objects', async () => {
       const changes = [
         {
           id: '123',
-          change: {
+          changes: {
             name: 'Updated Name',
             email: 'new@example.com',
             active: true,
@@ -322,7 +325,7 @@ describe('db-generic-crud-functions', () => {
           name: 'Updated Name',
           email: 'new@example.com',
           active: true,
-          updated_at: changes[0].change.updated_at,
+          updated_at: changes[0].changes.updated_at,
         },
       ]
 
@@ -333,16 +336,17 @@ describe('db-generic-crud-functions', () => {
 
       const result = await dbUpdate('users' as Table, changes as any)
 
-      expect(mockUpdate).toHaveBeenCalledWith(changes[0].change)
-      expect(result.success).toEqual(mockReturnedData)
-      expect(result.failed).toEqual([])
+      expect(mockUpdate).toHaveBeenCalledWith(changes[0].changes)
+      expect(result).toHaveLength(1)
+      expect(result[0].data).toEqual(mockReturnedData)
+      expect(result[0].error).toBeNull()
     })
 
     it('should work with different table types', async () => {
       const changes = [
         {
           id: '456',
-          change: { title: 'Updated Title' },
+          changes: { title: 'Updated Title' },
         },
       ]
 
@@ -354,14 +358,14 @@ describe('db-generic-crud-functions', () => {
       const result = await dbUpdate('posts' as Table, changes as any)
 
       expect(mockFrom).toHaveBeenCalledWith('posts')
-      expect(result.success).toHaveLength(1)
-      expect(result.failed).toEqual([])
+      expect(result).toHaveLength(1)
+      expect(result[0].error).toBeNull()
     })
 
     it('should handle all updates failing', async () => {
       const changes = [
-        { id: '1', change: { name: 'Name 1' } },
-        { id: '2', change: { name: 'Name 2' } },
+        { id: '1', changes: { name: 'Name 1' } },
+        { id: '2', changes: { name: 'Name 2' } },
       ]
 
       mockSelect
@@ -376,10 +380,12 @@ describe('db-generic-crud-functions', () => {
 
       const result = await dbUpdate('users' as Table, changes as any)
 
-      expect(result.success).toEqual([])
-      expect(result.failed).toHaveLength(2)
-      expect(result.failed[0].id).toBe('1')
-      expect(result.failed[1].id).toBe('2')
+      expect(result).toHaveLength(2)
+      expect(result.every((r) => r.data === null && r.error !== null)).toBe(
+        true,
+      )
+      expect(result[0].error.message).toBe('Update failed 1')
+      expect(result[1].error.message).toBe('Update failed 2')
     })
   })
 
@@ -615,11 +621,12 @@ describe('db-generic-crud-functions', () => {
 
       const updated = await dbUpdate(
         'groups' as Table,
-        [{ id: '1', change: { group_name: 'Updated Group' } }] as any,
+        [{ id: '1', changes: { group_name: 'Updated Group' } }] as any,
       )
 
-      expect((updated.success[0] as any).group_name).toBe('Updated Group')
-      expect(updated.failed).toEqual([])
+      expect(updated).toHaveLength(1)
+      expect((updated[0].data![0] as any).group_name).toBe('Updated Group')
+      expect(updated[0].error).toBeNull()
 
       // Delete
       mockRpc.mockResolvedValueOnce({
@@ -660,7 +667,7 @@ describe('db-generic-crud-functions', () => {
       // Bulk update
       const updateChanges = inserted.map((user, i) => ({
         id: user.id,
-        change: { name: `Updated User ${i}` },
+        changes: { name: `Updated User ${i}` },
       }))
 
       // Mock each update response
@@ -672,8 +679,8 @@ describe('db-generic-crud-functions', () => {
       })
 
       const updated = await dbUpdate('users' as Table, updateChanges as any)
-      expect(updated.success).toHaveLength(10)
-      expect(updated.failed).toEqual([])
+      expect(updated).toHaveLength(10)
+      expect(updated.every((r) => r.error === null)).toBe(true)
 
       // Bulk delete
       const ids = inserted.map((user) => user.id)
@@ -690,10 +697,10 @@ describe('db-generic-crud-functions', () => {
     it('should handle mixed success and failure in bulk operations', async () => {
       // Bulk update with some failures
       const changes = [
-        { id: '1', change: { name: 'Name 1' } },
-        { id: '2', change: { name: 'Name 2' } },
-        { id: '3', change: { name: 'Name 3' } },
-        { id: '4', change: { name: 'Name 4' } },
+        { id: '1', changes: { name: 'Name 1' } },
+        { id: '2', changes: { name: 'Name 2' } },
+        { id: '3', changes: { name: 'Name 3' } },
+        { id: '4', changes: { name: 'Name 4' } },
       ]
 
       mockSelect
@@ -715,10 +722,15 @@ describe('db-generic-crud-functions', () => {
         })
 
       const updated = await dbUpdate('users' as Table, changes as any)
-      expect(updated.success).toHaveLength(2)
-      expect(updated.failed).toHaveLength(2)
-      expect(updated.success.map((r: any) => r.id)).toEqual(['1', '3'])
-      expect(updated.failed.map((f) => f.id)).toEqual(['2', '4'])
+      const successfulUpdates = updated.filter((r) => r.error === null)
+      const failedUpdates = updated.filter((r) => r.error !== null)
+      expect(successfulUpdates).toHaveLength(2)
+      expect(failedUpdates).toHaveLength(2)
+      expect(successfulUpdates.map((r) => r.data![0].id)).toEqual(['1', '3'])
+      expect(failedUpdates.map((r) => r.error.message)).toEqual([
+        'Update failed',
+        'Update failed',
+      ])
 
       // Bulk delete with some failures
       const ids = ['1', '2', '3', '4']
