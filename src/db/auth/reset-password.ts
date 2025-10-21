@@ -1,4 +1,4 @@
-import { SIMMERClient } from '@/services/data/client'
+import { SIMMERClient } from '@/db/client'
 
 /**
  * Resets the password for the currently authenticated user using the provided Supabase client.

@@ -1,4 +1,4 @@
-import { SIMMERClient } from '@/services/data/client'
+import { SIMMERClient } from '@/db/client'
 
 export type CreateAccountArgs = {
   supabase: SIMMERClient

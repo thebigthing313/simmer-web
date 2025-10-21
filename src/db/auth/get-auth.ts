@@ -1,4 +1,4 @@
-import { SIMMERClient } from '@/services/data/client'
+import { SIMMERClient } from '@/db/client'
 
 /**
  * Represents the authentication status and metadata for a user.
