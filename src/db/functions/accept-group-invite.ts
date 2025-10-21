@@ -1,9 +1,6 @@
-import { SIMMERClient } from './client'
+import { supabase } from '@/db/client'
 
-export async function acceptGroupInvite(
-  supabase: SIMMERClient,
-  inviteId: string,
-) {
+export async function acceptGroupInvite(inviteId: string) {
   const { data, error } = await supabase
     .from('group_invites')
     .update({ is_accepted: true })

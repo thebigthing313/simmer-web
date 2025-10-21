@@ -1,5 +1,5 @@
 import type { Insert, Row, Table, Update } from '@/types/data-types'
-import { supabase } from '@/main.tsx'
+import { supabase } from '@/db/client'
 
 export async function dbSelectAll<T extends Table>(
   table: T,

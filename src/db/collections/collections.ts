@@ -1,5 +1,5 @@
 import { createCollection } from '@tanstack/react-db'
-import { DBWholeCollectionOptions } from '@/db/generic-collection-options'
+import { DBWholeCollectionOptions } from '@/db/collections/generic-collection-options'
 
 export const groupsCollection = createCollection(
   DBWholeCollectionOptions('groups', 1000 * 60 * 60),

@@ -6,7 +6,7 @@ import {
   collectionOnDelete,
   collectionOnInsert,
   collectionOnUpdate,
-} from '@/db/collection-functions'
+} from '@/db/collections/collection-functions'
 
 const { queryClient } = TanstackQueryProvider.getContext()
 

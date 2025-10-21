@@ -1,5 +1,5 @@
 import { eq, useLiveQuery } from '@tanstack/react-db'
-import { groupsCollection } from '../collections'
+import { groupsCollection } from '../collections/collections'
 
 export function useGroup(group_id: string) {
   const query = useLiveQuery((q) =>

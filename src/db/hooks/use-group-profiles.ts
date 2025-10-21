@@ -3,7 +3,7 @@ import {
   groupProfilesCollection,
   groupsCollection,
   profilesCollection,
-} from '../collections'
+} from '../collections/collections'
 
 /**
  * Fetches group profiles for a specified group ID using live queries with inner joins.
