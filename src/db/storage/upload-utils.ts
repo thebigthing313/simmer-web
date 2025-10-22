@@ -41,13 +41,26 @@ async function compressImage(
       canvas.width = width
       canvas.height = height
 
-      // Draw and compress
+      // Draw the image
       ctx.drawImage(img, 0, 0, width, height)
+
+      // Check for transparency
+      const imageData = ctx.getImageData(0, 0, width, height)
+      let hasAlpha = false
+      for (let i = 0; i < imageData.data.length; i += 4) {
+        if (imageData.data[i + 3] < 255) {
+          hasAlpha = true
+          break
+        }
+      }
+
+      // Compress and create blob
+      const mimeType = hasAlpha ? 'image/png' : 'image/jpeg'
       canvas.toBlob(
         (blob) => {
           if (blob) {
             const compressedFile = new File([blob], file.name, {
-              type: 'image/jpeg',
+              type: mimeType,
               lastModified: Date.now(),
             })
             resolve(compressedFile)
@@ -55,8 +68,8 @@ async function compressImage(
             reject(new Error('Compression failed'))
           }
         },
-        'image/jpeg',
-        quality,
+        mimeType,
+        hasAlpha ? undefined : quality,
       )
     }
     img.onerror = () => reject(new Error('Image load failed'))
