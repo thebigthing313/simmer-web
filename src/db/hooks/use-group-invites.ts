@@ -13,22 +13,24 @@ import {
  * @returns An object containing the query result and the group invites collection.
  */
 export function useGroupInvites(user_id: string) {
-  const query = useLiveQuery((q) =>
-    q
-      .from({ group_invite: groupInvitesCollection })
-      .innerJoin({ group: groupsCollection }, ({ group_invite, group }) =>
-        eq(group.id, group_invite.group_id),
-      )
-      .where(({ group_invite }) =>
-        and(
-          eq(group_invite.user_id, user_id),
-          eq(group_invite.is_accepted, false),
-          or(
-            eq(group_invite.expiration_date, null),
-            gte(group_invite.expiration_date, new Date().toISOString()),
+  const query = useLiveQuery(
+    (q) =>
+      q
+        .from({ group_invite: groupInvitesCollection })
+        .innerJoin({ group: groupsCollection }, ({ group_invite, group }) =>
+          eq(group.id, group_invite.group_id),
+        )
+        .where(({ group_invite }) =>
+          and(
+            eq(group_invite.user_id, user_id),
+            eq(group_invite.is_accepted, false),
+            or(
+              eq(group_invite.expiration_date, null),
+              gte(group_invite.expiration_date, new Date().toISOString()),
+            ),
           ),
         ),
-      ),
+    [user_id],
   )
   return { query, collection: groupInvitesCollection }
 }

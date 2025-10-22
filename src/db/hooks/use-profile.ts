@@ -8,12 +8,15 @@ import { profilesCollection } from '../collections/collections'
  * @returns An object containing the live query result and the profiles collection.
  */
 export function useProfile(id: string) {
-  return {
-    query: useLiveQuery((q) =>
+  const query = useLiveQuery(
+    (q) =>
       q
         .from({ profile: profilesCollection })
         .where(({ profile }) => eq(profile.id, id)),
-    ),
+    [id],
+  )
+  return {
+    query,
     collection: profilesCollection,
   }
 }
