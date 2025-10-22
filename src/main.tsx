@@ -9,21 +9,14 @@ import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
-// Supabase singleton client
-import { useGroupStore } from './stores/group-stores.ts'
-import { supabase } from '@/db/client'
 
 // Create a new router instance
-
-// Set the supabase client in the group store for access in collections
-useGroupStore.getState().setDb(supabase)
 
 const TanStackQueryProviderContext = TanStackQueryProvider.getContext()
 const router = createRouter({
   routeTree,
   context: {
     ...TanStackQueryProviderContext,
-    supabase,
   },
   // defaultPreload: 'intent',
   scrollRestoration: true,
