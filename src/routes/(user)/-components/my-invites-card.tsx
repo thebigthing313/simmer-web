@@ -1,7 +1,7 @@
 import { Link, useNavigate, useRouteContext } from '@tanstack/react-router'
 import { PlusIcon } from 'lucide-react'
 import { Children } from 'react'
-import { acceptGroupInvite } from '@/services/data/accept-group-invite'
+import { acceptGroupInvite } from '@/db/functions/accept-group-invite'
 import { GroupCard } from '@/components/blocks/group-card'
 import {
   Card,
@@ -15,14 +15,14 @@ import { Button } from '@/components/ui/button'
 import { useGroupInvites } from '@/db/hooks/use-group-invites'
 
 export function MyInvitesCard() {
-  const { supabase, user_id } = useRouteContext({ from: '/(user)' })
+  const { user_id } = useRouteContext({ from: '/(user)' })
   const { query, collection } = useGroupInvites(user_id)
   const navigate = useNavigate()
 
   const invites = query.data
 
   async function handleAccept(id: string, slug: string) {
-    await acceptGroupInvite(supabase, id)
+    await acceptGroupInvite(id)
     await collection.utils.refetch()
     navigate({ to: '/$groupSlug', params: { groupSlug: slug } })
   }
