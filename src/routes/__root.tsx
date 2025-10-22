@@ -6,23 +6,21 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { Info } from 'lucide-react'
-import type { SIMMERClient } from '@/db/client'
 import type { QueryClient } from '@tanstack/react-query'
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
-
 import { getAuth } from '@/db/auth/get-auth'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/sonner'
 
 interface MyRouterContext {
-  supabase: SIMMERClient
   queryClient: QueryClient
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  beforeLoad: async ({ context }) => {
-    const auth = await getAuth(context.supabase)
+  notFoundComponent: () => <div>Not Found</div>,
+  beforeLoad: async () => {
+    const auth = await getAuth()
     return { auth }
   },
   component: () => (
