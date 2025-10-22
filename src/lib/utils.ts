@@ -55,3 +55,12 @@ export type IsIdentical<A, B> =
         Supabase: A
         Zod: B
       }
+
+/**
+ * Adds a crypto-generated UUID as the 'id' property to the given object.
+ */
+export function addId<T extends Record<string, any>>(
+  obj: T,
+): T & { id: string } {
+  return { ...obj, id: crypto.randomUUID() }
+}
