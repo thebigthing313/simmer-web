@@ -29,8 +29,23 @@ export function useGroupInvites(user_id: string) {
               gte(group_invite.expiration_date, new Date().toISOString()),
             ),
           ),
-        ),
+        )
+        .select(({ group_invite, group }) => {
+          return {
+            id: group_invite.id,
+            expiration_date: group_invite.expiration_date,
+            is_accepted: group_invite.is_accepted,
+            group_id: group_invite.group_id,
+            group_name: group.group_name,
+            group_short_name: group.short_name,
+            group_logo_url: group.logo_url,
+            group_address: group.address,
+            group_phone: group.phone,
+            group_website: group.website_url,
+          }
+        }),
     [user_id],
   )
+
   return { query, collection: groupInvitesCollection }
 }
