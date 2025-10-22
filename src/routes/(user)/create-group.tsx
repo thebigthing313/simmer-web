@@ -36,6 +36,7 @@ import {
 } from '@/components/ui/field'
 import { Spinner } from '@/components/ui/spinner'
 import { PhotoInput } from '@/components/form-fields/photo-input'
+import { validateShortName } from '@/db/functions/validate-short-name'
 
 export const Route = createFileRoute('/(user)/create-group')({
   beforeLoad: ({ context }) => {
@@ -50,22 +51,10 @@ export const Route = createFileRoute('/(user)/create-group')({
 })
 
 function RouteComponent() {
-  const { supabase, auth } = Route.useRouteContext()
+  const { auth } = Route.useRouteContext()
   const groups = groupsCollection
   const group_profiles = groupProfilesCollection
   const navigate = useNavigate()
-
-  // local validator that uses route context; allow override via prop
-  async function validateShortName(slug: string): Promise<boolean> {
-    const { data, error } = await supabase
-      .from('groups')
-      .select('id')
-      .eq('short_name', slug)
-      .maybeSingle()
-    if (error) return false
-    // return true when available
-    return data === null
-  }
 
   const ShortNameSchema = z
     .string()
@@ -95,8 +84,13 @@ function RouteComponent() {
     onSubmit: async ({ value }) => {
       try {
         toast.info('Attempting to create group...')
-        const insertValue = addId(value as Omit<ZodGroupRowType, 'id'>)
-        const transaction = groups.insert(insertValue, { optimistic: false })
+        const insertValue = {
+          ...addId(value as Omit<ZodGroupRowType, 'id'>),
+          created_by: auth.user_id,
+        }
+        const transaction = groups.insert(insertValue as ZodGroupRowType, {
+          optimistic: false,
+        })
         await transaction.isPersisted.promise
         groups.utils.refetch()
         group_profiles.utils.refetch()
@@ -187,9 +181,11 @@ function RouteComponent() {
                 id="fax"
                 label="Fax"
                 placeholder="Enter fax number"
-                value={field.state.value}
+                value={field.state.value ?? ''}
                 errors={field.state.meta.errors}
-                onChange={(stored) => field.handleChange(stored)}
+                onChange={(stored) =>
+                  field.handleChange(stored === '' ? undefined : stored)
+                }
                 onBlur={() => field.handleBlur()}
               />
             )
@@ -226,9 +222,13 @@ function RouteComponent() {
               <TextInput
                 id="website_url"
                 label="Website URL"
-                value={field.state.value ?? undefined}
+                value={field.state.value ?? ''}
                 errors={field.state.meta.errors}
-                onChange={(e) => field.handleChange(e.target.value)}
+                onChange={(e) =>
+                  field.handleChange(
+                    e.target.value === '' ? undefined : e.target.value,
+                  )
+                }
                 isValid={
                   field.state.meta.isPristine || field.state.meta.isValid
                 }
