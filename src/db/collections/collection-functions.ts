@@ -1,7 +1,7 @@
 import { toast } from 'sonner'
 import type { Collection, TransactionWithMutations } from '@tanstack/react-db'
 import type { Table } from '@/db/data-types'
-import { dbDelete, dbInsert, dbUpdate } from '@/db/db-generic-crud-functions'
+import { dbDelete, dbInsert, dbUpdate } from '@/db/generic-crud-functions'
 
 export async function collectionOnDelete(
   table: Table,
@@ -52,14 +52,11 @@ export async function collectionOnUpdate(
   // 1. Get the structured results from the server
   const serverResponses = await dbUpdate(table, localUpdatedItems)
 
-  let hasFailure = false
-
   // 2. Iterate through responses to perform granular commit/rollback
   serverResponses.forEach((response, index) => {
     const mutation = transaction.mutations[index]
 
     if (response.error) {
-      hasFailure = true
       console.error(`Update failed for ID ${mutation.key}:`, response.error)
       toast.error('Some updates failed. Changes have been rolled back.')
       // Granular Rollback: Upsert the original (pre-optimistic) data.
