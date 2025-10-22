@@ -1,31 +1,45 @@
 import { forwardRef, useCallback, useId, useRef, useState } from 'react'
-import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-// import { FieldInfo } from '@/components/blocks/field-info';
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from '@/components/ui/field'
 import { cn } from '@/lib/utils'
+import { uploadPhoto } from '@/db/storage/upload-utils'
 
 /**
  * Props for the PhotoInput component.
  * @typedef {Object} PhotoInputProps
  * @property {string} [label] - The label for the input.
- * @property {string|string[]} [errorMsg] - Error message(s) to display.
- * @property {string|string[]} [helperMsg] - Helper message(s) to display.
+ * @property {string} [description] - Description text.
+ * @property {Array<{ message?: string }>} [errors] - Error messages.
  * @property {string} [id] - Optional id for the input.
  * @property {string} [className] - Additional class names for the container.
- * @property {File|null} [value] - The selected file.
- * @property {(file: File|null) => void} onChange - Callback when file changes.
+ * @property {string|null} [value] - The URL of the selected photo.
+ * @property {(url: string|null) => void} onChange - Callback when URL changes.
+ * @property {'logos'|'avatars'|'profile_photos'} [bucket] - The storage bucket for the photo.
+ * @property {string} [fileName] - Optional custom file name for the uploaded photo.
+ * @property {boolean} [isValid] - Whether the field is valid.
+ * @property {boolean} [isLoading] - Whether the field is loading.
  */
 type PhotoInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   'id' | 'type' | 'value' | 'onChange'
 > & {
   label?: string
-  errorMsg?: string | Array<string>
-  helperMsg?: string | Array<string>
+  description?: string
+  errors?: Array<{ message?: string } | undefined>
   id?: string
   className?: string
-  value?: File | null
-  onChange: (file: File | null) => void
+  value?: string | null
+  onChange: (url: string | null) => void
+  bucket?: 'logos' | 'avatars' | 'profile_photos'
+  fileName?: string
+  isValid?: boolean
+  isLoading?: boolean
 }
 
 /**
@@ -40,26 +54,26 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
   (
     {
       label,
-      errorMsg,
-      helperMsg,
+      description,
+      errors,
       id: idProp,
       className,
       onChange,
       value,
+      bucket = 'logos',
+      fileName,
+      isValid = true,
+      isLoading,
       ...rest
     },
     ref,
   ) => {
     const generatedId = useId()
     const id = idProp || generatedId
-    const hasHelper = helperMsg && !errorMsg
-    const hasError = !!errorMsg
-    const descIds =
-      [hasHelper ? `${id}-helper` : null, hasError ? `${id}-error` : null]
-        .filter(Boolean)
-        .join(' ') || undefined
 
     const [dragActive, setDragActive] = useState(false)
+    const [uploading, setUploading] = useState(false)
+    const [uploadError, setUploadError] = useState<string | null>(null)
     const inputRef = useRef<HTMLInputElement>(null)
 
     /**
@@ -81,22 +95,41 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
      * Handles file input change event.
      * @param {React.ChangeEvent<HTMLInputElement>} e
      */
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
       const file = e.target.files && e.target.files[0]
-      onChange(file) // Call the parent's onChange directly with the File object
+      if (file) {
+        await uploadFile(file)
+      }
     }
 
     /**
      * Handles file drop event.
      * @param {React.DragEvent<HTMLDivElement>} e
      */
-    function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+    async function handleDrop(e: React.DragEvent<HTMLDivElement>) {
       e.preventDefault()
       setDragActive(false)
       const file = e.dataTransfer.files[0]
 
       if (file.type === 'image/jpeg' || file.type === 'image/png') {
-        onChange(file) // Call the parent's onChange directly
+        await uploadFile(file)
+      }
+    }
+
+    /**
+     * Uploads the file to Supabase and updates the value.
+     * @param {File} file
+     */
+    async function uploadFile(file: File) {
+      setUploading(true)
+      setUploadError(null)
+      try {
+        const url = await uploadPhoto(file, bucket, fileName)
+        onChange(url)
+      } catch (error) {
+        setUploadError(error instanceof Error ? error.message : 'Upload failed')
+      } finally {
+        setUploading(false)
       }
     }
 
@@ -126,12 +159,12 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
     }
 
     return (
-      <div className={cn('flex flex-col gap-2', className)}>
-        {label && (
-          <Label htmlFor={id} className="w-full">
-            {label}
-          </Label>
-        )}
+      <Field data-invalid={!isValid} className={className}>
+        <FieldContent>
+          <FieldLabel htmlFor={id}>{label}</FieldLabel>
+          {description && <FieldDescription>{description}</FieldDescription>}
+        </FieldContent>
+
         <div
           className={cn(
             'relative flex flex-col items-center justify-center w-full h-full min-h-[180px] rounded-md border-3 border-dashed transition-colors cursor-pointer',
@@ -142,8 +175,7 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          aria-describedby={descIds}
-          aria-invalid={!!errorMsg}
+          aria-invalid={!isValid}
         >
           <input
             id={id}
@@ -159,27 +191,36 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
           />
 
           {value ? (
-            <PhotoPreview file={value} />
+            <PhotoPreview url={value} />
+          ) : uploading ? (
+            <div className="flex flex-col items-center gap-2 text-center px-4">
+              <span className="text-muted-foreground">Uploading...</span>
+            </div>
           ) : (
             <div className="flex flex-col items-center gap-2 text-center px-4">
               <span className="text-muted-foreground">
                 Drag and drop your JPG or PNG file or...
               </span>
               <Button
+                type="button"
                 variant="outline"
                 size="sm"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleBrowseClick()
                 }}
+                disabled={uploading}
               >
                 Browse for file
               </Button>
             </div>
           )}
         </div>
-        {/* <FieldInfo helperMsg={helperMsg} errorMsg={errorMsg} /> */}
-      </div>
+        {uploadError && (
+          <p className="text-sm text-destructive">{uploadError}</p>
+        )}
+        {errors && <FieldError errors={errors} />}
+      </Field>
     )
   },
 )
@@ -188,23 +229,23 @@ PhotoInput.displayName = 'PhotoInput'
 /**
  * Props for the PhotoPreview component.
  * @typedef {Object} PhotoPreviewProps
- * @property {File|null} file - The file to preview.
+ * @property {string|null} url - The URL of the photo to preview.
  */
 interface PhotoPreviewProps {
-  file: File | null
+  url: string | null
 }
 
 /**
- * Renders a preview of the selected photo file.
+ * Renders a preview of the selected photo URL.
  * @param {PhotoPreviewProps} props
- * @returns {JSX.Element|null}
+
  */
-function PhotoPreview({ file }: PhotoPreviewProps) {
-  if (!file) return null
+function PhotoPreview({ url }: PhotoPreviewProps) {
+  if (!url) return null
   return (
     <img
       className="object-cover rounded-md w-full h-full max-h-[320px] max-w-[320px]"
-      src={URL.createObjectURL(file)}
+      src={url}
       alt="Preview"
     />
   )
