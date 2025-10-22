@@ -13,6 +13,8 @@ export async function dbInsert<T extends Table>(
   table: T,
   values: Array<Insert<T>>,
 ): Promise<Array<Row<T>>> {
+  const { data: user } = await supabase.auth.getUser()
+  console.log('Inserting into', table, 'by user:', user)
   const { data, error } = await supabase
     .from(table)
     .insert(values as any)
