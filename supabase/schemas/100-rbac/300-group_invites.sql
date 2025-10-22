@@ -17,7 +17,7 @@ create table public.group_invites (
 create unique index on public.group_invites (group_id, user_id);
 
 create trigger handle_created_trigger before insert on public.group_invites for each row
-execute function public.set_created_by ();
+execute function simmer.set_created_by ();
 
 create trigger handle_updated_trigger before
 update on public.group_invites for each row when (old.* is distinct from new.*)

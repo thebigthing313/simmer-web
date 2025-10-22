@@ -20,4 +20,4 @@ update on public.groups for each row when (old.* is distinct from new.*)
 execute function public.set_updated_record_fields ();
 
 create trigger created_by_trigger before insert on public.groups for each row
-execute function public.set_created_by ();
+execute function simmer.set_created_by ();

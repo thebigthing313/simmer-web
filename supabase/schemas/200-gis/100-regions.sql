@@ -14,7 +14,7 @@ create table if not exists public.regions (
 );
 
 create trigger handle_created_trigger before insert on public.regions for each row
-execute function public.set_created_by ();
+execute function simmer.set_created_by ();
 
 create trigger handle_updated_trigger before
 update on public.regions for each row when (old.* is distinct from new.*)

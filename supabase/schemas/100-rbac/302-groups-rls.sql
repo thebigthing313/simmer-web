@@ -1,11 +1,15 @@
 alter table public.groups enable row level security;
 
-create policy "select: own group memberships or invites" on public.groups for
+create policy "select: own groups or invites" on public.groups for
 select
     to authenticated using (
         deleted_at is null
         and (
-            public.user_is_group_member (id)
+            created_by=(
+                select
+                    auth.uid ()
+            )
+            or public.user_is_group_member (id)
             or exists (
                 select
                     1
