@@ -3,7 +3,7 @@ import { useForm } from '@tanstack/react-form'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { CheckCircle, XCircle } from 'lucide-react'
-import type { ZodGroupInsertType, ZodGroupRowType } from '@/db/schemas/groups'
+import type { ZodGroupInsertType } from '@/db/schemas/groups'
 import type { InputHTMLAttributes } from 'react'
 import { addId } from '@/lib/utils'
 import {
@@ -15,7 +15,7 @@ import {
   GroupNameSchema,
   PhoneNumberSchema,
   URLSchema,
-} from '@/types/form-schemas'
+} from '@/db/form-schemas'
 import { TextInput } from '@/components/form-fields/text-input'
 import { AddressInput } from '@/components/form-fields/address-input'
 import { PhoneInput } from '@/components/form-fields/phone-input'
@@ -85,12 +85,13 @@ function RouteComponent() {
       try {
         toast.info('Attempting to create group...')
         const insertValue = {
-          ...addId(value as Omit<ZodGroupRowType, 'id'>),
+          ...addId(value as Omit<ZodGroupInsertType, 'id'>),
           created_by: auth.user_id,
         }
-        const transaction = groups.insert(insertValue as ZodGroupRowType, {
+        const transaction = groups.insert(insertValue as any, {
           optimistic: false,
         })
+
         await transaction.isPersisted.promise
         groups.utils.refetch()
         group_profiles.utils.refetch()
@@ -301,7 +302,7 @@ function ShortNameField({
       <FieldContent>
         <FieldLabel htmlFor="short_name">Short Name</FieldLabel>
         <FieldDescription>
-          This will be used your group's unique URL.
+          This will be used as your group's unique URL.
         </FieldDescription>
       </FieldContent>
       <InputGroup>
