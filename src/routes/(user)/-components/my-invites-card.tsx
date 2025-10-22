@@ -36,12 +36,11 @@ export function MyInvitesCard() {
       <CardContent>
         <GroupCardGroup key="user-groups">
           {invites.map((invite) => {
-            const { group_invite, group } = invite
             return (
               <Button
-                onClick={() => handleAccept(group_invite.id, group.short_name)}
+                onClick={() => handleAccept(invite.id, invite.group_short_name)}
               >
-                <GroupCard key={`gc-${group_invite.id}`} group_id={group.id} />
+                <GroupCard key={`gc-${invite.id}`} group_id={invite.group_id} />
               </Button>
             )
           })}
