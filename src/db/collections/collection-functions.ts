@@ -32,13 +32,8 @@ export async function collectionOnInsert(
   collection: Collection<any, any, any, any, any>,
 ) {
   const localNewItems = transaction.mutations.map((m) => m.modified)
-  try {
-    const serverNewItems = await dbInsert(table, localNewItems)
-    serverNewItems.forEach((item) => collection.utils.writeUpsert(item))
-  } catch (error) {
-    toast.error('Failed to create records.')
-    throw error // rethrow so tanstack db rolls back optimistic changes
-  }
+  const serverNewItems = await dbInsert(table, localNewItems)
+  serverNewItems.forEach((item) => collection.utils.writeUpsert(item))
 
   toast.success('Records created successfully.')
   return { refetch: false }
