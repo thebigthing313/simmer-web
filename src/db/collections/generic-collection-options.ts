@@ -1,6 +1,6 @@
 import { queryCollectionOptions } from '@tanstack/query-db-collection'
-import type { Row, Table } from '@/types/data-types'
-import { dbSelectAll } from '@/db/db-generic-crud-functions'
+import type { AppRow, Table } from '@/db/data-types'
+import { dbSelectAll } from '@/db/generic-crud-functions'
 import * as TanstackQueryProvider from '@/integrations/tanstack-query/root-provider'
 import {
   collectionOnDelete,
@@ -18,11 +18,11 @@ export const DBWholeCollectionOptions = <T extends Table>(
     queryKey: [table as string],
     queryFn: async () => {
       const data = await dbSelectAll(table)
-      return data
+      return data as unknown as Array<AppRow<T>>
     },
     queryClient,
     staleTime: staleTime,
-    getKey: (item: Row<T>) => item.id,
+    getKey: (item) => item.id,
     onInsert: ({ transaction, collection }) =>
       collectionOnInsert(table, transaction, collection),
     onUpdate: ({ transaction, collection }) =>
