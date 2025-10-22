@@ -7,7 +7,7 @@ import { Link } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import z from 'zod'
 import { FormLayout } from './form-layout'
-import { EmailSchema, PasswordSchema } from '@/types/form-schemas'
+import { EmailSchema, PasswordSchema } from '@/db/form-schemas'
 
 type LoginFormProps = {
   onEmailLogin: (email: string, password: string) => void

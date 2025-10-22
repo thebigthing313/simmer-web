@@ -3,7 +3,7 @@ import z from 'zod'
 import { FormLayout } from './form-layout'
 import { useForm } from '@tanstack/react-form'
 import { SubmitButton } from '@/components/form-fields/submit-button'
-import { PasswordSchema } from '@/types/form-schemas'
+import { PasswordSchema } from '@/db/form-schemas'
 import { PasswordInput } from '@/components/form-fields/password-input'
 
 interface ResetPasswordFormProps {

@@ -4,7 +4,7 @@ import { FormLayout } from './form-layout'
 import type { CreateAccountArgs } from '@/db/auth/create-account'
 import { TextInput } from '@/components/form-fields/text-input'
 import { SubmitButton } from '@/components/form-fields/submit-button'
-import { EmailSchema, NameSchema, PasswordSchema } from '@/types/form-schemas'
+import { EmailSchema, NameSchema, PasswordSchema } from '@/db/form-schemas'
 import { EmailInput } from '@/components/form-fields/email-input'
 import { PasswordInput } from '@/components/form-fields/password-input'
 

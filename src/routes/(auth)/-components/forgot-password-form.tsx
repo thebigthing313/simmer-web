@@ -1,5 +1,5 @@
 /* eslint-disable react/no-children-prop */
-import { EmailSchema } from '@/types/form-schemas'
+import { EmailSchema } from '@/db/form-schemas'
 import { useForm } from '@tanstack/react-form'
 import { FormLayout } from './form-layout'
 import { SubmitButton } from '@/components/form-fields/submit-button'
