@@ -10,6 +10,7 @@ import { LoginForm } from './-components/login-form'
 import { ErrorAlert } from './-components/error-alert'
 import { RedirectSchema } from '@/types/form-schemas'
 import { useGroupStore } from '@/stores/group-stores'
+import { signInWithPassword } from '@/db/auth/sign-in-password'
 
 export const Route = createFileRoute('/(auth)/login')({
   validateSearch: z.object({
@@ -36,15 +37,12 @@ export const Route = createFileRoute('/(auth)/login')({
 
 function RouteComponent() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
-  const { supabase, auth } = Route.useRouteContext()
+  const { auth } = Route.useRouteContext()
   const router = useRouter()
   const navigate = useNavigate()
 
   async function handleLogin(email: string, password: string) {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    const { error } = await signInWithPassword(email, password)
 
     if (!error) {
       await auth.refresh()

@@ -3,8 +3,8 @@ import { getAuth } from '@/db/auth/get-auth'
 import Logo from '@/assets/simmer-logo.svg?url'
 
 export const Route = createFileRoute('/(auth)')({
-  beforeLoad: async ({ context }) => {
-    const auth = await getAuth(context.supabase)
+  beforeLoad: async () => {
+    const auth = await getAuth()
     return { auth }
   },
   component: RouteComponent,

@@ -1,4 +1,4 @@
-import { SIMMERClient } from '@/db/client'
+import { supabase } from '@/db/client'
 
 /**
  * Sends a password reset email to the specified user using Supabase authentication.
@@ -8,12 +8,10 @@ import { SIMMERClient } from '@/db/client'
  * @returns A promise that resolves with the response data from Supabase if successful.
  * @throws Throws an error if the Supabase request fails or if no data is returned.
  */
-export async function forgotPassword(supabase: SIMMERClient, email: string) {
-  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+export async function forgotPassword(email: string) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${window.location.origin}/reset-password`,
   })
 
   if (error) throw error
-  if (!data) throw new Error('An expected error occurred. Please try again.')
-  return data
 }

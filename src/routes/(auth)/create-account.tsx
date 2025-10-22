@@ -5,6 +5,7 @@ import { ErrorAlert } from './-components/error-alert'
 import { CreateAccountForm } from './-components/create-account-form'
 import type { CreateAccountArgs } from '@/db/auth/create-account'
 import { createAccount } from '@/db/auth/create-account'
+import { signOut } from '@/db/auth/sign-out'
 
 export const Route = createFileRoute('/(auth)/create-account')({
   beforeLoad: ({ context }) => {
@@ -18,13 +19,11 @@ export const Route = createFileRoute('/(auth)/create-account')({
 
 function RouteComponent() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
-  const { supabase } = Route.useRouteContext()
   const navigate = useNavigate()
 
   const createMutation = useMutation({
     mutationFn: async (args: Omit<CreateAccountArgs, 'supabase'>) => {
       await createAccount({
-        supabase,
         email: args.email,
         password: args.password,
         firstName: args.firstName,
@@ -35,7 +34,7 @@ function RouteComponent() {
       setErrorMsg(error.message)
     },
     onSuccess: async () => {
-      await supabase.auth.signOut()
+      await signOut()
       navigate({ to: '/verify-email' })
     },
   })

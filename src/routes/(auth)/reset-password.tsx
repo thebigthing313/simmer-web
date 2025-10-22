@@ -6,6 +6,7 @@ import { ResetPasswordForm } from './-components/reset-password-form'
 import { ErrorAlert } from './-components/error-alert'
 import { resetPassword } from '@/db/auth/reset-password'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { signOut } from '@/db/auth/sign-out'
 
 export const Route = createFileRoute('/(auth)/reset-password')({
   component: RouteComponent,
@@ -14,21 +15,20 @@ export const Route = createFileRoute('/(auth)/reset-password')({
 function RouteComponent() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [success, setSuccess] = useState<boolean>(false)
-  const { supabase } = Route.useRouteContext()
 
   // Parse error info from the URL hash (used by Supabase for error redirects)
   const { error, error_code, error_description } = parseHashParams()
 
   const resetMutation = useMutation({
     mutationFn: async (newPassword: string) => {
-      await resetPassword(supabase, newPassword)
+      await resetPassword(newPassword)
     },
     onError: (mutationError: Error) => {
       setErrorMsg(mutationError.message)
     },
     onSuccess: async () => {
       setErrorMsg(null)
-      await supabase.auth.signOut()
+      await signOut()
       setSuccess(true)
     },
   })

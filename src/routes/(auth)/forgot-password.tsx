@@ -12,10 +12,9 @@ export const Route = createFileRoute('/(auth)/forgot-password')({
 
 function RouteComponent() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
-  const { supabase } = Route.useRouteContext()
   const forgotPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
-      await forgotPassword(supabase, email)
+      await forgotPassword(email)
     },
     onError: (error: Error) => {
       setErrorMsg(error.message)

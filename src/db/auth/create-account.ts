@@ -1,7 +1,6 @@
-import { SIMMERClient } from '@/db/client'
+import { supabase } from '@/db/client'
 
 export type CreateAccountArgs = {
-  supabase: SIMMERClient
   email: string
   password: string
   firstName: string
@@ -28,7 +27,6 @@ export type CreateAccountArgs = {
  * @returns A promise that resolves when account creation completes (void).
  */
 export async function createAccount({
-  supabase,
   email,
   password,
   firstName,

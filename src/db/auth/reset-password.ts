@@ -1,4 +1,4 @@
-import { SIMMERClient } from '@/db/client'
+import { supabase } from '../client'
 
 /**
  * Resets the password for the currently authenticated user using the provided Supabase client.
@@ -8,13 +8,12 @@ import { SIMMERClient } from '@/db/client'
  * @returns A promise that resolves with the updated user data.
  * @throws Throws an error if the password update fails or if no data is returned.
  */
-export async function resetPassword(supabase: SIMMERClient, password: string) {
+export async function resetPassword(password: string) {
   const { data, error } = await supabase.auth.updateUser({
     password: password,
   })
 
   if (error) throw error
-  if (!data) throw new Error('An unexpected error occured.')
 
   return data
 }

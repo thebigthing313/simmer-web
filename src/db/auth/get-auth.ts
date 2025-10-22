@@ -1,4 +1,4 @@
-import { SIMMERClient } from '@/db/client'
+import { supabase } from '@/db/client'
 
 /**
  * Represents the authentication status and metadata for a user.
@@ -8,7 +8,7 @@ export type AuthStatus = {
   user_email?: string
   profile_id?: string
   default_group?: string
-  groups?: { group_id: string; role: string }[]
+  groups?: Array<{ group_id: string; role: string }>
 }
 
 /**
@@ -33,7 +33,7 @@ export type Auth = AuthStatus & {
  * @param supabase - The Supabase client instance
  * @returns An Auth object with user_id, profile_id, default_group, groups, a refresh() method, and optional error.
  */
-export async function getAuth(supabase: SIMMERClient): Promise<Auth> {
+export async function getAuth(): Promise<Auth> {
   // Define the expected structure for group entries in app_metadata
   type GroupRole = { group_id: string; role: string }
 
@@ -50,7 +50,7 @@ export async function getAuth(supabase: SIMMERClient): Promise<Auth> {
     const { data: session, error: sessionError } =
       await supabase.auth.getSession()
 
-    if (sessionError || !session?.session) {
+    if (sessionError || !session.session) {
       return { error: sessionError ?? new Error('No session found') }
     }
 
@@ -76,12 +76,10 @@ export async function getAuth(supabase: SIMMERClient): Promise<Auth> {
       user_id: typeof claims.sub === 'string' ? claims.sub : undefined,
       user_email: typeof claims.email === 'string' ? claims.email : undefined,
       profile_id:
-        typeof appMeta.profile_id === 'string'
-          ? (appMeta.profile_id as string)
-          : undefined,
+        typeof appMeta.profile_id === 'string' ? appMeta.profile_id : undefined,
       default_group:
         typeof appMeta.default_group === 'string'
-          ? (appMeta.default_group as string)
+          ? appMeta.default_group
           : undefined,
       groups: Array.isArray(rawGroups)
         ? rawGroups.filter(isGroupRole)

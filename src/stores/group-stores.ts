@@ -1,41 +1,31 @@
 import { create } from 'zustand'
-import { SIMMERClient } from '@/db/client'
+import { supabase } from '@/db/client'
 
 // add this helper near the top with fetchGroupIdBySlug
-async function fetchGroupSlugById(
-  supabase: SIMMERClient,
-  id: string,
-): Promise<string | null> {
+async function fetchGroupSlugById(id: string): Promise<string | null> {
   const { data, error } = await supabase
     .from('groups')
     .select('short_name')
     .eq('id', id)
     .single()
-  if (error) throw error
-  return data?.short_name ?? null
+  if (error) return null
+  return data.short_name
 }
 
-async function fetchGroupIdBySlug(
-  supabase: SIMMERClient,
-  slug: string,
-): Promise<string | null> {
+async function fetchGroupIdBySlug(slug: string): Promise<string | null> {
   const { data, error } = await supabase
     .from('groups')
     .select('id')
     .eq('short_name', slug)
     .single()
-  if (error) throw error
-  return data?.id ?? null
+  if (error) return null
+  return data.id
 }
 
 type GroupStore = {
-  db: SIMMERClient | null
   groupSlug: string | null
   groupId: string | null
   loading: boolean
-
-  // set the supabase/simmer db client instance so fetchGroupIdBySlug can use it
-  setDb: (db: SIMMERClient | null) => void
 
   // set slug and ensure groupId is resolved (calls fetchGroupIdBySlug when necessary)
   setGroupSlug: (slug: string | null) => Promise<string | null>
@@ -67,10 +57,6 @@ export const useGroupStore = create<GroupStore>((set, get) => {
     groupId: null,
     loading: false,
 
-    setDb: (db) => {
-      set(() => ({ db }))
-    },
-
     setGroupSlug: async (slug) => {
       return await get().beforeLoad(slug ?? null)
     },
@@ -79,9 +65,7 @@ export const useGroupStore = create<GroupStore>((set, get) => {
     resolveSlugFromId: async (id) => {
       if (!id) return null
       if (inverseCache.has(id)) return inverseCache.get(id) ?? null
-      const db = get().db
-      if (!db) return null
-      const slug = await fetchGroupSlugById(db, id)
+      const slug = await fetchGroupSlugById(id)
       inverseCache.set(id, slug)
       // also populate forward cache if slug present
       if (slug != null) cache.set(slug, id)
@@ -124,19 +108,10 @@ export const useGroupStore = create<GroupStore>((set, get) => {
         }
       }
 
-      // Ensure db client is present
-      const db = get().db
-      if (!db) {
-        // No DB client — bail out (route or init code should set DB before calling)
-        console.warn('useGroupStore.beforeLoad called without DB client set')
-        set(() => ({ groupSlug: slug, groupId: null }))
-        return null
-      }
-
       // slug changed or id not present -> resolve (fetch and cache)
       set(() => ({ loading: true }))
       const p = (async () => {
-        const id = await fetchGroupIdBySlug(db, slug)
+        const id = await fetchGroupIdBySlug(slug)
         return id ?? null
       })()
 
