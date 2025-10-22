@@ -2,7 +2,10 @@ import z from 'zod'
 import { useForm } from '@tanstack/react-form'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
+import { CheckCircle, XCircle } from 'lucide-react'
 import type { ZodGroupInsertType, ZodGroupRowType } from '@/db/schemas/groups'
+import type { InputHTMLAttributes } from 'react'
+import { addId } from '@/lib/utils'
 import {
   groupProfilesCollection,
   groupsCollection,
@@ -32,8 +35,6 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 import { Spinner } from '@/components/ui/spinner'
-import { CheckCircle, XCircle } from 'lucide-react'
-import { InputHTMLAttributes } from 'react'
 import { PhotoInput } from '@/components/form-fields/photo-input'
 
 export const Route = createFileRoute('/(user)/create-group')({
@@ -91,23 +92,23 @@ function RouteComponent() {
   const form = useForm({
     validators: { onSubmit: ZodGroupInsert },
     defaultValues: emptyFormValues,
-    onSubmit: ({ value }) => {
-      toast.info('Attempting to create group...')
-      // const insertValue = value as ZodGroupRowType
-      // const transaction = groups.insert(insertValue, { optimistic: false })
-      // try {
-      //   await transaction.isPersisted.promise
-      // } catch (error: unknown) {
-      //   if (error instanceof Error) {
-      //     toast.error(`Failed to create group: ${error.message}`)
-      //   } else {
-      //     toast.error(`Failed to create group: ${String(error)}`)
-      //   }
-      // }
-      // groups.utils.refetch()
-      // group_profiles.utils.refetch()
-      // await auth.refresh()
-      // navigate({ to: '/$groupSlug', params: { groupSlug: value.short_name } })
+    onSubmit: async ({ value }) => {
+      try {
+        toast.info('Attempting to create group...')
+        const insertValue = addId(value as Omit<ZodGroupRowType, 'id'>)
+        const transaction = groups.insert(insertValue, { optimistic: false })
+        await transaction.isPersisted.promise
+        groups.utils.refetch()
+        group_profiles.utils.refetch()
+        await auth.refresh()
+        navigate({ to: '/$groupSlug', params: { groupSlug: value.short_name } })
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          toast.error(`Failed to create group: ${error.message}`)
+        } else {
+          toast.error(`Failed to create group: ${String(error)}`)
+        }
+      }
     },
   })
   return (
@@ -247,9 +248,10 @@ function RouteComponent() {
               <PhotoInput
                 id="logo_url"
                 label="Logo"
-                value={field.state.value ?? undefined}
+                value={field.state.value || null}
                 errors={field.state.meta.errors}
-                onChange={(e) => field.handleChange(e.target.value)}
+                onChange={(url) => field.handleChange(url)}
+                bucket="logos"
                 isValid={
                   field.state.meta.isPristine || field.state.meta.isValid
                 }
@@ -265,7 +267,7 @@ function RouteComponent() {
           selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => (
             <SubmitButton
-              label="Create Account"
+              label="Create Group"
               isLoading={isSubmitting}
               disabled={!canSubmit}
               className="w-full"
