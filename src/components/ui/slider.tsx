@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <shadcn> */
 'use client';
 
 import * as SliderPrimitive from '@radix-ui/react-slider';
