@@ -16,7 +16,7 @@ select
                 from
                     public.group_invites gi
                 where
-                    gi.group_id=id
+                    gi.group_id=groups.id
                     and gi.user_id=(
                         select
                             auth.uid ()
