@@ -1,7 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/$groupSlug/(app)/profiles/$profileId/statistics')({
-  component: RouteComponent
+export const Route = createFileRoute(
+  "/$groupSlug/(app)/profiles/$profileId/statistics",
+)({
+  component: RouteComponent,
 });
 
 function RouteComponent() {

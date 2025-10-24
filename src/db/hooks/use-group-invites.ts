@@ -1,8 +1,8 @@
-import { and, eq, gte, or, useLiveQuery } from '@tanstack/react-db'
+import { and, eq, gte, or, useLiveQuery } from "@tanstack/react-db";
 import {
   groupInvitesCollection,
   groupsCollection,
-} from '../collections/collections'
+} from "../collections/collections";
 
 /**
  * A React hook that fetches pending group invites for a specific user.
@@ -42,10 +42,10 @@ export function useGroupInvites(user_id: string) {
             group_address: group.address,
             group_phone: group.phone,
             group_website: group.website_url,
-          }
+          };
         }),
     [user_id],
-  )
+  );
 
-  return { query, collection: groupInvitesCollection }
+  return { query, collection: groupInvitesCollection };
 }

@@ -1,9 +1,9 @@
-import { eq, useLiveQuery } from '@tanstack/react-db'
+import { eq, useLiveQuery } from "@tanstack/react-db";
 import {
   groupProfilesCollection,
   groupsCollection,
   profilesCollection,
-} from '../collections/collections'
+} from "../collections/collections";
 
 /**
  * Fetches group profiles for a specified group ID using live queries with inner joins.
@@ -27,6 +27,6 @@ export function useGroupProfiles(group_id: string) {
         )
         .where(({ group_profile }) => eq(group_profile.group_id, group_id)),
     [group_id],
-  )
-  return { query, collection: groupProfilesCollection }
+  );
+  return { query, collection: groupProfilesCollection };
 }

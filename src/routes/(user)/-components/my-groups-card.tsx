@@ -1,26 +1,26 @@
-import { Children } from 'react'
-import { Link } from '@tanstack/react-router'
-import { PlusIcon } from 'lucide-react'
+import { Link } from "@tanstack/react-router";
+import { PlusIcon } from "lucide-react";
+import { Children } from "react";
+import { GroupCard } from "@/components/blocks/group-card";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from "@/components/ui/card";
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyTitle,
-} from '@/components/ui/empty'
-import { Button } from '@/components/ui/button'
-import { GroupCard } from '@/components/blocks/group-card'
-import { useGroups } from '@/db/hooks/use-groups'
+} from "@/components/ui/empty";
+import { useGroups } from "@/db/hooks/use-groups";
 
 export function MyGroupsCard() {
-  const { query } = useGroups()
-  const groups = query.data
+  const { query } = useGroups();
+  const groups = query.data;
 
   return (
     <Card>
@@ -41,21 +41,21 @@ export function MyGroupsCard() {
               >
                 <GroupCard key={`gc-${group.id}`} group_id={group.id} />
               </Link>
-            )
+            );
           })}
         </GroupCardGroup>
       </CardContent>
     </Card>
-  )
+  );
 }
 interface GroupCardGroupProps {
-  children?: React.ReactNode
-  className?: string
+  children?: React.ReactNode;
+  className?: string;
 }
 
 function GroupCardGroup({ children, className }: GroupCardGroupProps) {
-  const items = Children.toArray(children).filter(Boolean)
-  if (items.length === 0) return <EmptyGroupCardGroup />
+  const items = Children.toArray(children).filter(Boolean);
+  if (items.length === 0) return <EmptyGroupCardGroup />;
 
   return (
     <div className={className}>
@@ -68,7 +68,7 @@ function GroupCardGroup({ children, className }: GroupCardGroupProps) {
         </Link>
       </div>
     </div>
-  )
+  );
 }
 
 function EmptyGroupCardGroup() {
@@ -87,5 +87,5 @@ function EmptyGroupCardGroup() {
         </Link>
       </EmptyContent>
     </Empty>
-  )
+  );
 }

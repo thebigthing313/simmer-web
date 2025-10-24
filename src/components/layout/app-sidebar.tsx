@@ -1,7 +1,11 @@
-import { Link } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
-import { SidebarFooterMenu } from './sidebar-footer-menu'
-import type { LinkProps } from '@tanstack/react-router'
+import type { LinkProps } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
+import { ChevronRight } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -15,33 +19,29 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from '@/components/ui/sidebar'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
+} from "@/components/ui/sidebar";
+import { SidebarFooterMenu } from "./sidebar-footer-menu";
 
 type SubMenuItem = {
-  title: string
-  link: LinkProps
-  isActive: boolean
-}
+  title: string;
+  link: LinkProps;
+  isActive: boolean;
+};
 type MenuItem = {
-  label: string
-  icon: React.ReactNode
-  subItems?: Array<SubMenuItem>
-}
+  label: string;
+  icon: React.ReactNode;
+  subItems?: Array<SubMenuItem>;
+};
 
 export type MenuGroup = {
-  label: string
+  label: string;
 
-  items?: Array<MenuItem>
-}
+  items?: Array<MenuItem>;
+};
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
-  children?: React.ReactNode
-  menuGroups?: Array<MenuGroup>
+  children?: React.ReactNode;
+  menuGroups?: Array<MenuGroup>;
 }
 
 export function AppSidebar({
@@ -103,5 +103,5 @@ export function AppSidebar({
         <SidebarFooterMenu />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

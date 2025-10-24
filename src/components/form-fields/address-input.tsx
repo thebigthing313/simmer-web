@@ -1,37 +1,37 @@
-import { HomeIcon, SearchIcon } from 'lucide-react'
-import { toast } from 'sonner'
-import type { Ref } from 'react'
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from '@/components/ui/input-group'
+import { HomeIcon, SearchIcon } from "lucide-react";
+import type { Ref } from "react";
+import { toast } from "sonner";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from '@/components/ui/field'
-import { Spinner } from '@/components/ui/spinner'
+} from "@/components/ui/field";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
+} from "@/components/ui/tooltip";
 
 interface AddressInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
-  label?: string
-  description?: string
-  errors?: Array<{ message?: string } | undefined>
-  ref?: Ref<HTMLInputElement>
-  isValid?: boolean
-  isLoading?: boolean
-  className?: string
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
+  label?: string;
+  description?: string;
+  errors?: Array<{ message?: string } | undefined>;
+  ref?: Ref<HTMLInputElement>;
+  isValid?: boolean;
+  isLoading?: boolean;
+  className?: string;
 }
 
 function onGeocode() {
-  toast.info('Geocoding is not implemented yet.')
+  toast.info("Geocoding is not implemented yet.");
 }
 
 export function AddressInput({
@@ -74,5 +74,5 @@ export function AddressInput({
       </InputGroup>
       {errors && <FieldError errors={errors} />}
     </Field>
-  )
+  );
 }

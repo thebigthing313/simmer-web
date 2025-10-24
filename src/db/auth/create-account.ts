@@ -1,11 +1,11 @@
-import { supabase } from '@/db/client'
+import { supabase } from "@/db/client";
 
 export type CreateAccountArgs = {
-  email: string
-  password: string
-  firstName: string
-  lastName: string
-}
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+};
 
 /**
  * Creates a new user account via Supabase authentication.
@@ -41,9 +41,9 @@ export async function createAccount({
         last_name: lastName,
       },
     },
-  })
+  });
 
-  if (error) throw error
+  if (error) throw error;
   if (!data.user)
-    throw new Error('Account creation failed for an unknown reason')
+    throw new Error("Account creation failed for an unknown reason");
 }

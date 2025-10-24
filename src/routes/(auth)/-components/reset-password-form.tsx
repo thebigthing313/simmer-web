@@ -1,13 +1,14 @@
 /* eslint-disable react/no-children-prop */
-import z from 'zod'
-import { FormLayout } from './form-layout'
-import { useForm } from '@tanstack/react-form'
-import { SubmitButton } from '@/components/form-fields/submit-button'
-import { PasswordSchema } from '@/db/form-schemas'
-import { PasswordInput } from '@/components/form-fields/password-input'
+
+import { useForm } from "@tanstack/react-form";
+import z from "zod";
+import { PasswordInput } from "@/components/form-fields/password-input";
+import { SubmitButton } from "@/components/form-fields/submit-button";
+import { PasswordSchema } from "@/db/form-schemas";
+import { FormLayout } from "./form-layout";
 
 interface ResetPasswordFormProps {
-  onResetPassword: (newPassword: string) => void
+  onResetPassword: (newPassword: string) => void;
 }
 
 const ResetPasswordSchema = z
@@ -16,29 +17,29 @@ const ResetPasswordSchema = z
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords must match',
-    path: ['confirmPassword'],
-  })
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
 
 export function ResetPasswordForm({ onResetPassword }: ResetPasswordFormProps) {
   const form = useForm({
     validators: { onChange: ResetPasswordSchema },
     defaultValues: {
-      password: '',
-      confirmPassword: '',
+      password: "",
+      confirmPassword: "",
     },
     onSubmit: async ({ value }) => {
-      onResetPassword(value.password)
+      onResetPassword(value.password);
     },
-  })
+  });
 
   return (
     <FormLayout title="Reset Password" description="Enter your new password">
       <form
         onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
+          e.preventDefault();
+          e.stopPropagation();
+          form.handleSubmit();
         }}
       >
         <div className="grid gap-6">
@@ -80,5 +81,5 @@ export function ResetPasswordForm({ onResetPassword }: ResetPasswordFormProps) {
         </div>
       </form>
     </FormLayout>
-  )
+  );
 }

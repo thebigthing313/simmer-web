@@ -1,15 +1,15 @@
-import z from 'zod'
-import { useForm } from '@tanstack/react-form'
-import { FormLayout } from './form-layout'
-import type { CreateAccountArgs } from '@/db/auth/create-account'
-import { TextInput } from '@/components/form-fields/text-input'
-import { SubmitButton } from '@/components/form-fields/submit-button'
-import { EmailSchema, NameSchema, PasswordSchema } from '@/db/form-schemas'
-import { EmailInput } from '@/components/form-fields/email-input'
-import { PasswordInput } from '@/components/form-fields/password-input'
+import { useForm } from "@tanstack/react-form";
+import z from "zod";
+import { EmailInput } from "@/components/form-fields/email-input";
+import { PasswordInput } from "@/components/form-fields/password-input";
+import { SubmitButton } from "@/components/form-fields/submit-button";
+import { TextInput } from "@/components/form-fields/text-input";
+import type { CreateAccountArgs } from "@/db/auth/create-account";
+import { EmailSchema, NameSchema, PasswordSchema } from "@/db/form-schemas";
+import { FormLayout } from "./form-layout";
 
 interface CreateAccountFormProps {
-  onCreateAccount: (args: Omit<CreateAccountArgs, 'supabase'>) => void
+  onCreateAccount: (args: Omit<CreateAccountArgs, "supabase">) => void;
 }
 
 const CreateAccountSchema = z
@@ -21,19 +21,19 @@ const CreateAccountSchema = z
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords must match',
-    path: ['confirmPassword'],
-  })
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
 
 export function CreateAccountForm({ onCreateAccount }: CreateAccountFormProps) {
   const form = useForm({
     validators: { onChange: CreateAccountSchema },
     defaultValues: {
-      email: '',
-      firstName: '',
-      lastName: '',
-      password: '',
-      confirmPassword: '',
+      email: "",
+      firstName: "",
+      lastName: "",
+      password: "",
+      confirmPassword: "",
     },
     onSubmit: ({ value }) => {
       onCreateAccount({
@@ -41,17 +41,17 @@ export function CreateAccountForm({ onCreateAccount }: CreateAccountFormProps) {
         password: value.password,
         firstName: value.firstName,
         lastName: value.lastName,
-      })
+      });
     },
-  })
+  });
 
   return (
     <FormLayout title="Create Account" description="Sign up for a new account">
       <form
         onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
+          e.preventDefault();
+          e.stopPropagation();
+          form.handleSubmit();
         }}
       >
         <div className="grid gap-6">
@@ -67,7 +67,7 @@ export function CreateAccountForm({ onCreateAccount }: CreateAccountFormProps) {
                   errors={field.state.meta.errors}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
-              )
+              );
             }}
           />
           <form.Field
@@ -81,7 +81,7 @@ export function CreateAccountForm({ onCreateAccount }: CreateAccountFormProps) {
                   errors={field.state.meta.errors}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
-              )
+              );
             }}
           />
           <form.Field
@@ -95,7 +95,7 @@ export function CreateAccountForm({ onCreateAccount }: CreateAccountFormProps) {
                   errors={field.state.meta.errors}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
-              )
+              );
             }}
           />
           <form.Field
@@ -136,5 +136,5 @@ export function CreateAccountForm({ onCreateAccount }: CreateAccountFormProps) {
         </div>
       </form>
     </FormLayout>
-  )
+  );
 }

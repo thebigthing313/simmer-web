@@ -1,9 +1,9 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { Typography } from '@/components/typography'
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Typography } from "@/components/typography";
 
-export const Route = createFileRoute('/no-access')({
+export const Route = createFileRoute("/no-access")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
   return (
@@ -17,5 +17,5 @@ function RouteComponent() {
       </Typography>
       <Link to="/select-group">Select Another Group</Link>
     </div>
-  )
+  );
 }

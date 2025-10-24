@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-import type { ClassValue } from 'clsx'
+
+import type { ClassValue } from "clsx";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: Array<ClassValue>) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 /**
@@ -18,8 +19,8 @@ export function cn(...inputs: Array<ClassValue>) {
  * type B = Prettify<A>; // { a: number; b: string }
  */
 export type Prettify<T> = {
-  [K in keyof T]: T[K]
-} & {}
+  [K in keyof T]: T[K];
+} & {};
 
 export function buildChangedFields<T extends Record<string, any>>(
   value: Partial<T>,
@@ -28,33 +29,32 @@ export function buildChangedFields<T extends Record<string, any>>(
   const keys = new Set<string>([
     ...Object.keys(defaults),
     ...Object.keys(value),
-  ])
-  const changed: Partial<T> = {}
+  ]);
+  const changed: Partial<T> = {};
   keys.forEach((k) => {
-    const newVal = (value as any)[k]
-    const oldVal = (defaults as any)[k]
+    const newVal = (value as any)[k];
+    const oldVal = (defaults as any)[k];
     if (newVal !== oldVal) {
-      ;(changed as any)[k] = newVal
+      (changed as any)[k] = newVal;
     }
-  })
-  return changed
+  });
+  return changed;
 }
 
-export type IsSuperset<A, B> = B extends A ? A : B
-export type IsIdentical<A, B> =
-  IsSuperset<A, B> extends A
-    ? IsSuperset<B, A> extends B
-      ? A
-      : {
-          ERROR: 'Zod type is missing a Supabase field or Zod field is narrower'
-          Supabase: A
-          Zod: B
-        }
+export type IsSuperset<A, B> = B extends A ? A : B;
+export type IsIdentical<A, B> = IsSuperset<A, B> extends A
+  ? IsSuperset<B, A> extends B
+    ? A
     : {
-        ERROR: 'Zod type is missing a Supabase field or Zod field is wider'
-        Supabase: A
-        Zod: B
+        ERROR: "Zod type is missing a Supabase field or Zod field is narrower";
+        Supabase: A;
+        Zod: B;
       }
+  : {
+      ERROR: "Zod type is missing a Supabase field or Zod field is wider";
+      Supabase: A;
+      Zod: B;
+    };
 
 /**
  * Adds a crypto-generated UUID as the 'id' property to the given object.
@@ -62,5 +62,5 @@ export type IsIdentical<A, B> =
 export function addId<T extends Record<string, any>>(
   obj: T,
 ): T & { id: string } {
-  return { ...obj, id: crypto.randomUUID() }
+  return { ...obj, id: crypto.randomUUID() };
 }

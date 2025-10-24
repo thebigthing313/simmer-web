@@ -1,117 +1,120 @@
-import z from 'zod'
-import { useForm } from '@tanstack/react-form'
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
-import { toast } from 'sonner'
-import { CheckCircle, XCircle } from 'lucide-react'
-import type { ZodGroupInsertType } from '@/db/schemas/groups'
-import type { InputHTMLAttributes } from 'react'
-import { addId } from '@/lib/utils'
-import {
-  groupProfilesCollection,
-  groupsCollection,
-} from '@/db/collections/collections'
-import {
-  AddressSchema,
-  GroupNameSchema,
-  PhoneNumberSchema,
-  URLSchema,
-} from '@/db/form-schemas'
-import { TextInput } from '@/components/form-fields/text-input'
-import { AddressInput } from '@/components/form-fields/address-input'
-import { PhoneInput } from '@/components/form-fields/phone-input'
-import { SubmitButton } from '@/components/form-fields/submit-button'
-import { ZodGroupInsert } from '@/db/schemas/groups'
-import { FormErrorAlert } from '@/components/blocks/form-error-alert'
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from '@/components/ui/input-group'
+import { useForm } from "@tanstack/react-form";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { CheckCircle, XCircle } from "lucide-react";
+import type { InputHTMLAttributes } from "react";
+import { toast } from "sonner";
+import z from "zod";
+import { FormErrorAlert } from "@/components/blocks/form-error-alert";
+import { AddressInput } from "@/components/form-fields/address-input";
+import { PhoneInput } from "@/components/form-fields/phone-input";
+import { PhotoInput } from "@/components/form-fields/photo-input";
+import { SubmitButton } from "@/components/form-fields/submit-button";
+import { TextInput } from "@/components/form-fields/text-input";
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from '@/components/ui/field'
-import { Spinner } from '@/components/ui/spinner'
-import { PhotoInput } from '@/components/form-fields/photo-input'
-import { validateShortName } from '@/db/functions/validate-short-name'
+} from "@/components/ui/field";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  groupProfilesCollection,
+  groupsCollection,
+} from "@/db/collections/collections";
+import {
+  AddressSchema,
+  GroupNameSchema,
+  PhoneNumberSchema,
+  URLSchema,
+} from "@/db/form-schemas";
+import { validateShortName } from "@/db/functions/validate-short-name";
+import type { ZodGroupInsertType } from "@/db/schemas/groups";
+import { ZodGroupInsert } from "@/db/schemas/groups";
+import { addId } from "@/lib/utils";
 
-export const Route = createFileRoute('/(user)/create-group')({
+export const Route = createFileRoute("/(user)/create-group")({
   beforeLoad: ({ context }) => {
-    const { auth } = context
+    const { auth } = context;
     if (!auth.user_id) {
-      throw redirect({ to: '/login' })
+      throw redirect({ to: "/login" });
     }
 
-    return { user_id: auth.user_id }
+    return { user_id: auth.user_id };
   },
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  const { auth } = Route.useRouteContext()
-  const groups = groupsCollection
-  const group_profiles = groupProfilesCollection
-  const navigate = useNavigate()
+  const { auth } = Route.useRouteContext();
+  const groups = groupsCollection;
+  const group_profiles = groupProfilesCollection;
+  const navigate = useNavigate();
 
   const ShortNameSchema = z
     .string()
-    .min(1, 'Short name is required')
-    .max(15, 'Short name cannot exceed 15 characters')
+    .min(1, "Short name is required")
+    .max(15, "Short name cannot exceed 15 characters")
     .regex(
       /^[a-z0-9-]+$/,
-      'Short name may only contain lowercase letters, numbers, and hyphens',
+      "Short name may only contain lowercase letters, numbers, and hyphens",
     )
     .refine(async (slug: string) => validateShortName(slug), {
-      message: 'Short name is already taken',
-    })
+      message: "Short name is already taken",
+    });
 
   const emptyFormValues: ZodGroupInsertType = {
-    group_name: '',
-    address: '',
-    phone: '',
-    short_name: '',
+    group_name: "",
+    address: "",
+    phone: "",
+    short_name: "",
     fax: undefined,
     website_url: undefined,
     logo_url: undefined,
-  }
+  };
 
   const form = useForm({
     validators: { onSubmit: ZodGroupInsert },
     defaultValues: emptyFormValues,
     onSubmit: async ({ value }) => {
       try {
-        toast.info('Attempting to create group...')
+        toast.info("Attempting to create group...");
         const insertValue = {
-          ...addId(value as Omit<ZodGroupInsertType, 'id'>),
+          ...addId(value as Omit<ZodGroupInsertType, "id">),
           created_by: auth.user_id,
-        }
+        };
         const transaction = groups.insert(insertValue as any, {
           optimistic: false,
-        })
+        });
 
-        await transaction.isPersisted.promise
-        groups.utils.refetch()
-        group_profiles.utils.refetch()
-        await auth.refresh()
-        navigate({ to: '/$groupSlug', params: { groupSlug: value.short_name } })
+        await transaction.isPersisted.promise;
+        groups.utils.refetch();
+        group_profiles.utils.refetch();
+        await auth.refresh();
+        navigate({
+          to: "/$groupSlug",
+          params: { groupSlug: value.short_name },
+        });
       } catch (error: unknown) {
         if (error instanceof Error) {
-          toast.error(`Failed to create group: ${error.message}`)
+          toast.error(`Failed to create group: ${error.message}`);
         } else {
-          toast.error(`Failed to create group: ${String(error)}`)
+          toast.error(`Failed to create group: ${String(error)}`);
         }
       }
     },
-  })
+  });
   return (
     <form
       onSubmit={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        form.handleSubmit()
+        e.preventDefault();
+        e.stopPropagation();
+        form.handleSubmit();
       }}
     >
       <div className="grid gap-2">
@@ -134,7 +137,7 @@ function RouteComponent() {
                   field.state.meta.isPristine || field.state.meta.isValid
                 }
               />
-            )
+            );
           }}
         />
         <form.Field
@@ -153,7 +156,7 @@ function RouteComponent() {
                   field.state.meta.isPristine || field.state.meta.isValid
                 }
               />
-            )
+            );
           }}
         />
         <form.Field
@@ -170,7 +173,7 @@ function RouteComponent() {
                 onChange={(stored) => field.handleChange(stored)}
                 onBlur={() => field.handleBlur()}
               />
-            )
+            );
           }}
         />
         <form.Field
@@ -182,14 +185,14 @@ function RouteComponent() {
                 id="fax"
                 label="Fax"
                 placeholder="Enter fax number"
-                value={field.state.value ?? ''}
+                value={field.state.value ?? ""}
                 errors={field.state.meta.errors}
                 onChange={(stored) =>
-                  field.handleChange(stored === '' ? undefined : stored)
+                  field.handleChange(stored === "" ? undefined : stored)
                 }
                 onBlur={() => field.handleBlur()}
               />
-            )
+            );
           }}
         />
         <form.Field
@@ -212,7 +215,7 @@ function RouteComponent() {
                   field.state.meta.isDirty && field.state.meta.isValid
                 }
               />
-            )
+            );
           }}
         />
         <form.Field
@@ -223,11 +226,11 @@ function RouteComponent() {
               <TextInput
                 id="website_url"
                 label="Website URL"
-                value={field.state.value ?? ''}
+                value={field.state.value ?? ""}
                 errors={field.state.meta.errors}
                 onChange={(e) =>
                   field.handleChange(
-                    e.target.value === '' ? undefined : e.target.value,
+                    e.target.value === "" ? undefined : e.target.value,
                   )
                 }
                 isValid={
@@ -237,7 +240,7 @@ function RouteComponent() {
                   field.state.meta.isDirty && field.state.meta.isValidating
                 }
               />
-            )
+            );
           }}
         />
 
@@ -260,7 +263,7 @@ function RouteComponent() {
                   field.state.meta.isDirty && field.state.meta.isValidating
                 }
               />
-            )
+            );
           }}
         />
 
@@ -277,18 +280,18 @@ function RouteComponent() {
         />
       </div>
     </form>
-  )
+  );
 }
 
 interface ShortNameFieldProps
   extends Omit<
     InputHTMLAttributes<HTMLInputElement>,
-    'type' | 'id' | 'aria-invalid'
+    "type" | "id" | "aria-invalid"
   > {
-  isLoading?: boolean
-  isValid?: boolean
-  isAvailable?: boolean
-  errors?: Array<{ message?: string } | undefined>
+  isLoading?: boolean;
+  isValid?: boolean;
+  isAvailable?: boolean;
+  errors?: Array<{ message?: string } | undefined>;
 }
 function ShortNameField({
   isLoading = false,
@@ -327,5 +330,5 @@ function ShortNameField({
       </InputGroup>
       {errors && <FieldError errors={errors} />}
     </Field>
-  )
+  );
 }

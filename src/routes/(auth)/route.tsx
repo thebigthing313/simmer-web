@@ -1,14 +1,14 @@
-import { Outlet, createFileRoute } from '@tanstack/react-router'
-import { getAuth } from '@/db/auth/get-auth'
-import Logo from '@/assets/simmer-logo.svg?url'
+import { createFileRoute, Outlet } from "@tanstack/react-router";
+import Logo from "@/assets/simmer-logo.svg?url";
+import { getAuth } from "@/db/auth/get-auth";
 
-export const Route = createFileRoute('/(auth)')({
+export const Route = createFileRoute("/(auth)")({
   beforeLoad: async () => {
-    const auth = await getAuth()
-    return { auth }
+    const auth = await getAuth();
+    return { auth };
   },
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
   return (
@@ -18,5 +18,5 @@ function RouteComponent() {
         <Outlet />
       </div>
     </div>
-  )
+  );
 }

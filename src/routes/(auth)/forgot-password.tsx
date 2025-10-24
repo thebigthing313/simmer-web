@@ -1,28 +1,28 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { ErrorAlert } from './-components/error-alert'
-import { ForgotPasswordForm } from './-components/forgot-password-form'
-import { forgotPassword } from '@/db/auth/forgot-password'
+import { useMutation } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+import { forgotPassword } from "@/db/auth/forgot-password";
+import { ErrorAlert } from "./-components/error-alert";
+import { ForgotPasswordForm } from "./-components/forgot-password-form";
 
-export const Route = createFileRoute('/(auth)/forgot-password')({
+export const Route = createFileRoute("/(auth)/forgot-password")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const forgotPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
-      await forgotPassword(email)
+      await forgotPassword(email);
     },
     onError: (error: Error) => {
-      setErrorMsg(error.message)
+      setErrorMsg(error.message);
     },
     onSuccess: () => {
-      toast.success('Recovery email has been sent.')
+      toast.success("Recovery email has been sent.");
     },
-  })
+  });
 
   return (
     <>
@@ -33,5 +33,5 @@ function RouteComponent() {
         handleSubmit={(email: string) => forgotPasswordMutation.mutate(email)}
       />
     </>
-  )
+  );
 }

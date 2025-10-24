@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/$groupSlug/(app)/export-data/')({
+export const Route = createFileRoute("/$groupSlug/(app)/export-data/")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  return <div>Hello "/_app/export-data/"!</div>
+  return <div>Hello "/_app/export-data/"!</div>;
 }

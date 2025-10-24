@@ -1,23 +1,23 @@
-import { useForm } from '@tanstack/react-form'
-import { createFileRoute, useRouteContext } from '@tanstack/react-router'
-import { toast } from 'sonner'
-import type { ZodProfileUpdateType } from '@/db/schemas/profiles'
-import { SubmitButton } from '@/components/form-fields/submit-button'
-import { TextInput } from '@/components/form-fields/text-input'
-import { FieldGroup, FieldLegend, FieldSet } from '@/components/ui/field'
-import { NameSchema } from '@/types/form-schemas'
-import { buildChangedFields } from '@/lib/utils'
-import { ZodProfileUpdate } from '@/db/schemas/profiles'
-import { useProfile } from '@/db/hooks/use-profile'
+import { useForm } from "@tanstack/react-form";
+import { createFileRoute, useRouteContext } from "@tanstack/react-router";
+import { toast } from "sonner";
+import { SubmitButton } from "@/components/form-fields/submit-button";
+import { TextInput } from "@/components/form-fields/text-input";
+import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field";
+import { NameSchema } from "@/db/form-schemas";
+import { useProfile } from "@/db/hooks/use-profile";
+import type { ZodProfileUpdateType } from "@/db/schemas/profiles";
+import { ZodProfileUpdate } from "@/db/schemas/profiles";
+import { buildChangedFields } from "@/lib/utils";
 
-export const Route = createFileRoute('/(user)/profile')({
+export const Route = createFileRoute("/(user)/profile")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  const { profile_id } = useRouteContext({ from: '/(user)' })
-  const { query, collection } = useProfile(profile_id)
-  const profile = query.data[0]
+  const { profile_id } = useRouteContext({ from: "/(user)" });
+  const { query, collection } = useProfile(profile_id);
+  const profile = query.data[0];
 
   const defaultValues: ZodProfileUpdateType = {
     first_name: profile.first_name,
@@ -25,7 +25,7 @@ function RouteComponent() {
     bio: profile.bio,
     avatar_url: profile.avatar_url,
     profile_photo_url: profile.profile_photo_url,
-  }
+  };
 
   const form = useForm({
     validators: {
@@ -36,26 +36,26 @@ function RouteComponent() {
       const changed = buildChangedFields<ZodProfileUpdateType>(
         value,
         defaultValues,
-      )
+      );
       if (Object.keys(changed).length > 0) {
         collection.update(profile.id, (draft) => {
-          Object.assign(draft, changed)
-          Object.assign(defaultValues, changed)
-        })
-        toast.success('Profile updated successfully.')
+          Object.assign(draft, changed);
+          Object.assign(defaultValues, changed);
+        });
+        toast.success("Profile updated successfully.");
       } else {
-        toast.info('No changes to save.')
+        toast.info("No changes to save.");
       }
     },
-  })
+  });
 
   return (
     <div className="flex flex-col gap-2">
       <form
         onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
+          e.preventDefault();
+          e.stopPropagation();
+          form.handleSubmit();
         }}
       >
         <FieldSet>
@@ -76,7 +76,7 @@ function RouteComponent() {
                     isValid={field.state.meta.isValid}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
-                )
+                );
               }}
             />
             <form.Field
@@ -92,7 +92,7 @@ function RouteComponent() {
                     isValid={field.state.meta.isValid}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
-                )
+                );
               }}
             />
             <form.Field
@@ -102,12 +102,12 @@ function RouteComponent() {
                   <TextInput
                     id="bio"
                     label="Bio"
-                    value={field.state.value ?? ''}
+                    value={field.state.value ?? ""}
                     errors={field.state.meta.errors}
                     isValid={field.state.meta.isValid}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
-                )
+                );
               }}
             />
             <form.Field
@@ -117,12 +117,12 @@ function RouteComponent() {
                   <TextInput
                     id="profile_photo_url"
                     label="Profile Photo URL"
-                    value={field.state.value ?? ''}
+                    value={field.state.value ?? ""}
                     errors={field.state.meta.errors}
                     isValid={field.state.meta.isValid}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
-                )
+                );
               }}
             />
             <form.Field
@@ -132,12 +132,12 @@ function RouteComponent() {
                   <TextInput
                     id="avatar_url"
                     label="Avatar URL"
-                    value={field.state.value ?? ''}
+                    value={field.state.value ?? ""}
                     errors={field.state.meta.errors}
                     isValid={field.state.meta.isValid}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
-                )
+                );
               }}
             />
           </FieldGroup>
@@ -154,5 +154,5 @@ function RouteComponent() {
         />
       </form>
     </div>
-  )
+  );
 }

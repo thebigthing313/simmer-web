@@ -1,28 +1,28 @@
-import { MailIcon } from 'lucide-react'
-import type { InputHTMLAttributes, Ref } from 'react'
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from '@/components/ui/input-group'
+import { MailIcon } from "lucide-react";
+import type { InputHTMLAttributes, Ref } from "react";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from '@/components/ui/field'
+} from "@/components/ui/field";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 
 interface EmailInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
-  label?: string
-  description?: string
-  errors?: Array<{ message?: string } | undefined>
-  ref?: Ref<HTMLInputElement>
-  className?: string
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "type"> {
+  label?: string;
+  description?: string;
+  errors?: Array<{ message?: string } | undefined>;
+  ref?: Ref<HTMLInputElement>;
+  className?: string;
 }
 
 export function EmailInput({
-  label = 'Email',
+  label = "Email",
   description,
   errors,
   className,
@@ -46,5 +46,5 @@ export function EmailInput({
       {description && <FieldDescription>{description}</FieldDescription>}
       {errors && <FieldError errors={errors} />}
     </Field>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import { Separator } from '@/components/ui/separator'
-import { SidebarTrigger } from '@/components/ui/sidebar'
-import { Typography } from '@/components/typography'
+import { Typography } from "@/components/typography";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function SiteHeader() {
   return (
@@ -16,5 +16,5 @@ export function SiteHeader() {
         </Typography>
       </div>
     </header>
-  )
+  );
 }

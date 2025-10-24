@@ -1,37 +1,37 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { useMutation } from '@tanstack/react-query'
-import { useState } from 'react'
-import { CircleCheck } from 'lucide-react'
-import { ResetPasswordForm } from './-components/reset-password-form'
-import { ErrorAlert } from './-components/error-alert'
-import { resetPassword } from '@/db/auth/reset-password'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { signOut } from '@/db/auth/sign-out'
+import { useMutation } from "@tanstack/react-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { CircleCheck } from "lucide-react";
+import { useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { resetPassword } from "@/db/auth/reset-password";
+import { signOut } from "@/db/auth/sign-out";
+import { ErrorAlert } from "./-components/error-alert";
+import { ResetPasswordForm } from "./-components/reset-password-form";
 
-export const Route = createFileRoute('/(auth)/reset-password')({
+export const Route = createFileRoute("/(auth)/reset-password")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  const [errorMsg, setErrorMsg] = useState<string | null>(null)
-  const [success, setSuccess] = useState<boolean>(false)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
 
   // Parse error info from the URL hash (used by Supabase for error redirects)
-  const { error, error_code, error_description } = parseHashParams()
+  const { error, error_code, error_description } = parseHashParams();
 
   const resetMutation = useMutation({
     mutationFn: async (newPassword: string) => {
-      await resetPassword(newPassword)
+      await resetPassword(newPassword);
     },
     onError: (mutationError: Error) => {
-      setErrorMsg(mutationError.message)
+      setErrorMsg(mutationError.message);
     },
     onSuccess: async () => {
-      setErrorMsg(null)
-      await signOut()
-      setSuccess(true)
+      setErrorMsg(null);
+      await signOut();
+      setSuccess(true);
     },
-  })
+  });
 
   // If there is an error in the hash, show an error alert
   if (error && error_code && error_description) {
@@ -40,7 +40,7 @@ function RouteComponent() {
         errorTitle={`${error.toUpperCase()}: ${error_code.toUpperCase()}`}
         errorMsg={error_description}
       />
-    )
+    );
   }
 
   return (
@@ -55,12 +55,12 @@ function RouteComponent() {
       {!success && (
         <ResetPasswordForm
           onResetPassword={(newPassword) => {
-            resetMutation.mutate(newPassword)
+            resetMutation.mutate(newPassword);
           }}
         />
       )}
     </>
-  )
+  );
 }
 
 function SuccessfulReset() {
@@ -74,16 +74,16 @@ function SuccessfulReset() {
         </Link>
       </AlertDescription>
     </Alert>
-  )
+  );
 }
 
 // Helper to parse error params from the hash fragment (for Supabase error redirects)
 function parseHashParams() {
-  const hash = window.location.hash.substring(1) // remove the '#'
-  const params = new URLSearchParams(hash)
+  const hash = window.location.hash.substring(1); // remove the '#'
+  const params = new URLSearchParams(hash);
   return {
-    error: params.get('error'),
-    error_code: params.get('error_code'),
-    error_description: params.get('error_description'),
-  }
+    error: params.get("error"),
+    error_code: params.get("error_code"),
+    error_description: params.get("error_description"),
+  };
 }

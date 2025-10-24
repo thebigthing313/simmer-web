@@ -1,25 +1,26 @@
 /* eslint-disable react/no-children-prop */
-import { EmailSchema } from '@/db/form-schemas'
-import { useForm } from '@tanstack/react-form'
-import { FormLayout } from './form-layout'
-import { SubmitButton } from '@/components/form-fields/submit-button'
-import z from 'zod'
-import { EmailInput } from '@/components/form-fields/email-input'
+
+import { useForm } from "@tanstack/react-form";
+import z from "zod";
+import { EmailInput } from "@/components/form-fields/email-input";
+import { SubmitButton } from "@/components/form-fields/submit-button";
+import { EmailSchema } from "@/db/form-schemas";
+import { FormLayout } from "./form-layout";
 
 interface ForgotPasswordFormProps {
-  handleSubmit: (email: string) => void
+  handleSubmit: (email: string) => void;
 }
 
 const ForgotPasswordSchema = z.object({
   email: EmailSchema,
-})
+});
 
 export function ForgotPasswordForm({ handleSubmit }: ForgotPasswordFormProps) {
   const form = useForm({
     validators: { onChange: ForgotPasswordSchema },
-    defaultValues: { email: '' },
+    defaultValues: { email: "" },
     onSubmit: async ({ value }) => handleSubmit(value.email),
-  })
+  });
 
   return (
     <FormLayout
@@ -28,9 +29,9 @@ export function ForgotPasswordForm({ handleSubmit }: ForgotPasswordFormProps) {
     >
       <form
         onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
+          e.preventDefault();
+          e.stopPropagation();
+          form.handleSubmit();
         }}
       >
         <div className="grid gap-6">
@@ -45,7 +46,7 @@ export function ForgotPasswordForm({ handleSubmit }: ForgotPasswordFormProps) {
                   errors={field.state.meta.errors}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
-              )
+              );
             }}
           />
           <form.Subscribe
@@ -62,5 +63,5 @@ export function ForgotPasswordForm({ handleSubmit }: ForgotPasswordFormProps) {
         </div>
       </form>
     </FormLayout>
-  )
+  );
 }

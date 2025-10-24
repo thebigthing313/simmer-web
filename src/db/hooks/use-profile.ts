@@ -1,5 +1,5 @@
-import { eq, useLiveQuery } from '@tanstack/react-db'
-import { profilesCollection } from '../collections/collections'
+import { eq, useLiveQuery } from "@tanstack/react-db";
+import { profilesCollection } from "../collections/collections";
 
 /**
  * A React hook that retrieves a profile by its ID using a live query.
@@ -14,9 +14,9 @@ export function useProfile(id: string) {
         .from({ profile: profilesCollection })
         .where(({ profile }) => eq(profile.id, id)),
     [id],
-  )
+  );
   return {
     query,
     collection: profilesCollection,
-  }
+  };
 }

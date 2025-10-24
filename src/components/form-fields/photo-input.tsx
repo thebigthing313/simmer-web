@@ -1,14 +1,14 @@
-import { forwardRef, useCallback, useId, useRef, useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { forwardRef, useCallback, useId, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from '@/components/ui/field'
-import { cn } from '@/lib/utils'
-import { uploadPhoto } from '@/db/storage/upload-utils'
+} from "@/components/ui/field";
+import { uploadPhoto } from "@/db/storage/upload-utils";
+import { cn } from "@/lib/utils";
 
 /**
  * Props for the PhotoInput component.
@@ -27,20 +27,20 @@ import { uploadPhoto } from '@/db/storage/upload-utils'
  */
 type PhotoInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
-  'id' | 'type' | 'value' | 'onChange'
+  "id" | "type" | "value" | "onChange"
 > & {
-  label?: string
-  description?: string
-  errors?: Array<{ message?: string } | undefined>
-  id?: string
-  className?: string
-  value?: string | null
-  onChange: (url: string | null) => void
-  bucket?: 'logos' | 'avatars' | 'profile_photos'
-  fileName?: string
-  isValid?: boolean
-  isLoading?: boolean
-}
+  label?: string;
+  description?: string;
+  errors?: Array<{ message?: string } | undefined>;
+  id?: string;
+  className?: string;
+  value?: string | null;
+  onChange: (url: string | null) => void;
+  bucket?: "logos" | "avatars" | "profile_photos";
+  fileName?: string;
+  isValid?: boolean;
+  isLoading?: boolean;
+};
 
 /**
  * PhotoInput component allows users to upload a photo via drag-and-drop or file picker.
@@ -60,7 +60,7 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
       className,
       onChange,
       value,
-      bucket = 'logos',
+      bucket = "logos",
       fileName,
       isValid = true,
       isLoading,
@@ -68,13 +68,13 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
     },
     ref,
   ) => {
-    const generatedId = useId()
-    const id = idProp || generatedId
+    const generatedId = useId();
+    const id = idProp || generatedId;
 
-    const [dragActive, setDragActive] = useState(false)
-    const [uploading, setUploading] = useState(false)
-    const [uploadError, setUploadError] = useState<string | null>(null)
-    const inputRef = useRef<HTMLInputElement>(null)
+    const [dragActive, setDragActive] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const [uploadError, setUploadError] = useState<string | null>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     /**
      * Sets both the local and forwarded refs.
@@ -82,23 +82,23 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
      */
     const setRefs = useCallback(
       (node: HTMLInputElement) => {
-        inputRef.current = node
-        if (typeof ref === 'function') ref(node)
+        inputRef.current = node;
+        if (typeof ref === "function") ref(node);
         else if (ref)
           (ref as React.MutableRefObject<HTMLInputElement | null>).current =
-            node
+            node;
       },
       [ref],
-    )
+    );
 
     /**
      * Handles file input change event.
      * @param {React.ChangeEvent<HTMLInputElement>} e
      */
     async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-      const file = e.target.files && e.target.files[0]
+      const file = e.target.files && e.target.files[0];
       if (file) {
-        await uploadFile(file)
+        await uploadFile(file);
       }
     }
 
@@ -107,12 +107,12 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
      * @param {React.DragEvent<HTMLDivElement>} e
      */
     async function handleDrop(e: React.DragEvent<HTMLDivElement>) {
-      e.preventDefault()
-      setDragActive(false)
-      const file = e.dataTransfer.files[0]
+      e.preventDefault();
+      setDragActive(false);
+      const file = e.dataTransfer.files[0];
 
-      if (file.type === 'image/jpeg' || file.type === 'image/png') {
-        await uploadFile(file)
+      if (file.type === "image/jpeg" || file.type === "image/png") {
+        await uploadFile(file);
       }
     }
 
@@ -121,15 +121,17 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
      * @param {File} file
      */
     async function uploadFile(file: File) {
-      setUploading(true)
-      setUploadError(null)
+      setUploading(true);
+      setUploadError(null);
       try {
-        const url = await uploadPhoto(file, bucket, fileName)
-        onChange(url)
+        const url = await uploadPhoto(file, bucket, fileName);
+        onChange(url);
       } catch (error) {
-        setUploadError(error instanceof Error ? error.message : 'Upload failed')
+        setUploadError(
+          error instanceof Error ? error.message : "Upload failed",
+        );
       } finally {
-        setUploading(false)
+        setUploading(false);
       }
     }
 
@@ -138,8 +140,8 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
      * @param {React.DragEvent<HTMLDivElement>} e
      */
     function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
-      e.preventDefault()
-      setDragActive(true)
+      e.preventDefault();
+      setDragActive(true);
     }
 
     /**
@@ -147,15 +149,15 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
      * @param {React.DragEvent<HTMLDivElement>} e
      */
     function handleDragLeave(e: React.DragEvent<HTMLDivElement>) {
-      e.preventDefault()
-      setDragActive(false)
+      e.preventDefault();
+      setDragActive(false);
     }
 
     /**
      * Triggers the file input click.
      */
     function handleBrowseClick() {
-      inputRef.current?.click()
+      inputRef.current?.click();
     }
 
     return (
@@ -167,8 +169,8 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
 
         <div
           className={cn(
-            'relative flex flex-col items-center justify-center w-full h-full min-h-[180px] rounded-md border-3 border-dashed transition-colors cursor-pointer',
-            dragActive ? 'border-primary bg-muted/30' : 'border-primary/15',
+            "relative flex flex-col items-center justify-center w-full h-full min-h-[180px] rounded-md border-3 border-dashed transition-colors cursor-pointer",
+            dragActive ? "border-primary bg-muted/30" : "border-primary/15",
           )}
           tabIndex={0}
           onClick={handleBrowseClick}
@@ -186,7 +188,7 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
             onChange={handleChange}
             tabIndex={-1}
             {...Object.fromEntries(
-              Object.entries(rest).filter(([k]) => k !== 'value'),
+              Object.entries(rest).filter(([k]) => k !== "value"),
             )}
           />
 
@@ -206,8 +208,8 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
                 variant="outline"
                 size="sm"
                 onClick={(e) => {
-                  e.stopPropagation()
-                  handleBrowseClick()
+                  e.stopPropagation();
+                  handleBrowseClick();
                 }}
                 disabled={uploading}
               >
@@ -221,10 +223,10 @@ export const PhotoInput = forwardRef<HTMLInputElement, PhotoInputProps>(
         )}
         {errors && <FieldError errors={errors} />}
       </Field>
-    )
+    );
   },
-)
-PhotoInput.displayName = 'PhotoInput'
+);
+PhotoInput.displayName = "PhotoInput";
 
 /**
  * Props for the PhotoPreview component.
@@ -232,7 +234,7 @@ PhotoInput.displayName = 'PhotoInput'
  * @property {string|null} url - The URL of the photo to preview.
  */
 interface PhotoPreviewProps {
-  url: string | null
+  url: string | null;
 }
 
 /**
@@ -241,12 +243,12 @@ interface PhotoPreviewProps {
 
  */
 function PhotoPreview({ url }: PhotoPreviewProps) {
-  if (!url) return null
+  if (!url) return null;
   return (
     <img
       className="object-cover rounded-md w-full h-full max-h-[320px] max-w-[320px]"
       src={url}
       alt="Preview"
     />
-  )
+  );
 }

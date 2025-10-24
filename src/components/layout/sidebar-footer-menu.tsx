@@ -1,11 +1,11 @@
-import { HelpCircleIcon, InfoIcon } from 'lucide-react'
+import { HelpCircleIcon, InfoIcon } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/components/ui/sidebar'
+} from "@/components/ui/sidebar";
 
 export function SidebarFooterMenu() {
   return (
@@ -26,5 +26,5 @@ export function SidebarFooterMenu() {
         </SidebarMenuItem>
       </SidebarGroupContent>
     </SidebarGroup>
-  )
+  );
 }

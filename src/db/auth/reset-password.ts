@@ -1,4 +1,4 @@
-import { supabase } from '../client'
+import { supabase } from "../client";
 
 /**
  * Resets the password for the currently authenticated user using the provided Supabase client.
@@ -11,9 +11,9 @@ import { supabase } from '../client'
 export async function resetPassword(password: string) {
   const { data, error } = await supabase.auth.updateUser({
     password: password,
-  })
+  });
 
-  if (error) throw error
+  if (error) throw error;
 
-  return data
+  return data;
 }

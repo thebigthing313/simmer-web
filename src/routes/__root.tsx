@@ -1,27 +1,27 @@
+import { TanStackDevtools } from "@tanstack/react-devtools";
+import type { QueryClient } from "@tanstack/react-query";
 import {
-  Outlet,
   createRootRouteWithContext,
+  Outlet,
   useNavigate,
-} from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
-import { Info } from 'lucide-react'
-import type { QueryClient } from '@tanstack/react-query'
-import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
-import { getAuth } from '@/db/auth/get-auth'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
-import { Toaster } from '@/components/ui/sonner'
+} from "@tanstack/react-router";
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { Info } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
+import { getAuth } from "@/db/auth/get-auth";
+import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
 
 interface MyRouterContext {
-  queryClient: QueryClient
+  queryClient: QueryClient;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   notFoundComponent: () => <div>Not Found</div>,
   beforeLoad: async () => {
-    const auth = await getAuth()
-    return { auth }
+    const auth = await getAuth();
+    return { auth };
   },
   component: () => (
     <>
@@ -29,11 +29,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       <Toaster />
       <TanStackDevtools
         config={{
-          position: 'bottom-right',
+          position: "bottom-right",
         }}
         plugins={[
           {
-            name: 'Tanstack Router',
+            name: "Tanstack Router",
             render: <TanStackRouterDevtoolsPanel />,
           },
           TanStackQueryDevtools,
@@ -43,34 +43,34 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   ),
   errorComponent: (error) => (
     <ErrorComponent
-      title={'Root Level Error'}
+      title={"Root Level Error"}
       error={error.error.name}
       description={error.error.message}
     />
   ),
-})
+});
 
 type ErrorComponentProps = {
-  title?: string
-  description?: string
-  error?: Error | string | null
-  className?: string
-}
+  title?: string;
+  description?: string;
+  error?: Error | string | null;
+  className?: string;
+};
 
 function ErrorComponent({
-  title = 'Something went wrong',
+  title = "Something went wrong",
   description,
   error,
-  className = '',
+  className = "",
 }: ErrorComponentProps) {
   const errorMessage =
-    typeof error === 'string'
+    typeof error === "string"
       ? error
       : error instanceof Error
         ? error.message
-        : null
+        : null;
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <Alert variant="destructive" className={className}>
@@ -86,15 +86,15 @@ function ErrorComponent({
         <div className="mt-4 flex gap-2">
           <Button
             variant="destructive"
-            onClick={() => navigate({ to: '/login' })}
+            onClick={() => navigate({ to: "/login" })}
           >
             Back to Login
           </Button>
-          <Button variant="outline" onClick={() => navigate({ to: '/' })}>
+          <Button variant="outline" onClick={() => navigate({ to: "/" })}>
             Home
           </Button>
         </div>
       </AlertDescription>
     </Alert>
-  )
+  );
 }

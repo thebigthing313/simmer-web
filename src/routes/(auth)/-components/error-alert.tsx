@@ -1,9 +1,9 @@
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
-import { AlertCircleIcon } from 'lucide-react'
+import { AlertCircleIcon } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface ErrorAlertProps {
-  errorTitle: string
-  errorMsg: string
+  errorTitle: string;
+  errorMsg: string;
 }
 
 export function ErrorAlert({ errorTitle, errorMsg }: ErrorAlertProps) {
@@ -13,5 +13,5 @@ export function ErrorAlert({ errorTitle, errorMsg }: ErrorAlertProps) {
       <AlertTitle>{errorTitle}</AlertTitle>
       <AlertDescription>{errorMsg}</AlertDescription>
     </Alert>
-  )
+  );
 }

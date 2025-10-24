@@ -1,5 +1,5 @@
-import { supabase } from '@/db/client'
+import { supabase } from "@/db/client";
 
 export function signOut() {
-  return supabase.auth.signOut()
+  return supabase.auth.signOut();
 }

@@ -1,12 +1,12 @@
-import { AppSidebar } from './app-sidebar'
-import { SiteHeader } from './site-header'
-import type { MenuGroup } from './app-sidebar'
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import type { MenuGroup } from "./app-sidebar";
+import { AppSidebar } from "./app-sidebar";
+import { SiteHeader } from "./site-header";
 
 interface SidebarWithInsetProps {
-  header?: React.ReactNode
-  children?: React.ReactNode
-  menuGroups?: Array<MenuGroup>
+  header?: React.ReactNode;
+  children?: React.ReactNode;
+  menuGroups?: Array<MenuGroup>;
 }
 export function SidebarWithInset({
   header,
@@ -17,8 +17,8 @@ export function SidebarWithInset({
     <SidebarProvider
       style={
         {
-          '--sidebar-width': 'calc(var(--spacing) * 72)',
-          '--header-height': 'calc(var(--spacing) * 12)',
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
         } as React.CSSProperties
       }
       className="h-full w-full flex"
@@ -31,5 +31,5 @@ export function SidebarWithInset({
         </div>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

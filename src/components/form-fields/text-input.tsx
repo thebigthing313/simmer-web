@@ -1,27 +1,27 @@
-import type { InputHTMLAttributes, Ref } from 'react'
+import type { InputHTMLAttributes, Ref } from "react";
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from '@/components/ui/field'
+} from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from '@/components/ui/input-group'
-import { Spinner } from '@/components/ui/spinner'
+} from "@/components/ui/input-group";
+import { Spinner } from "@/components/ui/spinner";
 
 interface TextInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
-  label?: string
-  description?: string
-  errors?: Array<{ message?: string } | undefined>
-  ref?: Ref<HTMLInputElement>
-  isValid?: boolean
-  isLoading?: boolean
-  className?: string
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "type"> {
+  label?: string;
+  description?: string;
+  errors?: Array<{ message?: string } | undefined>;
+  ref?: Ref<HTMLInputElement>;
+  isValid?: boolean;
+  isLoading?: boolean;
+  className?: string;
 }
 
 export function TextInput({
@@ -56,5 +56,5 @@ export function TextInput({
       </InputGroup>
       {errors && <FieldError errors={errors} />}
     </Field>
-  )
+  );
 }

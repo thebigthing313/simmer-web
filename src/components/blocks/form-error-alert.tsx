@@ -1,9 +1,9 @@
-import { AlertCircleIcon } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
-import { Typography } from '../typography'
+import { AlertCircleIcon } from "lucide-react";
+import { Typography } from "../typography";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 interface FormErrorAlertProps {
-  errors: Array<{ message?: string } | undefined>
+  errors: Array<{ message?: string } | undefined>;
 }
 export function FormErrorAlert({ errors }: FormErrorAlertProps) {
   return (
@@ -21,5 +21,5 @@ export function FormErrorAlert({ errors }: FormErrorAlertProps) {
         </Typography>
       </AlertDescription>
     </Alert>
-  )
+  );
 }

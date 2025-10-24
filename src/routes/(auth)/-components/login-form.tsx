@@ -1,43 +1,44 @@
 /* eslint-disable react/no-children-prop */
-import { Button } from '@/components/ui/button'
-import { EmailInput } from '@/components/form-fields/email-input'
-import { PasswordInput } from '@/components/form-fields/password-input'
-import { SubmitButton } from '@/components/form-fields/submit-button'
-import { Link } from '@tanstack/react-router'
-import { useForm } from '@tanstack/react-form'
-import z from 'zod'
-import { FormLayout } from './form-layout'
-import { EmailSchema, PasswordSchema } from '@/db/form-schemas'
+
+import { useForm } from "@tanstack/react-form";
+import { Link } from "@tanstack/react-router";
+import z from "zod";
+import { EmailInput } from "@/components/form-fields/email-input";
+import { PasswordInput } from "@/components/form-fields/password-input";
+import { SubmitButton } from "@/components/form-fields/submit-button";
+import { Button } from "@/components/ui/button";
+import { EmailSchema, PasswordSchema } from "@/db/form-schemas";
+import { FormLayout } from "./form-layout";
 
 type LoginFormProps = {
-  onEmailLogin: (email: string, password: string) => void
-  onForgotPassword: () => void
-}
+  onEmailLogin: (email: string, password: string) => void;
+  onForgotPassword: () => void;
+};
 
 const LoginSchema = z.object({
   email: EmailSchema,
   password: PasswordSchema,
-})
+});
 
 export function LoginForm({ onEmailLogin, onForgotPassword }: LoginFormProps) {
   const form = useForm({
     validators: { onChange: LoginSchema },
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
     onSubmit: async ({ value }) => {
-      onEmailLogin(value.email, value.password)
+      onEmailLogin(value.email, value.password);
     },
-  })
+  });
 
   return (
     <FormLayout title="Welcome back!" description="Login to your account">
       <form
         onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
+          e.preventDefault();
+          e.stopPropagation();
+          form.handleSubmit();
         }}
       >
         <div className="grid gap-6">
@@ -49,11 +50,12 @@ export function LoginForm({ onEmailLogin, onForgotPassword }: LoginFormProps) {
                 <form.Field
                   name="email"
                   children={(field) => {
-                    const showErrors = isSubmitted || field.state.meta.isTouched
+                    const showErrors =
+                      isSubmitted || field.state.meta.isTouched;
                     const errors =
                       showErrors && !field.state.meta.isValid
                         ? field.state.meta.errors
-                        : undefined
+                        : undefined;
                     return (
                       <EmailInput
                         required
@@ -63,18 +65,19 @@ export function LoginForm({ onEmailLogin, onForgotPassword }: LoginFormProps) {
                         errors={errors}
                         onChange={(e) => field.handleChange(e.target.value)}
                       />
-                    )
+                    );
                   }}
                 />
 
                 <form.Field
                   name="password"
                   children={(field) => {
-                    const showErrors = isSubmitted || field.state.meta.isTouched
+                    const showErrors =
+                      isSubmitted || field.state.meta.isTouched;
                     const errors =
                       showErrors && !field.state.meta.isValid
                         ? field.state.meta.errors
-                        : undefined
+                        : undefined;
                     return (
                       <PasswordInput
                         required
@@ -84,7 +87,7 @@ export function LoginForm({ onEmailLogin, onForgotPassword }: LoginFormProps) {
                         errors={errors}
                         onChange={(e) => field.handleChange(e.target.value)}
                       />
-                    )
+                    );
                   }}
                 />
               </>
@@ -114,12 +117,12 @@ export function LoginForm({ onEmailLogin, onForgotPassword }: LoginFormProps) {
           Forgot your password?
         </Button>
         <div className="text-center text-sm">
-          Don&apos;t have an account?{' '}
+          Don&apos;t have an account?{" "}
           <Link to="/create-account" className="underline underline-offset-4">
             Create one here.
           </Link>
         </div>
       </div>
     </FormLayout>
-  )
+  );
 }

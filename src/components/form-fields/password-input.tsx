@@ -1,68 +1,67 @@
-import { EyeIcon } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
-import type { InputHTMLAttributes, Ref } from 'react'
-
+import { EyeIcon } from "lucide-react";
+import type { InputHTMLAttributes, Ref } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from '@/components/ui/field'
+} from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from '@/components/ui/input-group'
-import { Button } from '@/components/ui/button'
+} from "@/components/ui/input-group";
 
 interface PasswordInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
-  label?: string
-  description?: string
-  errors?: Array<{ message?: string } | undefined>
-  ref?: Ref<HTMLInputElement>
-  className?: string
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "type"> {
+  label?: string;
+  description?: string;
+  errors?: Array<{ message?: string } | undefined>;
+  ref?: Ref<HTMLInputElement>;
+  className?: string;
 }
 
 export function PasswordInput({
-  label = 'Password',
+  label = "Password",
   description,
   errors,
   className,
   ref,
   ...inputProps
 }: PasswordInputProps) {
-  const [visible, setVisible] = useState(false)
-  const btnRef = useRef<HTMLButtonElement | null>(null)
+  const [visible, setVisible] = useState(false);
+  const btnRef = useRef<HTMLButtonElement | null>(null);
 
   // Safety: if pointerup happens outside the button (drag off), ensure we hide the password.
   useEffect(() => {
     function onUp() {
-      setVisible(false)
+      setVisible(false);
     }
 
     if (visible) {
-      window.addEventListener('pointerup', onUp)
-      window.addEventListener('keyup', onUp)
+      window.addEventListener("pointerup", onUp);
+      window.addEventListener("keyup", onUp);
     }
     return () => {
-      window.removeEventListener('pointerup', onUp)
-      window.removeEventListener('keyup', onUp)
-    }
-  }, [visible])
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("keyup", onUp);
+    };
+  }, [visible]);
 
   // Keyboard handlers: show while Space or Enter is held down on the button
   function handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === ' ' || e.key === 'Spacebar' || e.key === 'Enter') {
-      e.preventDefault()
-      setVisible(true)
+    if (e.key === " " || e.key === "Spacebar" || e.key === "Enter") {
+      e.preventDefault();
+      setVisible(true);
     }
   }
 
   function handleKeyUp(e: React.KeyboardEvent) {
-    if (e.key === ' ' || e.key === 'Spacebar' || e.key === 'Enter') {
-      e.preventDefault()
-      setVisible(false)
+    if (e.key === " " || e.key === "Spacebar" || e.key === "Enter") {
+      e.preventDefault();
+      setVisible(false);
     }
   }
 
@@ -72,7 +71,7 @@ export function PasswordInput({
       {description && <FieldDescription>{description}</FieldDescription>}
       <InputGroup>
         <InputGroupInput
-          type={visible ? 'text' : 'password'}
+          type={visible ? "text" : "password"}
           aria-invalid={errors && errors.length > 0}
           ref={ref}
           {...inputProps}
@@ -97,5 +96,5 @@ export function PasswordInput({
       </InputGroup>
       {errors && <FieldError errors={errors} />}
     </Field>
-  )
+  );
 }

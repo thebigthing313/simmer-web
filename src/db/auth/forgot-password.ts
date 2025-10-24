@@ -1,4 +1,4 @@
-import { supabase } from '@/db/client'
+import { supabase } from "@/db/client";
 
 /**
  * Sends a password reset email to the specified user using Supabase authentication.
@@ -11,7 +11,7 @@ import { supabase } from '@/db/client'
 export async function forgotPassword(email: string) {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${window.location.origin}/reset-password`,
-  })
+  });
 
-  if (error) throw error
+  if (error) throw error;
 }
