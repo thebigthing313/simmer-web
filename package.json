@@ -14,12 +14,7 @@
     "db-schemas": "pnpm supazod -i ./src/types/supabase-types.ts -o ./src/types/db-schemas.ts -t ./src/types/db-schemas.d.ts -s public"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@fontsource/roboto": "^5.2.8",
     "@hookform/resolvers": "^5.2.2",
-    "@mui/icons-material": "^7.3.4",
-    "@mui/material": "^7.3.4",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.7",
@@ -90,7 +85,6 @@
     "@vitejs/plugin-react": "^5.0.4",
     "jsdom": "^27.0.0",
     "node": "link:@types\\node",
-    "supazod": "^4.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
