@@ -85,6 +85,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
+    "@storybook/addon-docs": "^9.1.15",
     "@tanstack/devtools-event-client": "^0.3.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
