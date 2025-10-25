@@ -1,0 +1,16 @@
+import { H1, H2 } from './typography';
+import { Button } from './ui/button';
+
+interface NotFoundProps {
+	onGoHome?: () => void;
+}
+export function NotFound({ onGoHome }: NotFoundProps) {
+	return (
+		<main className="max-w-lg grid grid-rows gap-2">
+			<H1>404 - Page Not Found</H1>
+			<H2>Sorry, the page you are looking for does not exist.</H2>
+
+			<Button onClick={onGoHome}>Go Home</Button>
+		</main>
+	);
+}
