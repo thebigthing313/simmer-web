@@ -64,11 +64,20 @@ export function TextInput({
 					<InputGroupButton
 						variant="ghost"
 						size="icon-sm"
-						onClick={() =>
-							props.onChange?.({
-								target: { value: '' },
-							} as React.ChangeEvent<HTMLInputElement>)
-						}
+						onClick={() => {
+							if (props.type === 'file') {
+								if (ref && 'current' in ref && ref.current) {
+									ref.current.value = '';
+								}
+								props.onChange?.({
+									target: { value: '', files: null },
+								} as React.ChangeEvent<HTMLInputElement>);
+							} else {
+								props.onChange?.({
+									target: { value: '' },
+								} as React.ChangeEvent<HTMLInputElement>);
+							}
+						}}
 						aria-label="Clear input"
 					>
 						<EraserIcon />
