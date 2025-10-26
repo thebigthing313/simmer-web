@@ -9,6 +9,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { NotFound } from '@/components/not-found';
 import { ThemeProvider } from '@/components/theme-provider';
+import { RootErrorComponent } from '../components/root-error-component';
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
 import appCss from '../styles.css?url';
 
@@ -53,6 +54,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 	shellComponent: RootDocument,
 	notFoundComponent: () => <NotFound />,
+	errorComponent: ({ error }) => {
+		const isDevelopment = import.meta.env.DEV;
+		return <RootErrorComponent error={error} isDevelopment={isDevelopment} />;
+	},
 });
 
 function RootDocument() {
