@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { NotFound } from '@/components/not-found';
+import { ThemeProvider } from '@/components/theme-provider';
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
 import appCss from '../styles.css?url';
 
@@ -61,7 +62,9 @@ function RootDocument() {
 				<HeadContent />
 			</head>
 			<body>
-				<Outlet />
+				<ThemeProvider>
+					<Outlet />
+				</ThemeProvider>
 				<TanStackDevtools
 					config={{
 						position: 'bottom-right',
