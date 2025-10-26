@@ -11,13 +11,8 @@ import {
 import { Spinner } from '../ui/spinner';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
-interface TextInputProps
-	extends React.DetailedHTMLProps<
-		React.InputHTMLAttributes<HTMLInputElement>,
-		HTMLInputElement
-	> {
+interface TextInputProps extends React.ComponentPropsWithRef<'input'> {
 	showSpinner?: boolean;
-	ref?: React.Ref<HTMLInputElement>;
 	showValid?: boolean;
 	showPaste?: boolean;
 	showClear?: boolean;
@@ -25,11 +20,11 @@ interface TextInputProps
 }
 export function TextInput({
 	className,
-	ref,
 	showSpinner = false,
 	showPaste = false,
 	showClear = false,
 	showValid = false,
+	ref,
 	...props
 }: TextInputProps) {
 	function handlePaste() {
