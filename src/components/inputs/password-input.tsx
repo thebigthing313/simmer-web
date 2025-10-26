@@ -11,14 +11,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 interface PasswordInputProps
-	extends Omit<
-		React.DetailedHTMLProps<
-			React.InputHTMLAttributes<HTMLInputElement>,
-			HTMLInputElement
-		>,
-		'type'
-	> {
-	ref?: React.Ref<HTMLInputElement>;
+	extends Omit<React.ComponentPropsWithRef<'input'>, 'type'> {
 	className?: string;
 }
 export function PasswordInput({
