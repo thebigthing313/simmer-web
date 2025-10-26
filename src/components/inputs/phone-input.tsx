@@ -7,7 +7,7 @@ import {
 	type PhoneNumber,
 	parsePhoneNumber,
 } from 'libphonenumber-js/min';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
 import { ButtonGroup } from '../ui/button-group';
@@ -55,9 +55,13 @@ export function PhoneInput({
 	);
 
 	const [rawPhone, setRawPhone] = React.useState('');
-	const [displayPhone, setDisplayPhone] = React.useState('');
 	const [ext, setExt] = React.useState('');
 	const [isValid, setIsValid] = React.useState(true);
+
+	const displayPhone = useMemo(() => {
+		const formatter = new AsYouType(countryCode);
+		return formatter.input(rawPhone);
+	}, [rawPhone, countryCode]);
 
 	React.useEffect(() => {
 		if (value) {
@@ -66,12 +70,21 @@ export function PhoneInput({
 		}
 	}, [value]);
 
-	React.useEffect(() => {
-		const formatter = new AsYouType(countryCode);
-		setDisplayPhone(formatter.input(rawPhone));
-	}, [rawPhone, countryCode]);
+	const handlePhoneChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			setRawPhone(e.target.value.replace(/\D/g, ''));
+		},
+		[],
+	);
 
-	const handleBlur = () => {
+	const handleExtChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			setExt(e.target.value);
+		},
+		[],
+	);
+
+	const handleBlur = useCallback(() => {
 		if (!rawPhone.trim()) {
 			onChange?.(undefined);
 			setIsValid(true);
@@ -86,7 +99,7 @@ export function PhoneInput({
 			onChange?.(undefined);
 			setIsValid(false);
 		}
-	};
+	}, [rawPhone, ext, countryCode, onChange]);
 
 	return (
 		<div className={cn('flex gap-2', className)}>
@@ -95,7 +108,7 @@ export function PhoneInput({
 				<Input
 					type="text"
 					value={displayPhone}
-					onChange={(e) => setRawPhone(e.target.value.replace(/\D/g, ''))}
+					onChange={handlePhoneChange}
 					onBlur={handleBlur}
 					aria-invalid={!isValid}
 				/>
@@ -106,7 +119,7 @@ export function PhoneInput({
 					<InputGroupInput
 						type="text"
 						value={ext}
-						onChange={(e) => setExt(e.target.value)}
+						onChange={handleExtChange}
 						onBlur={handleBlur}
 					/>
 				</InputGroup>
