@@ -8,6 +8,7 @@ import {
 	InputGroupButton,
 	InputGroupInput,
 } from '../ui/input-group';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 interface PasswordInputProps
 	extends Omit<
@@ -35,14 +36,19 @@ export function PasswordInput({
 				{...props}
 			/>
 			<InputGroupAddon align="inline-end">
-				<InputGroupButton
-					variant="ghost"
-					size="icon-sm"
-					onClick={() => setVisible(!visible)}
-					aria-label={visible ? 'Hide password' : 'Show password'}
-				>
-					{visible ? <EyeOffIcon /> : <EyeIcon />}
-				</InputGroupButton>
+				<Tooltip>
+					<TooltipTrigger>
+						<InputGroupButton
+							variant="ghost"
+							size="icon-sm"
+							onClick={() => setVisible(!visible)}
+							aria-label={visible ? 'Hide password' : 'Show password'}
+						>
+							{visible ? <EyeOffIcon /> : <EyeIcon />}
+						</InputGroupButton>
+					</TooltipTrigger>
+					<TooltipContent>Toggle Visibility</TooltipContent>
+				</Tooltip>
 			</InputGroupAddon>
 		</InputGroup>
 	);
