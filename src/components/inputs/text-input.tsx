@@ -9,6 +9,7 @@ import {
 	InputGroupInput,
 } from '../ui/input-group';
 import { Spinner } from '../ui/spinner';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 interface TextInputProps
 	extends React.DetailedHTMLProps<
@@ -51,37 +52,47 @@ export function TextInput({
 			<InputGroupAddon align="inline-end">
 				{showSpinner && <Spinner />}
 				{showPaste && (
-					<InputGroupButton
-						variant="ghost"
-						size="icon-sm"
-						onClick={handlePaste}
-						aria-label="Paste from clipboard"
-					>
-						<ClipboardPaste />
-					</InputGroupButton>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<InputGroupButton
+								variant="ghost"
+								size="icon-sm"
+								onClick={handlePaste}
+								aria-label="Paste from clipboard"
+							>
+								<ClipboardPaste />
+							</InputGroupButton>
+						</TooltipTrigger>
+						<TooltipContent>Paste from Clipboard</TooltipContent>
+					</Tooltip>
 				)}
 				{showClear && (
-					<InputGroupButton
-						variant="ghost"
-						size="icon-sm"
-						onClick={() => {
-							if (props.type === 'file') {
-								if (ref && 'current' in ref && ref.current) {
-									ref.current.value = '';
-								}
-								props.onChange?.({
-									target: { value: '', files: null },
-								} as React.ChangeEvent<HTMLInputElement>);
-							} else {
-								props.onChange?.({
-									target: { value: '' },
-								} as React.ChangeEvent<HTMLInputElement>);
-							}
-						}}
-						aria-label="Clear input"
-					>
-						<EraserIcon />
-					</InputGroupButton>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<InputGroupButton
+								variant="ghost"
+								size="icon-sm"
+								onClick={() => {
+									if (props.type === 'file') {
+										if (ref && 'current' in ref && ref.current) {
+											ref.current.value = '';
+										}
+										props.onChange?.({
+											target: { value: '', files: null },
+										} as React.ChangeEvent<HTMLInputElement>);
+									} else {
+										props.onChange?.({
+											target: { value: '' },
+										} as React.ChangeEvent<HTMLInputElement>);
+									}
+								}}
+								aria-label="Clear input"
+							>
+								<EraserIcon />
+							</InputGroupButton>
+						</TooltipTrigger>
+						<TooltipContent>Clear Input</TooltipContent>
+					</Tooltip>
 				)}
 				{showValid && <CheckCircle />}
 			</InputGroupAddon>
