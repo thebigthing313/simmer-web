@@ -319,11 +319,14 @@ export const StylableTextAreaInput = forwardRef<
 });
 
 interface URLDialogProps {
-	open: boolean;
-	onOpenChange: (open: boolean) => void;
 	onAttach: (url: string) => void;
 }
-function URLDialog({ open, onOpenChange, onAttach }: URLDialogProps) {
+
+function URLDialog({
+	open,
+	onOpenChange,
+	onAttach,
+}: URLDialogProps & React.ComponentPropsWithoutRef<typeof Dialog>) {
 	const [url, setUrl] = useState('');
 
 	useEffect(() => {
