@@ -10,15 +10,14 @@ import {
 } from '../ui/input-group';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
-interface PasswordInputProps
-	extends Omit<React.ComponentPropsWithRef<'input'>, 'type'> {
+interface PasswordInputProps {
 	className?: string;
 }
 export function PasswordInput({
 	className,
 	ref,
 	...props
-}: PasswordInputProps) {
+}: PasswordInputProps & Omit<React.ComponentPropsWithRef<'input'>, 'type'>) {
 	const [visible, setVisible] = React.useState(false);
 
 	return (

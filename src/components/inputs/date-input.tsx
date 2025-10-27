@@ -29,7 +29,16 @@ export function DateInput({
 	required,
 	'aria-label': ariaLabel,
 	'aria-labelledby': ariaLabelledBy,
-}: DateInputProps) {
+}: DateInputProps &
+	Omit<
+		React.ComponentPropsWithRef<'input'>,
+		| 'value'
+		| 'onChange'
+		| 'disabled'
+		| 'required'
+		| 'aria-label'
+		| 'aria-labelledby'
+	>) {
 	const [open, setOpen] = React.useState(false);
 	const [isInvalid, setIsInvalid] = React.useState(false);
 	const [inputValue, setInputValue] = React.useState('');
@@ -113,6 +122,10 @@ export function DateInput({
 							captionLayout="dropdown"
 							onSelect={(date) => {
 								onChange?.(date);
+								setInputValue(
+									date && isValid(date) ? format(date, 'yyyy-MM-dd') : '',
+								);
+								setIsInvalid(false);
 								setOpen(false);
 							}}
 						/>
