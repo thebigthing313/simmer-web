@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <storybook> */
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { ScrollArea, ScrollBar } from '../../ui/scroll-area';

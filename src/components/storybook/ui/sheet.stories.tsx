@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useUniqueElementIds: <storybook> */
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Bell, Calendar, Mail, Settings, User } from 'lucide-react';
 import { Badge } from '../../ui/badge';

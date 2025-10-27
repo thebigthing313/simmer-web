@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/correctness/useUniqueElementIds: <storybook> */
+/** biome-ignore-all lint/a11y/noLabelWithoutControl: <storybook> */
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CalendarDays, MapPin, Users } from 'lucide-react';
 import { Badge } from '../../ui/badge';
