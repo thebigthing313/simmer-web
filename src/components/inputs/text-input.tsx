@@ -11,13 +11,14 @@ import {
 import { Spinner } from '../ui/spinner';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
-interface TextInputProps extends React.ComponentPropsWithRef<'input'> {
+interface TextInputProps {
 	showSpinner?: boolean;
 	showValid?: boolean;
 	showPaste?: boolean;
 	showClear?: boolean;
 	className?: string;
 }
+
 export function TextInput({
 	className,
 	showSpinner = false,
@@ -26,7 +27,7 @@ export function TextInput({
 	showValid = false,
 	ref,
 	...props
-}: TextInputProps) {
+}: TextInputProps & React.ComponentPropsWithRef<'input'>) {
 	function handlePaste() {
 		try {
 			navigator.clipboard.readText().then((text) => {
