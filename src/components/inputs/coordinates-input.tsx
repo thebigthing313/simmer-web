@@ -2,6 +2,7 @@ import { ClipboardCopy, ClipboardPaste } from 'lucide-react';
 import React from 'react';
 import { toast } from 'sonner';
 import type { Coordinates } from '@/lib/types';
+import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
 import { ButtonGroup } from '../ui/button-group';
 import { Input } from '../ui/input';
@@ -20,9 +21,20 @@ export function CoordinatesInput({
 	value,
 	// mapRef,
 	onChange,
-}: CoordinatesInputProps) {
-	const [lat, setLat] = React.useState<LatState>({ value: '', cardinal: 'N', invalid: false });
-	const [lng, setLng] = React.useState<LngState>({ value: '', cardinal: 'E', invalid: false });
+	className,
+	ref,
+	...props
+}: CoordinatesInputProps & React.ComponentPropsWithRef<'div'>) {
+	const [lat, setLat] = React.useState<LatState>({
+		value: '',
+		cardinal: 'N',
+		invalid: false,
+	});
+	const [lng, setLng] = React.useState<LngState>({
+		value: '',
+		cardinal: 'E',
+		invalid: false,
+	});
 
 	React.useEffect(() => {
 		setLat({
@@ -56,15 +68,38 @@ export function CoordinatesInput({
 	};
 
 	const updateCoord = (type: 'lat' | 'lng', num: number) => {
-		const newCardinal = num >= 0 ? (type === 'lat' ? 'N' : 'E') : (type === 'lat' ? 'S' : 'W');
+		const newCardinal =
+			num >= 0 ? (type === 'lat' ? 'N' : 'E') : type === 'lat' ? 'S' : 'W';
 		const absStr = Math.abs(num).toString();
 		if (type === 'lat') {
-			setLat({ value: absStr, cardinal: newCardinal as 'N' | 'S', invalid: false });
+			setLat({
+				value: absStr,
+				cardinal: newCardinal as 'N' | 'S',
+				invalid: false,
+			});
 		} else {
-			setLng({ value: absStr, cardinal: newCardinal as 'E' | 'W', invalid: false });
+			setLng({
+				value: absStr,
+				cardinal: newCardinal as 'E' | 'W',
+				invalid: false,
+			});
 		}
-		const signedLat = type === 'lat' ? (newCardinal === 'S' ? -Math.abs(num) : Math.abs(num)) : (lat.cardinal === 'S' ? -Math.abs(parseFloat(lat.value)) : Math.abs(parseFloat(lat.value)));
-		const signedLng = type === 'lng' ? (newCardinal === 'W' ? -Math.abs(num) : Math.abs(num)) : (lng.cardinal === 'W' ? -Math.abs(parseFloat(lng.value)) : Math.abs(parseFloat(lng.value)));
+		const signedLat =
+			type === 'lat'
+				? newCardinal === 'S'
+					? -Math.abs(num)
+					: Math.abs(num)
+				: lat.cardinal === 'S'
+					? -Math.abs(parseFloat(lat.value))
+					: Math.abs(parseFloat(lat.value));
+		const signedLng =
+			type === 'lng'
+				? newCardinal === 'W'
+					? -Math.abs(num)
+					: Math.abs(num)
+				: lng.cardinal === 'W'
+					? -Math.abs(parseFloat(lng.value))
+					: Math.abs(parseFloat(lng.value));
 		onChange?.({ latitude: signedLat, longitude: signedLng });
 	};
 
@@ -72,16 +107,16 @@ export function CoordinatesInput({
 		const current = type === 'lat' ? lat : lng;
 		const trimmed = current.value.trim();
 		if (trimmed === '') {
-			if (type === 'lat') setLat(prev => ({ ...prev, invalid: true }));
-			else setLng(prev => ({ ...prev, invalid: true }));
+			if (type === 'lat') setLat((prev) => ({ ...prev, invalid: true }));
+			else setLng((prev) => ({ ...prev, invalid: true }));
 			return;
 		}
 		let num: number | null = parseDMS(trimmed, type);
 		if (num === null) num = parseFloat(trimmed);
 		const max = type === 'lat' ? 90 : 180;
 		if (num === null || Number.isNaN(num) || num < -max || num > max) {
-			if (type === 'lat') setLat(prev => ({ ...prev, invalid: true }));
-			else setLng(prev => ({ ...prev, invalid: true }));
+			if (type === 'lat') setLat((prev) => ({ ...prev, invalid: true }));
+			else setLng((prev) => ({ ...prev, invalid: true }));
 			return;
 		}
 		updateCoord(type, num);
@@ -91,14 +126,19 @@ export function CoordinatesInput({
 	const handleLngBlur = () => handleBlur('lng');
 
 	const handleChange = (type: 'lat' | 'lng', value: string) => {
-		if (type === 'lat') setLat(prev => ({ ...prev, value }));
-		else setLng(prev => ({ ...prev, value }));
+		if (type === 'lat') setLat((prev) => ({ ...prev, value }));
+		else setLng((prev) => ({ ...prev, value }));
 	};
 
-	const handleLatChange = (e: React.ChangeEvent<HTMLInputElement>) => handleChange('lat', e.target.value);
-	const handleLngChange = (e: React.ChangeEvent<HTMLInputElement>) => handleChange('lng', e.target.value);
+	const handleLatChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+		handleChange('lat', e.target.value);
+	const handleLngChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+		handleChange('lng', e.target.value);
 
-	const handlePasteIntoInput = (e: React.ClipboardEvent<HTMLInputElement>, type: 'lat' | 'lng') => {
+	const handlePasteIntoInput = (
+		e: React.ClipboardEvent<HTMLInputElement>,
+		type: 'lat' | 'lng',
+	) => {
 		e.preventDefault();
 		const pasted = e.clipboardData.getData('text').trim();
 		let num: number | null = parseDMS(pasted, type);
@@ -135,8 +175,16 @@ export function CoordinatesInput({
 					lng >= -180 &&
 					lng <= 180
 				) {
-					setLat({ value: Math.abs(lat).toString(), cardinal: lat >= 0 ? 'N' : 'S', invalid: false });
-					setLng({ value: Math.abs(lng).toString(), cardinal: lng >= 0 ? 'E' : 'W', invalid: false });
+					setLat({
+						value: Math.abs(lat).toString(),
+						cardinal: lat >= 0 ? 'N' : 'S',
+						invalid: false,
+					});
+					setLng({
+						value: Math.abs(lng).toString(),
+						cardinal: lng >= 0 ? 'E' : 'W',
+						invalid: false,
+					});
 					onChange?.({ latitude: lat, longitude: lng });
 					toast.success('Coordinates pasted from clipboard');
 				} else {
@@ -153,8 +201,10 @@ export function CoordinatesInput({
 
 	const handleCopy = async () => {
 		try {
-			const latVal = lat.cardinal === 'S' ? -parseFloat(lat.value) : parseFloat(lat.value);
-			const lngVal = lng.cardinal === 'W' ? -parseFloat(lng.value) : parseFloat(lng.value);
+			const latVal =
+				lat.cardinal === 'S' ? -parseFloat(lat.value) : parseFloat(lat.value);
+			const lngVal =
+				lng.cardinal === 'W' ? -parseFloat(lng.value) : parseFloat(lng.value);
 			if (!Number.isNaN(latVal) && !Number.isNaN(lngVal)) {
 				await navigator.clipboard.writeText(`${latVal}, ${lngVal}`);
 				toast.success('Coordinates copied to clipboard');
@@ -166,12 +216,21 @@ export function CoordinatesInput({
 	};
 
 	return (
-		<div className="grid grid-cols-2 grid-rows-2 gap-2">
+		<div
+			className={cn('grid grid-cols-2 grid-rows-2 gap-2', className)}
+			ref={ref}
+			{...props}
+		>
 			<ButtonGroup>
 				<Button
 					variant="outline"
 					size="icon"
-					onClick={() => setLat(prev => ({ ...prev, cardinal: prev.cardinal === 'N' ? 'S' : 'N' }))}
+					onClick={() =>
+						setLat((prev) => ({
+							...prev,
+							cardinal: prev.cardinal === 'N' ? 'S' : 'N',
+						}))
+					}
 				>
 					{lat.cardinal}
 				</Button>
@@ -198,7 +257,12 @@ export function CoordinatesInput({
 				<Button
 					variant="outline"
 					size="icon"
-					onClick={() => setLng(prev => ({ ...prev, cardinal: prev.cardinal === 'E' ? 'W' : 'E' }))}
+					onClick={() =>
+						setLng((prev) => ({
+							...prev,
+							cardinal: prev.cardinal === 'E' ? 'W' : 'E',
+						}))
+					}
 				>
 					{lng.cardinal}
 				</Button>
