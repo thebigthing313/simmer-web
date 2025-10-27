@@ -24,7 +24,8 @@ export function CoordinatesInput({
 	className,
 	ref,
 	...props
-}: CoordinatesInputProps & React.ComponentPropsWithRef<'div'>) {
+}: CoordinatesInputProps &
+	Omit<React.ComponentPropsWithRef<'div'>, 'onChange' | 'value'>) {
 	const [lat, setLat] = React.useState<LatState>({
 		value: '',
 		cardinal: 'N',
