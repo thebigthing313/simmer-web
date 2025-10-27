@@ -1,24 +1,20 @@
-import { useRef, useState } from 'react';
+import type React from 'react';
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { TextInput } from './text-input';
 
-interface AvatarInputProps
-	extends Omit<
-		React.DetailedHTMLProps<
-			React.InputHTMLAttributes<HTMLInputElement>,
-			HTMLInputElement
-		>,
-		'type' | 'accept'
-	> {
+interface AvatarInputProps {
 	className?: string;
 }
+
 export function AvatarInput({
 	className,
 	onChange,
+	ref,
 	...props
-}: AvatarInputProps) {
+}: AvatarInputProps &
+	Omit<React.ComponentPropsWithRef<'input'>, 'type' | 'accept' | 'className'>) {
 	const [preview, setPreview] = useState<string | null>(null);
-	const inputRef = useRef<HTMLInputElement>(null);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
@@ -54,7 +50,7 @@ export function AvatarInput({
 					accept="image/*"
 					onChange={handleChange}
 					showClear
-					ref={inputRef}
+					ref={ref}
 					{...props}
 				/>
 			</div>
