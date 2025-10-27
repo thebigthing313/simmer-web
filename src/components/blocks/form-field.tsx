@@ -9,19 +9,20 @@ import {
 interface FormFieldProps {
 	label?: string;
 	description?: string;
-	className?: string;
 	errors?: Array<{ message?: string | undefined } | undefined>;
-	children?: React.ReactNode;
 }
+
 export function FormField({
 	label,
 	description,
 	className,
 	children,
+	ref,
 	errors,
-}: FormFieldProps) {
+	...props
+}: FormFieldProps & React.ComponentPropsWithRef<'div'>) {
 	return (
-		<Field orientation="responsive" className={className}>
+		<Field orientation="responsive" className={className} ref={ref} {...props}>
 			{label && description ? (
 				<FieldContent>
 					<FieldLabel>{label}</FieldLabel>
