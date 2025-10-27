@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card, CardContent, CardHeader } from '../../ui/card';
 import { Skeleton } from '../../ui/skeleton';
 
@@ -106,7 +106,7 @@ export const TableSkeleton: Story = {
 			<div className="flex space-x-4">
 				<Skeleton className="h-4 w-[100px]" />
 				<Skeleton className="h-4 w-[150px]" />
-				<Skeleton className="h-4 w-[80px]" />
+				<Skeleton className="h-4 w-20" />
 				<Skeleton className="h-4 w-[120px]" />
 			</div>
 		</div>
