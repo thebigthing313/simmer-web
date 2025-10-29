@@ -1,5 +1,6 @@
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import z from 'zod';
+import { GeoJSONSchema } from 'zod-geojson';
 
 export const EmailSchema = z.email('Invalid email address');
 
@@ -56,3 +57,6 @@ export const PhoneNumberSchema = z
 	.transform((v) => v.trim());
 
 export const URLSchema = z.url();
+
+// Re-export GeoJSONSchema from zod-geojson for use in generated schemas
+export { GeoJSONSchema };
