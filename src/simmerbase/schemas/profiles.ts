@@ -1,5 +1,5 @@
 // Auto-generated schema file for profiles table
-// Generated on: 2025-10-29T03:34:09.313Z
+// Generated on: 2025-10-29T04:16:44.591Z
 //
 // IMPORTANT: Automatic preprocessing is enabled for date fields:
 // - Fields ending in '_at' (timestamps): ISO strings are automatically converted to Date objects
@@ -15,15 +15,28 @@ import { NameSchema } from './fields';
 export const ZodProfilesRow = z.object({
 	avatar_url: z.url().nullable(),
 	bio: z.string().nullable(),
-	created_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()),
+	created_at: z.preprocess(
+		(val) => (typeof val === 'string' ? new Date(val) : val),
+		z.date(),
+	),
 	created_by: z.uuid().nullable(),
-	deleted_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).nullable(),
+	deleted_at: z
+		.preprocess(
+			(val) => (typeof val === 'string' ? new Date(val) : val),
+			z.date(),
+		)
+		.nullable(),
 	deleted_by: z.uuid().nullable(),
 	first_name: NameSchema,
 	id: z.uuid(),
 	last_name: NameSchema,
 	profile_photo_url: z.url().nullable(),
-	updated_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).nullable(),
+	updated_at: z
+		.preprocess(
+			(val) => (typeof val === 'string' ? new Date(val) : val),
+			z.date(),
+		)
+		.nullable(),
 	updated_by: z.uuid().nullable(),
 	user_id: z.uuid().nullable(),
 });

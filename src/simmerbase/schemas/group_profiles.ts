@@ -12,14 +12,22 @@
 import z from 'zod';
 
 export const ZodGroup_profilesRow = z.object({
-	created_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()),
+	created_at: z.preprocess(
+		(val) => (typeof val === 'string' ? new Date(val) : val),
+		z.date(),
+	),
 	created_by: z.uuid().nullable(),
 	group_id: z.uuid(),
 	id: z.uuid(),
 	is_active: z.boolean(),
 	profile_id: z.uuid(),
 	role: z.string(),
-	updated_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).nullable(),
+	updated_at: z
+		.preprocess(
+			(val) => (typeof val === 'string' ? new Date(val) : val),
+			z.date(),
+		)
+		.nullable(),
 	updated_by: z.uuid().nullable(),
 });
 
@@ -33,5 +41,9 @@ export const ZodGroup_profilesInsert = z.object({
 export const ZodGroup_profilesUpdate = ZodGroup_profilesInsert.partial();
 
 export type ZodGroup_profilesRowType = z.infer<typeof ZodGroup_profilesRow>;
-export type ZodGroup_profilesInsertType = z.infer<typeof ZodGroup_profilesInsert>;
-export type ZodGroup_profilesUpdateType = z.infer<typeof ZodGroup_profilesUpdate>;
+export type ZodGroup_profilesInsertType = z.infer<
+	typeof ZodGroup_profilesInsert
+>;
+export type ZodGroup_profilesUpdateType = z.infer<
+	typeof ZodGroup_profilesUpdate
+>;

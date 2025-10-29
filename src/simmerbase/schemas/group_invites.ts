@@ -12,9 +12,20 @@
 import z from 'zod';
 
 export const ZodGroup_invitesRow = z.object({
-	created_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()),
+	created_at: z.preprocess(
+		(val) => (typeof val === 'string' ? new Date(val) : val),
+		z.date(),
+	),
 	created_by: z.uuid().nullable(),
-	expiration_date: z.preprocess((val) => typeof val === "string" ? new Date(val.includes("T") ? val : `${val}T00:00:00Z`) : val, z.date()).nullable(),
+	expiration_date: z
+		.preprocess(
+			(val) =>
+				typeof val === 'string'
+					? new Date(val.includes('T') ? val : `${val}T00:00:00Z`)
+					: val,
+			z.date(),
+		)
+		.nullable(),
 	group_id: z.uuid(),
 	id: z.uuid(),
 	is_accepted: z.boolean(),
@@ -23,7 +34,16 @@ export const ZodGroup_invitesRow = z.object({
 });
 
 export const ZodGroup_invitesInsert = z.object({
-	expiration_date: z.preprocess((val) => typeof val === "string" ? new Date(val.includes("T") ? val : `${val}T00:00:00Z`) : val, z.date()).nullable().optional(),
+	expiration_date: z
+		.preprocess(
+			(val) =>
+				typeof val === 'string'
+					? new Date(val.includes('T') ? val : `${val}T00:00:00Z`)
+					: val,
+			z.date(),
+		)
+		.nullable()
+		.optional(),
 	group_id: z.uuid(),
 	is_accepted: z.boolean().optional(),
 	role: z.string(),

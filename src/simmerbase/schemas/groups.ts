@@ -14,9 +14,17 @@ import { NameSchema, PhoneNumberSchema } from './fields';
 
 export const ZodGroupsRow = z.object({
 	address: z.string(),
-	created_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()),
+	created_at: z.preprocess(
+		(val) => (typeof val === 'string' ? new Date(val) : val),
+		z.date(),
+	),
 	created_by: z.uuid().nullable(),
-	deleted_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).nullable(),
+	deleted_at: z
+		.preprocess(
+			(val) => (typeof val === 'string' ? new Date(val) : val),
+			z.date(),
+		)
+		.nullable(),
 	deleted_by: z.uuid().nullable(),
 	fax: z.string().nullable(),
 	group_name: NameSchema,
@@ -24,7 +32,12 @@ export const ZodGroupsRow = z.object({
 	logo_url: z.url().nullable(),
 	phone: PhoneNumberSchema,
 	short_name: NameSchema,
-	updated_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).nullable(),
+	updated_at: z
+		.preprocess(
+			(val) => (typeof val === 'string' ? new Date(val) : val),
+			z.date(),
+		)
+		.nullable(),
 	updated_by: z.uuid().nullable(),
 	website_url: z.url().nullable(),
 });
