@@ -1,6 +1,17 @@
-import { supabase } from '@/simmerbase/client';
+import { redirect } from '@tanstack/react-router';
+import { createServerFn } from '@tanstack/react-start';
+import { getSupabaseServerClient } from '../ssr-client';
 
-export async function signOut(): Promise<void> {
+export const signOut = createServerFn().handler(async () => {
+	const supabase = getSupabaseServerClient();
 	const { error } = await supabase.auth.signOut();
-	if (error) throw error;
-}
+
+	if (error) {
+		return {
+			error: true,
+			message: error.message,
+		};
+	}
+
+	throw redirect({ to: '/login' });
+});
