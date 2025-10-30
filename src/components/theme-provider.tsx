@@ -1,3 +1,4 @@
+import { ClientOnly } from 'node_modules/@tanstack/react-router/dist/esm/ClientOnly';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 type Theme = 'dark' | 'light' | 'system';
@@ -20,7 +21,17 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
-export function ThemeProvider({
+export function ClientThemeProvider({
+	children,
+}: React.ComponentPropsWithoutRef<typeof ThemeProvider>) {
+	return (
+		<ClientOnly>
+			<ThemeProvider>{children}</ThemeProvider>
+		</ClientOnly>
+	);
+}
+
+function ThemeProvider({
 	children,
 	defaultTheme = 'system',
 	storageKey = 'vite-ui-theme',
