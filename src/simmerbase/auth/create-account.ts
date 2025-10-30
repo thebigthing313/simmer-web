@@ -1,6 +1,7 @@
 import { redirect } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
+import { PasswordSchema } from '../schemas/fields';
 import { getSupabaseServerClient } from '../ssr-client';
 
 export type CreateAccountArgs = {
@@ -12,7 +13,7 @@ export type CreateAccountArgs = {
 
 const CreateAccountSchema = z.object({
 	email: z.email(),
-	password: z.string().min(6),
+	password: PasswordSchema,
 	firstName: z.string().min(1),
 	lastName: z.string().min(1),
 	redirectTo: z.url(),
