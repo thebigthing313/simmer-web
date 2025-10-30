@@ -1,4 +1,7 @@
-import { supabase } from '@/simmerbase/client';
+import { redirect } from '@tanstack/react-router';
+import { createServerFn } from '@tanstack/react-start';
+import z from 'zod';
+import { getSupabaseServerClient } from '../ssr-client';
 
 export type CreateAccountArgs = {
 	email: string;
@@ -7,43 +10,32 @@ export type CreateAccountArgs = {
 	lastName: string;
 };
 
-/**
- * Creates a new user account via Supabase authentication.
- *
- * Signs up a user with the provided email and password and stores the
- * first and last name as user metadata (keys: `first_name`, `last_name`).
- * Throws on any Supabase error or if sign-up completes without a created user.
- *
- * @param args - The account creation arguments.
- * @param args.supabase - An initialized Supabase client with auth capabilities.
- * @param args.email - The email address to register.
- * @param args.password - The password for the new account.
- * @param args.firstName - The user's first name (saved as `first_name` metadata).
- * @param args.lastName - The user's last name (saved as `last_name` metadata).
- *
- * @throws {Error} When Supabase returns an error during sign-up.
- * @throws {Error} When sign-up succeeds but no user is present in the response.
- *
- * @returns A promise that resolves when account creation completes (void).
- */
-export async function createAccount({
-	email,
-	password,
-	firstName,
-	lastName,
-}: CreateAccountArgs): Promise<void> {
-	const { data, error } = await supabase.auth.signUp({
-		email: email,
-		password: password,
-		options: {
-			data: {
-				first_name: firstName,
-				last_name: lastName,
-			},
-		},
-	});
+const CreateAccountSchema = z.object({
+	email: z.email(),
+	password: z.string().min(6),
+	firstName: z.string().min(1),
+	lastName: z.string().min(1),
+	redirectTo: z.url(),
+});
 
-	if (error) throw error;
-	if (!data.user)
-		throw new Error('Account creation failed for an unknown reason');
-}
+export const createAccount = createServerFn({ method: 'POST' })
+	.inputValidator(CreateAccountSchema)
+	.handler(async ({ data }) => {
+		const { email, password, firstName, lastName } = data;
+		const supabase = getSupabaseServerClient();
+
+		const { error } = await supabase.auth.signUp({
+			email: email,
+			password: password,
+			options: {
+				data: {
+					first_name: firstName,
+					last_name: lastName,
+				},
+			},
+		});
+
+		if (error) throw error;
+
+		throw redirect({ to: '/confirm-email' });
+	});
