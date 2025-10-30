@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { NotFound } from '@/components/not-found';
-import { ThemeProvider } from '@/components/theme-provider';
+import { ClientThemeProvider } from '@/components/theme-provider';
 import { RootErrorComponent } from '../components/root-error-component';
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
 import appCss from '../styles.css?url';
@@ -67,9 +67,12 @@ function RootDocument() {
 				<HeadContent />
 			</head>
 			<body>
-				<ThemeProvider>
-					<Outlet />
-				</ThemeProvider>
+				<ClientThemeProvider>
+					<div className="flex min-h-screen min-w-screen items-center justify-center px-2">
+						<Outlet />
+					</div>
+				</ClientThemeProvider>
+
 				<TanStackDevtools
 					config={{
 						position: 'bottom-right',
