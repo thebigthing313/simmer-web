@@ -1,10 +1,26 @@
-import { supabase } from '@/simmerbase/client';
+import { createServerFn } from '@tanstack/react-start';
+import z from 'zod';
+import { getSupabaseServerClient } from '../ssr-client';
 
-export async function signInWithPassword(email: string, password: string) {
-	const { data, error } = await supabase.auth.signInWithPassword({
-		email,
-		password,
+const SignInWithPasswordSchema = z.object({
+	email: z.email(),
+	password: z.string().min(6),
+});
+
+export const signInWithPassword = createServerFn({ method: 'POST' })
+	.inputValidator(SignInWithPasswordSchema)
+	.handler(async ({ data }) => {
+		const supabase = getSupabaseServerClient();
+
+		const { error } = await supabase.auth.signInWithPassword({
+			email: data.email,
+			password: data.password,
+		});
+
+		if (error) {
+			return {
+				error: true,
+				message: error.message,
+			};
+		}
 	});
-	if (error) throw error;
-	return data;
-}
