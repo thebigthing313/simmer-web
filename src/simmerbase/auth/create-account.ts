@@ -35,7 +35,12 @@ export const createAccount = createServerFn({ method: 'POST' })
 			},
 		});
 
-		if (error) throw error;
+		if (error) {
+			return {
+				error: true,
+				message: error.message,
+			};
+		}
 
 		throw redirect({ to: '/confirm-email' });
 	});
