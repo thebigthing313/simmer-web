@@ -17,7 +17,6 @@ export const signInWithPassword = createServerFn({ method: 'POST' })
 			email: data.email,
 			password: data.password,
 		});
-
 		if (error) {
 			return {
 				error: true,
