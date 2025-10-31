@@ -1,4 +1,3 @@
-import { redirect } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
 import { PasswordSchema } from '../schemas/fields';
@@ -16,7 +15,6 @@ const CreateAccountSchema = z.object({
 	password: PasswordSchema,
 	firstName: z.string().min(1),
 	lastName: z.string().min(1),
-	redirectTo: z.url(),
 });
 
 export const createAccount = createServerFn({ method: 'POST' })
@@ -42,6 +40,4 @@ export const createAccount = createServerFn({ method: 'POST' })
 				message: error.message,
 			};
 		}
-
-		throw redirect({ to: '/confirm-email' });
 	});
