@@ -29,7 +29,7 @@ export function PasswordInput({
 			/>
 			<InputGroupAddon align="inline-end">
 				<Tooltip>
-					<TooltipTrigger>
+					<TooltipTrigger asChild>
 						<InputGroupButton
 							variant="ghost"
 							size="icon-sm"
