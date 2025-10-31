@@ -15,7 +15,10 @@ export const resetPassword = createServerFn({ method: 'POST' })
 			password: data.password,
 		});
 
-		if (error) throw error;
-
-		return data;
+		if (error) {
+			return {
+				error: true,
+				message: error.message,
+			};
+		}
 	});
