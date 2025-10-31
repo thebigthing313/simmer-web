@@ -1,12 +1,28 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
+import { ThemeModeToggle } from '@/components/theme-mode-toggle';
+import { useTheme } from '@/components/theme-provider';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { capitalize } from '@/lib/utils';
+import { getClaims } from '@/simmerbase/auth/get-claims';
 
-export const Route = createFileRoute('/')({ component: App });
+export const Route = createFileRoute('/')({
+	beforeLoad: async () => {
+		const claims = getClaims();
+		const returnClaims = await claims();
+		if (returnClaims.user_id === null) {
+			throw redirect({ to: '/login' });
+		}
+		const { user_id, user_email, profile_id, groups } = returnClaims;
+		return { user_id, user_email, profile_id, groups };
+	},
+	component: App,
+});
 
 function App() {
+	const { theme } = useTheme();
 	return (
-		<div className="drop-shadow drop-shadow-muted/50 flex w-full max-w-2xl flex-col gap-4">
+		<div className="flex w-full max-w-2xl flex-col gap-4">
 			<div className="flex justify-center">
 				<img src="/simmer-logo.svg" alt="Simmer Logo" className="w-[150px]" />
 			</div>
@@ -29,7 +45,12 @@ function App() {
 				</TabsContent>
 				<TabsContent value="settings">
 					<Card className="h-[500px]  overflow-auto">
-						<CardContent>Settings Content</CardContent>
+						<CardContent>
+							<div className="flex flex-row gap-2">
+								<ThemeModeToggle />
+								<span>Current Theme: {capitalize(theme)}</span>
+							</div>
+						</CardContent>
 					</Card>
 				</TabsContent>
 			</Tabs>
