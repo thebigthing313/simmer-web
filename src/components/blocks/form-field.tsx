@@ -9,12 +9,14 @@ import {
 interface FormFieldProps {
 	label?: string;
 	description?: string;
+	htmlFor?: string;
 	errors?: Array<{ message?: string | undefined } | undefined>;
 }
 
 export function FormField({
 	label,
 	description,
+	htmlFor,
 	className,
 	children,
 	ref,
@@ -25,7 +27,7 @@ export function FormField({
 		<Field orientation="responsive" className={className} ref={ref} {...props}>
 			{label && description ? (
 				<FieldContent>
-					<FieldLabel>{label}</FieldLabel>
+					<FieldLabel htmlFor={htmlFor}>{label}</FieldLabel>
 					<FieldDescription>{description}</FieldDescription>
 				</FieldContent>
 			) : (
