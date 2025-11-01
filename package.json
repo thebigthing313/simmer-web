@@ -11,7 +11,8 @@
     "lint": "biome lint",
     "check": "biome check",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "db-types": "pnpx supabase gen types typescript --local > ./src/simmerbase/supabase-types.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
