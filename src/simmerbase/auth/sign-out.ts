@@ -1,4 +1,3 @@
-import { redirect } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 import { getSupabaseServerClient } from '../ssr-client';
 
@@ -12,6 +11,4 @@ export const signOut = createServerFn().handler(async () => {
 			message: error.message,
 		};
 	}
-
-	throw redirect({ to: '/login' });
 });
