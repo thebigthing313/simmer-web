@@ -1,49 +1,67 @@
 // Auto-generated schema file for group_profiles table
-// Generated on: 2025-10-29T03:35:06.762Z
+// Generated on: 2025-11-01T22:19:37.140Z
 //
 // IMPORTANT: Automatic preprocessing is enabled for date fields:
 // - Fields ending in '_at' (timestamps): ISO strings are automatically converted to Date objects
 // - Fields ending in '_date' (dates): Date strings are automatically converted to Date objects (UTC)
-// - Fields named 'geom': PostGIS geometry data (GeoJSON when queried via RPC)
 //
 // You can validate data directly without manual transformation:
-//   const validated = ZodGroup_profilesRow.parse(dataFromSupabase);
+//   const validated = ZodGroupProfilesRow.parse(dataFromSupabase);
 
 import z from 'zod';
 
-export const ZodGroup_profilesRow = z.object({
-	created_at: z.preprocess(
-		(val) => (typeof val === 'string' ? new Date(val) : val),
-		z.date(),
-	),
-	created_by: z.uuid().nullable(),
+export const ZodGroupProfilesRow = z.object({
+	created_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).optional(),
+	created_by: z.uuid().nullable().optional(),
+	deleted_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).nullable().optional(),
+	deleted_by: z.uuid().nullable().optional(),
 	group_id: z.uuid(),
 	id: z.uuid(),
 	is_active: z.boolean(),
 	profile_id: z.uuid(),
-	role: z.string(),
-	updated_at: z
-		.preprocess(
-			(val) => (typeof val === 'string' ? new Date(val) : val),
-			z.date(),
-		)
-		.nullable(),
-	updated_by: z.uuid().nullable(),
+	role: z.enum(["owner", "admin", "manager", "collector", "member"]),
+	updated_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).nullable().optional(),
+	updated_by: z.uuid().nullable().optional(),
 });
 
-export const ZodGroup_profilesInsert = z.object({
+export const ZodGroupProfilesInsert = z.object({
 	group_id: z.uuid(),
+	id: z.uuid().optional(),
 	is_active: z.boolean().optional(),
 	profile_id: z.uuid(),
-	role: z.string(),
+	role: z.enum(["owner", "admin", "manager", "collector", "member"]),
 });
 
-export const ZodGroup_profilesUpdate = ZodGroup_profilesInsert.partial();
+export const ZodGroupProfilesUpdate = ZodGroupProfilesInsert.partial();
 
-export type ZodGroup_profilesRowType = z.infer<typeof ZodGroup_profilesRow>;
-export type ZodGroup_profilesInsertType = z.infer<
-	typeof ZodGroup_profilesInsert
->;
-export type ZodGroup_profilesUpdateType = z.infer<
-	typeof ZodGroup_profilesUpdate
->;
+// Schemas for converting back to database format (Date -> ISO string)
+export const ZodGroupProfilesRowToDb = z.object({
+	created_at: z.preprocess((val) => val instanceof Date ? val.toISOString() : val, z.string()).optional(),
+	created_by: z.uuid().nullable().optional(),
+	deleted_at: z.preprocess((val) => val instanceof Date ? val.toISOString() : val, z.string()).nullable().optional(),
+	deleted_by: z.uuid().nullable().optional(),
+	group_id: z.uuid(),
+	id: z.uuid(),
+	is_active: z.boolean(),
+	profile_id: z.uuid(),
+	role: z.enum(["owner", "admin", "manager", "collector", "member"]),
+	updated_at: z.preprocess((val) => val instanceof Date ? val.toISOString() : val, z.string()).nullable().optional(),
+	updated_by: z.uuid().nullable().optional(),
+});
+
+export const ZodGroupProfilesInsertToDb = z.object({
+	group_id: z.uuid(),
+	id: z.uuid().optional(),
+	is_active: z.boolean().optional(),
+	profile_id: z.uuid(),
+	role: z.enum(["owner", "admin", "manager", "collector", "member"]),
+});
+
+export const ZodGroupProfilesUpdateToDb = ZodGroupProfilesInsertToDb.partial();
+
+export type ZodGroupProfilesRowType = z.infer<typeof ZodGroupProfilesRow>;
+export type ZodGroupProfilesInsertType = z.infer<typeof ZodGroupProfilesInsert>;
+export type ZodGroupProfilesUpdateType = z.infer<typeof ZodGroupProfilesUpdate>;
+export type ZodGroupProfilesRowToDbType = z.infer<typeof ZodGroupProfilesRowToDb>;
+export type ZodGroupProfilesInsertToDbType = z.infer<typeof ZodGroupProfilesInsertToDb>;
+export type ZodGroupProfilesUpdateToDbType = z.infer<typeof ZodGroupProfilesUpdateToDb>;
