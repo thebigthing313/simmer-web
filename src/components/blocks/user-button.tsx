@@ -10,7 +10,7 @@ interface UserButtonProps {
 export function UserButton({ imageUrl, fallback, onClick }: UserButtonProps) {
 	return (
 		<Tooltip>
-			<TooltipTrigger>
+			<TooltipTrigger asChild>
 				<Button
 					onClick={onClick}
 					variant="outline"
