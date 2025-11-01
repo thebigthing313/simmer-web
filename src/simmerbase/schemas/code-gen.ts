@@ -29,6 +29,7 @@ function generate(table: Table) {
 		'created_by',
 		'updated_at',
 		'updated_by',
+		'deleted_at',
 		'deleted_by',
 	];
 	const existingAuditFields = auditFields.filter((field) => field in rowFields);
