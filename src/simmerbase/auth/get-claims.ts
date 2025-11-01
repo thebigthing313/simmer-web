@@ -1,8 +1,5 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
-import { createIsomorphicFn } from '@tanstack/react-start';
 import { z } from 'zod';
-import { getSupabaseBrowserClient } from '../client';
-import { getSupabaseServerClient } from '../ssr-client';
+import { getSupabaseClient } from '../client';
 
 interface JwtClaims {
 	iss: string;
@@ -43,50 +40,44 @@ export const ReturnedClaimsSchema = z.object({
 
 export type ReturnedClaims = z.infer<typeof ReturnedClaimsSchema>;
 
-export const getClaims = () =>
-	createIsomorphicFn()
-		.server(async (): Promise<ReturnedClaims> => {
-			const supabase = getSupabaseServerClient();
-			const claims = await fetchClaims(supabase);
-			return claims;
-		})
-		.client(async (): Promise<ReturnedClaims> => {
-			const supabase = getSupabaseBrowserClient();
-			const claims = await fetchClaims(supabase);
-			return claims;
-		});
+export async function getClaims() {
+	const supabase = getSupabaseClient();
 
-async function fetchClaims(supabase: SupabaseClient): Promise<ReturnedClaims> {
-	const { data, error: _error } = await supabase.auth.getClaims();
+	async function fetchClaims(): Promise<ReturnedClaims> {
+		const { data, error: _error } = await supabase.auth.getClaims();
 
-	function isGroup(g: unknown): g is Group {
-		return GroupSchema.safeParse(g).success;
+		function isGroup(g: unknown): g is Group {
+			return GroupSchema.safeParse(g).success;
+		}
+
+		if (!data)
+			return ReturnedClaimsSchema.parse({
+				user_id: null,
+				user_email: null,
+				profile_id: null,
+				groups: [],
+			});
+
+		const claims = data.claims as JwtClaims;
+
+		const appMeta =
+			typeof claims.app_metadata === 'object' && claims.app_metadata !== null
+				? (claims.app_metadata as Record<string, unknown>)
+				: ({} as Record<string, unknown>);
+
+		const rawGroups = appMeta.groups;
+
+		const returnedClaims: ReturnedClaims = {
+			user_id: claims.sub,
+			user_email: claims.email,
+			profile_id:
+				typeof appMeta.profile_id === 'string' ? appMeta.profile_id : null,
+			groups: Array.isArray(rawGroups) ? rawGroups.filter(isGroup) : [],
+		};
+
+		return ReturnedClaimsSchema.parse(returnedClaims);
 	}
 
-	if (!data)
-		return ReturnedClaimsSchema.parse({
-			user_id: null,
-			user_email: null,
-			profile_id: null,
-			groups: [],
-		});
-
-	const claims = data.claims as JwtClaims;
-
-	const appMeta =
-		typeof claims.app_metadata === 'object' && claims.app_metadata !== null
-			? (claims.app_metadata as Record<string, unknown>)
-			: ({} as Record<string, unknown>);
-
-	const rawGroups = appMeta.groups;
-
-	const returnedClaims: ReturnedClaims = {
-		user_id: claims.sub,
-		user_email: claims.email,
-		profile_id:
-			typeof appMeta.profile_id === 'string' ? appMeta.profile_id : null,
-		groups: Array.isArray(rawGroups) ? rawGroups.filter(isGroup) : [],
-	};
-
-	return ReturnedClaimsSchema.parse(returnedClaims);
+	const claims = await fetchClaims();
+	return claims;
 }

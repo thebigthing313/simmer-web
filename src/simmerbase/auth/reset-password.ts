@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
+import { getSupabaseClient } from '../client';
 import { PasswordSchema } from '../schemas/fields';
-import { getSupabaseServerClient } from '../ssr-client';
 
 const ResetPasswordSchema = z.object({
 	password: PasswordSchema,
@@ -10,7 +10,7 @@ const ResetPasswordSchema = z.object({
 export const resetPassword = createServerFn({ method: 'POST' })
 	.inputValidator(ResetPasswordSchema)
 	.handler(async ({ data }) => {
-		const supabase = getSupabaseServerClient();
+		const supabase = getSupabaseClient();
 		const { error } = await supabase.auth.updateUser({
 			password: data.password,
 		});

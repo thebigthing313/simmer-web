@@ -1,8 +1,8 @@
 import { createServerFn } from '@tanstack/react-start';
-import { getSupabaseServerClient } from '../ssr-client';
+import { getSupabaseClient } from '../client';
 
 export const signOut = createServerFn().handler(async () => {
-	const supabase = getSupabaseServerClient();
+	const supabase = getSupabaseClient();
 	const { error } = await supabase.auth.signOut();
 
 	if (error) {

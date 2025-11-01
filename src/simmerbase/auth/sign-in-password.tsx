@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
+import { getSupabaseClient } from '../client';
 import { PasswordSchema } from '../schemas/fields';
-import { getSupabaseServerClient } from '../ssr-client';
 
 const SignInWithPasswordSchema = z.object({
 	email: z.email(),
@@ -11,7 +11,7 @@ const SignInWithPasswordSchema = z.object({
 export const signInWithPassword = createServerFn({ method: 'POST' })
 	.inputValidator(SignInWithPasswordSchema)
 	.handler(async ({ data }) => {
-		const supabase = getSupabaseServerClient();
+		const supabase = getSupabaseClient();
 
 		const { error } = await supabase.auth.signInWithPassword({
 			email: data.email,

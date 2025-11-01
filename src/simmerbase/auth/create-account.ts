@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
+import { getSupabaseClient } from '../client';
 import { PasswordSchema } from '../schemas/fields';
-import { getSupabaseServerClient } from '../ssr-client';
 
 export type CreateAccountArgs = {
 	email: string;
@@ -21,7 +21,7 @@ export const createAccount = createServerFn({ method: 'POST' })
 	.inputValidator(CreateAccountSchema)
 	.handler(async ({ data }) => {
 		const { email, password, firstName, lastName } = data;
-		const supabase = getSupabaseServerClient();
+		const supabase = getSupabaseClient();
 
 		const { error } = await supabase.auth.signUp({
 			email: email,
