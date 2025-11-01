@@ -1,5 +1,7 @@
+import { useNavigate } from '@tanstack/react-router';
 import { LogOut } from 'lucide-react';
 import type React from 'react';
+import { signOut } from '@/simmerbase/auth/sign-out';
 import { ThemeModeToggle } from '../blocks/theme-mode-toggle';
 import { UserButton } from '../blocks/user-button';
 import { Separator } from '../ui/separator';
@@ -24,28 +26,33 @@ export function SharedLayout({ children }: React.ComponentPropsWithRef<'div'>) {
 
 interface SharedSidebarProps {
 	groupProps?: React.ComponentPropsWithoutRef<typeof GroupButton>;
-	onSignOut: () => void;
 }
+
 export function SharedSidebar({
 	groupProps,
-	onSignOut,
 	children,
 }: SharedSidebarProps & React.ComponentPropsWithRef<typeof SidebarContent>) {
+	const navigate = useNavigate();
+
 	return (
 		<Sidebar collapsible="icon">
 			<SidebarHeader>
 				{groupProps && <GroupButton {...groupProps} />}
 			</SidebarHeader>
-			<SidebarContent className="border-b border-t">{children}</SidebarContent>
+			<SidebarContent>{children}</SidebarContent>
 			<SidebarFooter>
 				<SidebarMenu>
 					<SidebarMenuItem>
 						<SidebarMenuButton
-							type="button"
+							tooltip="Sign Out"
 							variant="default"
-							onClick={onSignOut}
+							onClick={() => {
+								signOut();
+								navigate({ to: '/login' });
+							}}
 						>
-							<LogOut /> <span>Sign Out</span>
+							<LogOut />
+							<span>Sign Out</span>
 						</SidebarMenuButton>
 					</SidebarMenuItem>
 				</SidebarMenu>
