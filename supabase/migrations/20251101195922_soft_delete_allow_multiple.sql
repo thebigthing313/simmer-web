@@ -1,6 +1,12 @@
-create or replace function public.soft_delete_record (p_record_ids uuid[], p_table_name text) returns void language plpgsql
-set
-    search_path = '' security invoker as $$
+drop function if exists "public"."soft_delete_record"(p_record_id uuid, p_table_name text);
+
+set check_function_bodies = off;
+
+CREATE OR REPLACE FUNCTION public.soft_delete_record(p_record_ids uuid[], p_table_name text)
+ RETURNS void
+ LANGUAGE plpgsql
+ SET search_path TO ''
+AS $function$
     declare
         v_table_exists boolean;
         v_has_deleted_columns boolean;
@@ -47,4 +53,7 @@ set
             p_table_name
         ) using p_record_ids;
     end;
-$$;
+$function$
+;
+
+
