@@ -21,11 +21,13 @@ export function GroupButton({
 					className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 					onClick={onClick}
 				>
-					<img
-						src={logo_url ?? '/simmer-favicon.svg'}
-						alt={`${name ?? 'simmer'} logo`}
-						className="size-6"
-					/>
+					<div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+						<img
+							src={logo_url ?? '/simmer-favicon.svg'}
+							alt={`${name ?? 'simmer'} logo`}
+							className="size-8"
+						/>
+					</div>
 
 					<div className="grid flex-1 text-left text-sm leading-tight">
 						<span className="truncate font-medium">{name ?? 'SIMMER'}</span>
