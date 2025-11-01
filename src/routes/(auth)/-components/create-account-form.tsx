@@ -1,10 +1,12 @@
 /** biome-ignore-all lint/correctness/noChildrenProp: <tanstack form> */
 import { useForm } from '@tanstack/react-form';
+import { Link } from '@tanstack/react-router';
 import z from 'zod';
 import { FormField } from '@/components/blocks/form-field';
 import { SubmitButton } from '@/components/blocks/submit-button';
 import { PasswordInput } from '@/components/inputs/password-input';
 import { TextInput } from '@/components/inputs/text-input';
+import { Button } from '@/components/ui/button';
 import {
 	EmailSchema,
 	NameSchema,
@@ -174,6 +176,9 @@ export function CreateAccountForm({ onCreateAccount }: CreateAccountFormProps) {
 							/>
 						)}
 					/>
+					<Button type="button" variant="secondary" asChild>
+						<Link to="/login">Back to Login Page</Link>
+					</Button>
 				</div>
 			</form>
 		</FormLayout>
