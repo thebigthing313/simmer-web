@@ -1,10 +1,19 @@
 import { useMutation } from '@tanstack/react-query';
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute, Link, redirect } from '@tanstack/react-router';
 import { useState } from 'react';
+import z from 'zod';
+import { Button } from '@/components/ui/button';
+import { useAppForm } from '@/forms/form-context';
+import { NameFieldGroupFields } from '@/forms/name-field-group';
 import { createAccount } from '@/simmerbase/auth/create-account';
 import { signOut } from '@/simmerbase/auth/sign-out';
-import { CreateAccountForm } from './-components/create-account-form';
+import {
+	EmailSchema,
+	NameSchema,
+	PasswordSchema,
+} from '@/simmerbase/schemas/fields';
 import { ErrorAlert } from './-components/error-alert';
+import { FormLayout } from './-components/form-layout';
 
 export const Route = createFileRoute('/(auth)/create-account')({
 	beforeLoad: ({ context }) => {
@@ -32,23 +41,84 @@ function RouteComponent() {
 		},
 	});
 
+	const CreateAccountSchema = z
+		.object({
+			email: EmailSchema,
+			fullName: z.object({ firstName: NameSchema, lastName: NameSchema }),
+			password: PasswordSchema,
+			confirmPassword: z.string(),
+		})
+		.refine((data) => data.password === data.confirmPassword, {
+			message: 'Passwords must match',
+			path: ['confirmPassword'],
+		});
+
+	const form = useAppForm({
+		validators: { onChange: CreateAccountSchema },
+		defaultValues: {
+			email: '',
+			fullName: {
+				firstName: '',
+				lastName: '',
+			},
+			password: '',
+			confirmPassword: '',
+		},
+		onSubmit: ({ value }) => {
+			createMutation.mutate({
+				data: {
+					email: value.email,
+					password: value.password,
+					firstName: value.fullName.firstName,
+					lastName: value.fullName.lastName,
+				},
+			});
+		},
+	});
+
 	return (
 		<>
 			{errorMsg && (
 				<ErrorAlert errorTitle="Account Creation Error" errorMsg={errorMsg} />
 			)}
-			<CreateAccountForm
-				onCreateAccount={(args) =>
-					createMutation.mutate({
-						data: {
-							email: args.email,
-							password: args.password,
-							firstName: args.firstName,
-							lastName: args.lastName,
-						},
-					})
-				}
-			/>
+			<FormLayout
+				title="Create Account"
+				description="Sign up for a new account"
+			>
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						e.stopPropagation();
+						form.handleSubmit();
+					}}
+				>
+					<div className="grid gap-6">
+						<form.AppField name="email">
+							{(field) => <field.TextField label="Email" />}
+						</form.AppField>
+
+						<form.AppForm>
+							<NameFieldGroupFields form={form} fields="fullName" />
+						</form.AppForm>
+
+						<form.AppField name="password">
+							{(field) => <field.PasswordField label="Password" />}
+						</form.AppField>
+
+						<form.AppField name="confirmPassword">
+							{(field) => <field.PasswordField label="Confirm Password" />}
+						</form.AppField>
+
+						<form.AppForm>
+							<form.SubmitFormButton label="Login" className="w-full" />
+						</form.AppForm>
+
+						<Button type="button" variant="secondary" asChild>
+							<Link to="/login">Back to Login Page</Link>
+						</Button>
+					</div>
+				</form>
+			</FormLayout>
 		</>
 	);
 }
