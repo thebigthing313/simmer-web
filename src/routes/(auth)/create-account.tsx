@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { createFileRoute, Link, redirect } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { useState } from 'react';
 import z from 'zod';
-import { Button } from '@/components/ui/button';
+import { FieldDescription, FieldLegend, FieldSet } from '@/components/ui/field';
 import { useAppForm } from '@/forms/form-context';
 import { NameFieldGroupFields } from '@/forms/name-field-group';
 import { createAccount } from '@/simmerbase/auth/create-account';
@@ -81,10 +81,7 @@ function RouteComponent() {
 			{errorMsg && (
 				<ErrorAlert errorTitle="Account Creation Error" errorMsg={errorMsg} />
 			)}
-			<FormLayout
-				title="Create Account"
-				description="Sign up for a new account"
-			>
+			<FormLayout showReturnToLogin>
 				<form
 					onSubmit={(e) => {
 						e.preventDefault();
@@ -92,31 +89,29 @@ function RouteComponent() {
 						form.handleSubmit();
 					}}
 				>
-					<div className="grid gap-6">
+					<FieldSet>
+						<FieldLegend>Create Account</FieldLegend>
+						<FieldDescription>Sign up for a new account</FieldDescription>
 						<form.AppField name="email">
 							{(field) => <field.TextField label="Email" />}
 						</form.AppField>
-
 						<form.AppForm>
 							<NameFieldGroupFields form={form} fields="fullName" />
 						</form.AppForm>
-
 						<form.AppField name="password">
 							{(field) => <field.PasswordField label="Password" />}
 						</form.AppField>
-
 						<form.AppField name="confirmPassword">
 							{(field) => <field.PasswordField label="Confirm Password" />}
 						</form.AppField>
-
 						<form.AppForm>
-							<form.SubmitFormButton label="Login" className="w-full" />
+							<form.SubmitFormButton
+								label="Create New Account"
+								className="w-full"
+							/>
 						</form.AppForm>
-
-						<Button type="button" variant="secondary" asChild>
-							<Link to="/login">Back to Login Page</Link>
-						</Button>
-					</div>
+					</FieldSet>
+					<div className="grid gap-6"></div>
 				</form>
 			</FormLayout>
 		</>
