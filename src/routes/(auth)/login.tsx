@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/correctness/noChildrenProp: <Tanstack Form docs> */
 import { useMutation } from '@tanstack/react-query';
 import {
 	createFileRoute,
@@ -8,6 +7,12 @@ import {
 } from '@tanstack/react-router';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import {
+	FieldDescription,
+	FieldGroup,
+	FieldLegend,
+	FieldSet,
+} from '@/components/ui/field';
 import { useAppForm } from '@/forms/form-context';
 import { signInWithPassword } from '@/simmerbase/auth/sign-in-password';
 import { EmailSchema, PasswordSchema } from '@/simmerbase/schemas/fields';
@@ -49,7 +54,7 @@ function RouteComponent() {
 	return (
 		<>
 			{errorMsg && <ErrorAlert errorTitle="Login Error" errorMsg={errorMsg} />}
-			<FormLayout title="Welcome back!" description="Login to your account">
+			<FormLayout>
 				<form
 					onSubmit={(e) => {
 						e.preventDefault();
@@ -57,22 +62,26 @@ function RouteComponent() {
 						form.handleSubmit();
 					}}
 				>
-					<div className="grid gap-6">
-						<form.AppField
-							validators={{ onBlur: EmailSchema }}
-							name="email"
-							children={(field) => <field.TextField label="Email" />}
-						/>
+					<FieldSet>
+						<FieldLegend>Login to Your Account</FieldLegend>
+						<FieldDescription>Welcome back!</FieldDescription>
+						<FieldGroup>
+							<form.AppField name="email" validators={{ onBlur: EmailSchema }}>
+								{(field) => <field.TextField label="Email" />}
+							</form.AppField>
 
-						<form.AppField
-							validators={{ onChange: PasswordSchema }}
-							name="password"
-							children={(field) => <field.PasswordField label="Password" />}
-						/>
-						<form.AppForm>
-							<form.SubmitFormButton label="Login" className="w-full" />
-						</form.AppForm>
-					</div>
+							<form.AppField
+								validators={{ onChange: PasswordSchema }}
+								name="password"
+							>
+								{(field) => <field.PasswordField label="Password" />}
+							</form.AppField>
+
+							<form.AppForm>
+								<form.SubmitFormButton label="Login" className="w-full" />
+							</form.AppForm>
+						</FieldGroup>
+					</FieldSet>
 				</form>
 				<div className="grid mt-4">
 					<Button
