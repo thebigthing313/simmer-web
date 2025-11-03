@@ -9,14 +9,13 @@ import {
 } from '@/components/ui/item';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Skeleton } from '../ui/skeleton';
 
 /**
  * Props for the GroupCard component.
  */
 interface GroupCardProps {
-	/** The group data object containing logo, name, address, and phone. If undefined, renders a skeleton. */
-	group?: {
+	/** The group data object containing logo, name, address, and phone.*/
+	group: {
 		/** URL of the group's logo (optional). */
 		logo_url?: string;
 		/** Name of the group. */
@@ -33,10 +32,6 @@ export function GroupCard({
 	className,
 	ref,
 }: GroupCardProps & React.ComponentPropsWithRef<'div'>) {
-	if (!group) {
-		return <GroupCardSkeleton />;
-	}
-
 	const { logo_url, group_name, address, phone } = group;
 
 	const parsedPhone = parsePhoneNumber(phone, 'US').formatNational();
@@ -61,22 +56,6 @@ export function GroupCard({
 				<ItemDescription className="tracking-tight">
 					{parsedPhone}
 				</ItemDescription>
-			</ItemContent>
-		</Item>
-	);
-}
-
-function GroupCardSkeleton() {
-	return (
-		<Item variant="outline" className="min-w-xs max-w-md bg-card">
-			<ItemMedia className="size-20 bg-background" variant="image">
-				<Skeleton className="w-full h-full rounded-full" />
-			</ItemMedia>
-
-			<ItemContent>
-				<Skeleton className="h-4 w-3/4" />
-				<Skeleton className="h-4 w-5/6" />
-				<Skeleton className="h-4 w-1/2" />
 			</ItemContent>
 		</Item>
 	);
