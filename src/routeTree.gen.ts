@@ -9,22 +9,57 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as userRouteRouteImport } from './routes/(user)/route'
 import { Route as authRouteRouteImport } from './routes/(auth)/route'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as GroupSlugRouteRouteImport } from './routes/$groupSlug/route'
+import { Route as userIndexRouteImport } from './routes/(user)/index'
+import { Route as GroupSlugIndexRouteImport } from './routes/$groupSlug/index'
+import { Route as userSettingsRouteImport } from './routes/(user)/settings'
+import { Route as userProfileRouteImport } from './routes/(user)/profile'
+import { Route as userCreateGroupRouteImport } from './routes/(user)/create-group'
 import { Route as authResetPasswordRouteImport } from './routes/(auth)/reset-password'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
 import { Route as authCreateAccountRouteImport } from './routes/(auth)/create-account'
 import { Route as authConfirmEmailRouteImport } from './routes/(auth)/confirm-email'
 
+const userRouteRoute = userRouteRouteImport.update({
+  id: '/(user)',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const authRouteRoute = authRouteRouteImport.update({
   id: '/(auth)',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const GroupSlugRouteRoute = GroupSlugRouteRouteImport.update({
+  id: '/$groupSlug',
+  path: '/$groupSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const userIndexRoute = userIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => userRouteRoute,
+} as any)
+const GroupSlugIndexRoute = GroupSlugIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => GroupSlugRouteRoute,
+} as any)
+const userSettingsRoute = userSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => userRouteRoute,
+} as any)
+const userProfileRoute = userProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => userRouteRoute,
+} as any)
+const userCreateGroupRoute = userCreateGroupRouteImport.update({
+  id: '/create-group',
+  path: '/create-group',
+  getParentRoute: () => userRouteRoute,
 } as any)
 const authResetPasswordRoute = authResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -53,66 +88,104 @@ const authConfirmEmailRoute = authConfirmEmailRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/$groupSlug': typeof GroupSlugRouteRouteWithChildren
   '/confirm-email': typeof authConfirmEmailRoute
   '/create-account': typeof authCreateAccountRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
   '/reset-password': typeof authResetPasswordRoute
+  '/create-group': typeof userCreateGroupRoute
+  '/profile': typeof userProfileRoute
+  '/settings': typeof userSettingsRoute
+  '/$groupSlug/': typeof GroupSlugIndexRoute
+  '/': typeof userIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/confirm-email': typeof authConfirmEmailRoute
   '/create-account': typeof authCreateAccountRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
   '/reset-password': typeof authResetPasswordRoute
+  '/create-group': typeof userCreateGroupRoute
+  '/profile': typeof userProfileRoute
+  '/settings': typeof userSettingsRoute
+  '/$groupSlug': typeof GroupSlugIndexRoute
+  '/': typeof userIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/$groupSlug': typeof GroupSlugRouteRouteWithChildren
   '/(auth)': typeof authRouteRouteWithChildren
+  '/(user)': typeof userRouteRouteWithChildren
   '/(auth)/confirm-email': typeof authConfirmEmailRoute
   '/(auth)/create-account': typeof authCreateAccountRoute
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/reset-password': typeof authResetPasswordRoute
+  '/(user)/create-group': typeof userCreateGroupRoute
+  '/(user)/profile': typeof userProfileRoute
+  '/(user)/settings': typeof userSettingsRoute
+  '/$groupSlug/': typeof GroupSlugIndexRoute
+  '/(user)/': typeof userIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
+    | '/$groupSlug'
     | '/confirm-email'
     | '/create-account'
     | '/forgot-password'
     | '/login'
     | '/reset-password'
+    | '/create-group'
+    | '/profile'
+    | '/settings'
+    | '/$groupSlug/'
+    | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/confirm-email'
     | '/create-account'
     | '/forgot-password'
     | '/login'
     | '/reset-password'
+    | '/create-group'
+    | '/profile'
+    | '/settings'
+    | '/$groupSlug'
+    | '/'
   id:
     | '__root__'
-    | '/'
+    | '/$groupSlug'
     | '/(auth)'
+    | '/(user)'
     | '/(auth)/confirm-email'
     | '/(auth)/create-account'
     | '/(auth)/forgot-password'
     | '/(auth)/login'
     | '/(auth)/reset-password'
+    | '/(user)/create-group'
+    | '/(user)/profile'
+    | '/(user)/settings'
+    | '/$groupSlug/'
+    | '/(user)/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  GroupSlugRouteRoute: typeof GroupSlugRouteRouteWithChildren
   authRouteRoute: typeof authRouteRouteWithChildren
+  userRouteRoute: typeof userRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/(user)': {
+      id: '/(user)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof userRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(auth)': {
       id: '/(auth)'
       path: ''
@@ -120,12 +193,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/$groupSlug': {
+      id: '/$groupSlug'
+      path: '/$groupSlug'
+      fullPath: '/$groupSlug'
+      preLoaderRoute: typeof GroupSlugRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(user)/': {
+      id: '/(user)/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof userIndexRouteImport
+      parentRoute: typeof userRouteRoute
+    }
+    '/$groupSlug/': {
+      id: '/$groupSlug/'
+      path: '/'
+      fullPath: '/$groupSlug/'
+      preLoaderRoute: typeof GroupSlugIndexRouteImport
+      parentRoute: typeof GroupSlugRouteRoute
+    }
+    '/(user)/settings': {
+      id: '/(user)/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof userSettingsRouteImport
+      parentRoute: typeof userRouteRoute
+    }
+    '/(user)/profile': {
+      id: '/(user)/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof userProfileRouteImport
+      parentRoute: typeof userRouteRoute
+    }
+    '/(user)/create-group': {
+      id: '/(user)/create-group'
+      path: '/create-group'
+      fullPath: '/create-group'
+      preLoaderRoute: typeof userCreateGroupRouteImport
+      parentRoute: typeof userRouteRoute
     }
     '/(auth)/reset-password': {
       id: '/(auth)/reset-password'
@@ -165,6 +273,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface GroupSlugRouteRouteChildren {
+  GroupSlugIndexRoute: typeof GroupSlugIndexRoute
+}
+
+const GroupSlugRouteRouteChildren: GroupSlugRouteRouteChildren = {
+  GroupSlugIndexRoute: GroupSlugIndexRoute,
+}
+
+const GroupSlugRouteRouteWithChildren = GroupSlugRouteRoute._addFileChildren(
+  GroupSlugRouteRouteChildren,
+)
+
 interface authRouteRouteChildren {
   authConfirmEmailRoute: typeof authConfirmEmailRoute
   authCreateAccountRoute: typeof authCreateAccountRoute
@@ -185,9 +305,28 @@ const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
   authRouteRouteChildren,
 )
 
+interface userRouteRouteChildren {
+  userCreateGroupRoute: typeof userCreateGroupRoute
+  userProfileRoute: typeof userProfileRoute
+  userSettingsRoute: typeof userSettingsRoute
+  userIndexRoute: typeof userIndexRoute
+}
+
+const userRouteRouteChildren: userRouteRouteChildren = {
+  userCreateGroupRoute: userCreateGroupRoute,
+  userProfileRoute: userProfileRoute,
+  userSettingsRoute: userSettingsRoute,
+  userIndexRoute: userIndexRoute,
+}
+
+const userRouteRouteWithChildren = userRouteRoute._addFileChildren(
+  userRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  GroupSlugRouteRoute: GroupSlugRouteRouteWithChildren,
   authRouteRoute: authRouteRouteWithChildren,
+  userRouteRoute: userRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
