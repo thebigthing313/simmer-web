@@ -3,15 +3,9 @@ import { createIsomorphicFn } from '@tanstack/react-start';
 import { getCookies, setCookie } from '@tanstack/react-start/server';
 import type { Database } from '@/simmerbase/supabase-types';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_SBPUBLISHABLE_KEY;
 
-export const getSupabaseBrowserClient = () => {
-	return createBrowserClient<Database>(supabaseUrl, supabaseAnonKey);
-};
-
-export const getSupabaseServerClient = () => {
-	if (
+export const getSupabaseClient = createIsomorphicFn()
+	.server(() => {	if (
 		!process.env.VITE_SUPABASE_URL ||
 		!process.env.VITE_SUPABASE_SBPUBLISHABLE_KEY
 	) {
@@ -37,9 +31,9 @@ export const getSupabaseServerClient = () => {
 				},
 			},
 		},
-	);
-};
-
-export const getSupabaseClient = createIsomorphicFn()
-	.server(() => getSupabaseServerClient())
-	.client(() => getSupabaseBrowserClient());
+	);})
+	.client(() => {
+		const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_SBPUBLISHABLE_KEY;
+		return createBrowserClient<Database>(supabaseUrl, supabaseAnonKey);
+	});
