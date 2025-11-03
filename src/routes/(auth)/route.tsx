@@ -3,9 +3,8 @@ import { getClaims } from '@/simmerbase/auth/get-claims';
 
 export const Route = createFileRoute('/(auth)')({
 	beforeLoad: async () => {
-		const claims = getClaims();
-		const returnClaims = await claims();
-		const { user_id, user_email, profile_id, groups } = returnClaims;
+		const claims = await getClaims();
+		const { user_id, user_email, profile_id, groups } = claims;
 		return { user_id, user_email, profile_id, groups };
 	},
 	component: RouteComponent,
