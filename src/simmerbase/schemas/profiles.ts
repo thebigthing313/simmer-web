@@ -1,5 +1,5 @@
 // Auto-generated schema file for profiles table
-// Generated on: 2025-11-01T22:19:49.474Z
+// Generated on: 2025-11-04T17:00:18.174Z
 //
 // IMPORTANT: Automatic preprocessing is enabled for date fields:
 // - Fields ending in '_at' (timestamps): ISO strings are automatically converted to Date objects
@@ -11,7 +11,7 @@
 import z from 'zod';
 
 export const ZodProfilesRow = z.object({
-	avatar_url: z.url().nullable(),
+	avatar_url: z.string().nullable(),
 	bio: z.string().nullable(),
 	created_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).optional(),
 	created_by: z.uuid().nullable().optional(),
@@ -20,19 +20,17 @@ export const ZodProfilesRow = z.object({
 	first_name: z.string(),
 	id: z.uuid(),
 	last_name: z.string(),
-	profile_photo_url: z.url().nullable(),
 	updated_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).nullable().optional(),
 	updated_by: z.uuid().nullable().optional(),
 	user_id: z.uuid().nullable(),
 });
 
 export const ZodProfilesInsert = z.object({
-	avatar_url: z.url().nullable().optional(),
+	avatar_url: z.string().nullable().optional(),
 	bio: z.string().nullable().optional(),
 	first_name: z.string(),
 	id: z.uuid().optional(),
 	last_name: z.string(),
-	profile_photo_url: z.url().nullable().optional(),
 	user_id: z.uuid().nullable().optional(),
 });
 
@@ -40,7 +38,7 @@ export const ZodProfilesUpdate = ZodProfilesInsert.partial();
 
 // Schemas for converting back to database format (Date -> ISO string)
 export const ZodProfilesRowToDb = z.object({
-	avatar_url: z.url().nullable(),
+	avatar_url: z.string().nullable(),
 	bio: z.string().nullable(),
 	created_at: z.preprocess((val) => val instanceof Date ? val.toISOString() : val, z.string()).optional(),
 	created_by: z.uuid().nullable().optional(),
@@ -49,19 +47,17 @@ export const ZodProfilesRowToDb = z.object({
 	first_name: z.string(),
 	id: z.uuid(),
 	last_name: z.string(),
-	profile_photo_url: z.url().nullable(),
 	updated_at: z.preprocess((val) => val instanceof Date ? val.toISOString() : val, z.string()).nullable().optional(),
 	updated_by: z.uuid().nullable().optional(),
 	user_id: z.uuid().nullable(),
 });
 
 export const ZodProfilesInsertToDb = z.object({
-	avatar_url: z.url().nullable().optional(),
+	avatar_url: z.string().nullable().optional(),
 	bio: z.string().nullable().optional(),
 	first_name: z.string(),
 	id: z.uuid().optional(),
 	last_name: z.string(),
-	profile_photo_url: z.url().nullable().optional(),
 	user_id: z.uuid().nullable().optional(),
 });
 

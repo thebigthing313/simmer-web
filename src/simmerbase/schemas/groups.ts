@@ -1,5 +1,5 @@
 // Auto-generated schema file for groups table
-// Generated on: 2025-11-01T22:19:29.147Z
+// Generated on: 2025-11-04T17:00:24.231Z
 //
 // IMPORTANT: Automatic preprocessing is enabled for date fields:
 // - Fields ending in '_at' (timestamps): ISO strings are automatically converted to Date objects
@@ -20,12 +20,12 @@ export const ZodGroupsRow = z.object({
 	fax: z.string().nullable(),
 	group_name: z.string(),
 	id: z.uuid(),
-	logo_url: z.url().nullable(),
+	logo_url: z.string().nullable(),
 	phone: PhoneNumberSchema,
 	short_name: z.string(),
 	updated_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).nullable().optional(),
 	updated_by: z.uuid().nullable().optional(),
-	website_url: z.url().nullable(),
+	website_url: z.string().nullable(),
 });
 
 export const ZodGroupsInsert = z.object({
@@ -33,10 +33,10 @@ export const ZodGroupsInsert = z.object({
 	fax: z.string().nullable().optional(),
 	group_name: z.string(),
 	id: z.uuid().optional(),
-	logo_url: z.url().nullable().optional(),
+	logo_url: z.string().nullable().optional(),
 	phone: PhoneNumberSchema,
 	short_name: z.string(),
-	website_url: z.url().nullable().optional(),
+	website_url: z.string().nullable().optional(),
 });
 
 export const ZodGroupsUpdate = ZodGroupsInsert.partial();
@@ -51,12 +51,12 @@ export const ZodGroupsRowToDb = z.object({
 	fax: z.string().nullable(),
 	group_name: z.string(),
 	id: z.uuid(),
-	logo_url: z.url().nullable(),
+	logo_url: z.string().nullable(),
 	phone: PhoneNumberSchema,
 	short_name: z.string(),
 	updated_at: z.preprocess((val) => val instanceof Date ? val.toISOString() : val, z.string()).nullable().optional(),
 	updated_by: z.uuid().nullable().optional(),
-	website_url: z.url().nullable(),
+	website_url: z.string().nullable(),
 });
 
 export const ZodGroupsInsertToDb = z.object({
@@ -64,10 +64,10 @@ export const ZodGroupsInsertToDb = z.object({
 	fax: z.string().nullable().optional(),
 	group_name: z.string(),
 	id: z.uuid().optional(),
-	logo_url: z.url().nullable().optional(),
+	logo_url: z.string().nullable().optional(),
 	phone: PhoneNumberSchema,
 	short_name: z.string(),
-	website_url: z.url().nullable().optional(),
+	website_url: z.string().nullable().optional(),
 });
 
 export const ZodGroupsUpdateToDb = ZodGroupsInsertToDb.partial();
