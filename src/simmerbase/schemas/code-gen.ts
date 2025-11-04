@@ -361,10 +361,12 @@ function mapTypeToZod(
 		return isNullable ? 'z.uuid().nullable()' : 'z.uuid()';
 	}
 
-	// Handle URL fields
-	if (field.includes('url')) {
-		return isNullable ? 'z.url().nullable()' : 'z.url()';
-	} // Handle email fields
+	// // Handle URL fields
+	// if (field.includes('url')) {
+	// 	return isNullable ? 'z.url().nullable()' : 'z.url()';
+	// }
+
+	// Handle email fields
 	if (field.includes('email')) {
 		return isNullable ? 'EmailSchema.nullable()' : 'EmailSchema';
 	}
@@ -439,10 +441,10 @@ function mapTypeToZodDb(
 		return isNullable ? 'z.uuid().nullable()' : 'z.uuid()';
 	}
 
-	// Handle URL fields
-	if (field.includes('url')) {
-		return isNullable ? 'z.url().nullable()' : 'z.url()';
-	}
+	// // Handle URL fields
+	// if (field.includes('url')) {
+	// 	return isNullable ? 'z.url().nullable()' : 'z.url()';
+	// }
 
 	// Handle email fields
 	if (field.includes('email')) {
