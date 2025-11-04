@@ -19,7 +19,7 @@ const { queryClient } = TanstackQueryProvider.getContext();
  * Configuration fields commonly passed to TanStack Query hooks.
  * Also supports custom mutation handlers (onInsert, onUpdate, onDelete)
  * for overriding default Supabase behavior.
- * 
+ *
  * @example
  * ```typescript
  * const config: FactoryConfig<MyItem> = {
@@ -166,108 +166,113 @@ export function createSupabaseCollection<
 					return result;
 				},
 
-				onInsert: finalConfig.onInsert ?? (async ({ transaction, collection }) => {
-					const localNewItems = transaction.mutations.map((m) => m.modified);
+				onInsert:
+					finalConfig.onInsert ??
+					(async ({ transaction, collection }) => {
+						const localNewItems = transaction.mutations.map((m) => m.modified);
 
-					const parsedLocalNewItems = localNewItems.map((item) =>
-						insertSchema.parse(item),
-					);
-
-					const supabase = getSupabaseClient();
-					const { data: serverNewItems, error: insertError } = await supabase
-						.from(tableName)
-						// biome-ignore lint/suspicious/noExplicitAny: Generic types don't match Supabase's specific table types
-						.insert(parsedLocalNewItems as any)
-						.select('*');
-
-					if (insertError || !serverNewItems) {
-						throw new Error(
-							`Failed to insert into ${tableName}: ${insertError?.message ?? 'No data returned'}`,
-							{ cause: insertError },
+						const parsedLocalNewItems = localNewItems.map((item) =>
+							insertSchema.parse(item),
 						);
-					}
 
-					const parsedServerNewItems = serverNewItems.map((item) =>
-						rowSchema.parse(item),
-					);
-
-					collection.utils.writeBatch(() => {
-						parsedServerNewItems.forEach((item) => {
-							collection.utils.writeUpsert(item);
-						});
-					});
-
-					return { refetch: false };
-				}),
-
-				onUpdate: finalConfig.onUpdate ?? (async ({ transaction, collection }) => {
-					if (transaction.mutations.length === 0) {
-						return { refetch: false };
-					}
-
-					const localUpdatedKeys = transaction.mutations.map((m) => m.key);
-					const localChangesToApply = transaction.mutations[0].changes;
-
-					const parsedChangesToApply =
-						updateSchema.parse(localChangesToApply);
-
-					const supabase = getSupabaseClient();
-					const { data: serverUpdatedItems, error: updateError } =
-						await supabase
+						const supabase = getSupabaseClient();
+						const { data: serverNewItems, error: insertError } = await supabase
 							.from(tableName)
 							// biome-ignore lint/suspicious/noExplicitAny: Generic types don't match Supabase's specific table types
-							.update(parsedChangesToApply as any)
-							.in('id', localUpdatedKeys)
+							.insert(parsedLocalNewItems as any)
 							.select('*');
 
-					if (updateError || !serverUpdatedItems) {
-						throw new Error(
-							`Failed to update ${tableName}: ${updateError?.message ?? 'No data returned'}`,
-							{ cause: updateError },
+						if (insertError || !serverNewItems) {
+							throw new Error(
+								`Failed to insert into ${tableName}: ${insertError?.message ?? 'No data returned'}`,
+								{ cause: insertError },
+							);
+						}
+
+						const parsedServerNewItems = serverNewItems.map((item) =>
+							rowSchema.parse(item),
 						);
-					}
 
-					const parsedServerUpdatedItems = serverUpdatedItems.map((item) =>
-						rowSchema.parse(item),
-					);
-
-					collection.utils.writeBatch(() => {
-						parsedServerUpdatedItems.forEach((item) => {
-							collection.utils.writeUpsert(item);
+						collection.utils.writeBatch(() => {
+							parsedServerNewItems.forEach((item) => {
+								collection.utils.writeUpsert(item);
+							});
 						});
-					});
 
-					return { refetch: false };
-				}),
+						return { refetch: false };
+					}),
 
-				onDelete: finalConfig.onDelete ?? (async ({ transaction, collection }) => {
-					const localDeletedItemIds = transaction.mutations.map((m) => m.key);
+				onUpdate:
+					finalConfig.onUpdate ??
+					(async ({ transaction, collection }) => {
+						if (transaction.mutations.length === 0) {
+							return { refetch: false };
+						}
+						const localUpdatedKeys = transaction.mutations.map((m) => m.key);
+						const localChangesToApply = transaction.mutations[0].changes;
 
-					const supabase = getSupabaseClient();
-					const { error: deleteError } = await supabase.rpc(
-						'soft_delete_record',
-						{
-							p_record_ids: localDeletedItemIds,
-							p_table_name: tableName,
-						},
-					);
+						const parsedChangesToApply =
+							updateSchema.parse(localChangesToApply);
 
-					if (deleteError) {
-						throw new Error(
-							`Failed to delete from ${tableName}: ${deleteError.message}`,
-							{ cause: deleteError },
+						const supabase = getSupabaseClient();
+						const { data: serverUpdatedItems, error: updateError } =
+							await supabase
+								.from(tableName)
+								// biome-ignore lint/suspicious/noExplicitAny: Generic types don't match Supabase's specific table types
+								.update(parsedChangesToApply as any)
+								.in('id', localUpdatedKeys)
+								.select('*');
+
+						if (updateError || !serverUpdatedItems) {
+							throw new Error(
+								`Failed to update ${tableName}: ${updateError?.message ?? 'No data returned'}`,
+								{ cause: updateError },
+							);
+						}
+
+						const parsedServerUpdatedItems = serverUpdatedItems.map((item) =>
+							rowSchema.parse(item),
 						);
-					}
 
-					collection.utils.writeBatch(() => {
-						localDeletedItemIds.forEach((id) => {
-							collection.utils.writeDelete(id);
+						collection.utils.writeBatch(() => {
+							parsedServerUpdatedItems.forEach((item) => {
+								collection.utils.writeUpsert(item);
+							});
 						});
-					});
 
-					return { refetch: false };
-				}),
-				
+						return { refetch: false };
+					}),
+
+				onDelete:
+					finalConfig.onDelete ??
+					(async ({ transaction, collection }) => {
+						const localDeletedItemIds = transaction.mutations.map((m) => m.key);
+
+						const supabase = getSupabaseClient();
+						const { error: deleteError } = await supabase.rpc(
+							'soft_delete_record',
+							{
+								p_record_ids: localDeletedItemIds,
+								p_table_name: tableName,
+							},
+						);
+
+						if (deleteError) {
+							throw new Error(
+								`Failed to delete from ${tableName}: ${deleteError.message}`,
+								{ cause: deleteError },
+							);
+						}
+
+						collection.utils.writeBatch(() => {
+							localDeletedItemIds.forEach((id) => {
+								collection.utils.writeDelete(id);
+							});
+						});
+
+						return { refetch: false };
+					}),
+
 				...finalConfig,
 			}),
 		);
