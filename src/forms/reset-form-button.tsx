@@ -1,15 +1,15 @@
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
 import { useFormContext } from './form-context';
 
-interface SubmitFormButtonProps {
+interface ResetFormButtonProps {
 	label?: string;
 }
-export function SubmitFormButton({
-	label = 'Submit',
+export function ResetFormButton({
+	label = 'Reset',
 	ref,
 	...props
-}: SubmitFormButtonProps & React.ComponentPropsWithRef<'button'>) {
+}: ResetFormButtonProps & React.ComponentPropsWithRef<'button'>) {
 	const form = useFormContext();
 	return (
 		<form.Subscribe selector={(state) => state.isSubmitting}>
@@ -17,16 +17,16 @@ export function SubmitFormButton({
 				<Button
 					ref={ref}
 					type="button"
-					variant="default"
+					variant="secondary"
 					aria-busy={isSubmitting}
 					disabled={isSubmitting}
-					onClick={form.handleSubmit}
+					onClick={() => {
+						form.reset();
+						toast.success('Form reset to original values.');
+					}}
 					{...props}
 				>
-					<span>
-						{label}
-						{isSubmitting && <Spinner />}
-					</span>
+					{label}
 				</Button>
 			)}
 		</form.Subscribe>
