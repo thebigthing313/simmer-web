@@ -206,7 +206,6 @@ export type Database = {
           first_name: string
           id: string
           last_name: string
-          profile_photo_url: string | null
           updated_at: string | null
           updated_by: string | null
           user_id: string | null
@@ -221,7 +220,6 @@ export type Database = {
           first_name: string
           id?: string
           last_name: string
-          profile_photo_url?: string | null
           updated_at?: string | null
           updated_by?: string | null
           user_id?: string | null
@@ -236,7 +234,6 @@ export type Database = {
           first_name?: string
           id?: string
           last_name?: string
-          profile_photo_url?: string | null
           updated_at?: string | null
           updated_by?: string | null
           user_id?: string | null
