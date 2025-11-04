@@ -9,6 +9,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { NotFound } from '@/components/not-found';
 import { ClientThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
 import { RootErrorComponent } from '../components/root-error-component';
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
 import appCss from '../styles.css?url';
@@ -70,6 +71,7 @@ function RootDocument() {
 				<ClientThemeProvider>
 					<div className="flex min-h-screen min-w-screen items-center justify-center px-2">
 						<Outlet />
+						<Toaster />
 					</div>
 				</ClientThemeProvider>
 
