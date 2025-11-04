@@ -3,7 +3,6 @@ create table if not exists public.profiles (
     "first_name" text not null,
     "last_name" text not null,
     "user_id" uuid references auth.users (id) on delete restrict,
-    "profile_photo_url" text,
     "avatar_url" text,
     "bio" text,
     "created_at" timestamp with time zone not null default now(),
