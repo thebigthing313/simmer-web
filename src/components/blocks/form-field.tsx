@@ -24,7 +24,7 @@ export function FormField({
 	...props
 }: FormFieldProps & React.ComponentPropsWithRef<'div'>) {
 	return (
-		<Field orientation="responsive" className={className} ref={ref} {...props}>
+		<Field orientation="vertical" className={className} ref={ref} {...props}>
 			{label && description ? (
 				<FieldContent>
 					<FieldLabel htmlFor={htmlFor}>{label}</FieldLabel>
