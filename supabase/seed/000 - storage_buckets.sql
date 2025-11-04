@@ -1,8 +1,8 @@
 insert into
-    storage.buckets (id, name, public)
+    storage.buckets (id, name, public, allowed_mime_types, max_file_size)
 values
-    ('avatars', 'avatars', true),
-    ('group_images', 'group_images', true)
+    ('avatars', 'avatars', true, ARRAY['image/*'], 3145728),
+    ('group_images', 'group_images', true, ARRAY['image/*'], 10485760)
 on conflict (id) do nothing;
 
 CREATE POLICY "Users can manage their own avatars 1oj01fe_0"
