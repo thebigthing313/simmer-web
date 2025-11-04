@@ -111,7 +111,6 @@ function RouteComponent() {
 							/>
 						</form.AppForm>
 					</FieldSet>
-					<div className="grid gap-6"></div>
 				</form>
 			</FormLayout>
 		</>
