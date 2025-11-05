@@ -26,7 +26,7 @@ export const Route = createFileRoute('/(auth)/create-account')({
 });
 
 function RouteComponent() {
-	const [errorMsg, setErrorMsg] = useState<string | null>(null);
+	const [errorMsg, setErrorMsg] = useState<string | undefined>(undefined);
 
 	const createMutation = useMutation({
 		mutationFn: createAccount,
