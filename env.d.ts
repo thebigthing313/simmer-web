@@ -14,6 +14,7 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       readonly SUPABASE_SERVICE_ROLE_KEY: string;
+      readonly SUPABASE_URL: string;
       readonly NODE_ENV: 'development' | 'production' | 'test';
     }
   }
