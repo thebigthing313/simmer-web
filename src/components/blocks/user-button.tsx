@@ -1,3 +1,4 @@
+import { getSupabaseUrl } from '@/simmerbase/storage/get-supabase-url';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
@@ -8,6 +9,7 @@ interface UserButtonProps {
 	onClick?: () => void;
 }
 export function UserButton({ imageUrl, fallback, onClick }: UserButtonProps) {
+	const imageSrc = !imageUrl ? undefined : getSupabaseUrl(imageUrl);
 	return (
 		<Tooltip>
 			<TooltipTrigger asChild>
@@ -18,7 +20,7 @@ export function UserButton({ imageUrl, fallback, onClick }: UserButtonProps) {
 					size="icon"
 				>
 					<Avatar>
-						<AvatarImage src={imageUrl} alt="" />
+						<AvatarImage src={imageSrc} alt="" />
 						<AvatarFallback>{fallback ?? 'S'}</AvatarFallback>
 					</Avatar>
 				</Button>
