@@ -3,15 +3,34 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { createClientOnlyFn } from '@tanstack/react-start';
 import { CircleCheck } from 'lucide-react';
 import { useState } from 'react';
+import z from 'zod';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import {
+	FieldDescription,
+	FieldGroup,
+	FieldLegend,
+	FieldSet,
+} from '@/components/ui/field';
+import { useAppForm } from '@/forms/form-context';
 import { resetPassword } from '@/simmerbase/auth/reset-password';
 import { signOut } from '@/simmerbase/auth/sign-out';
+import { PasswordSchema } from '@/simmerbase/schemas/fields';
 import { ErrorAlert } from './-components/error-alert';
-import { ResetPasswordForm } from './-components/reset-password-form';
+import { FormLayout } from './-components/form-layout';
 
 export const Route = createFileRoute('/(auth)/reset-password')({
 	component: RouteComponent,
 });
+
+const ResetPasswordSchema = z
+	.object({
+		password: PasswordSchema,
+		confirmPassword: z.string(),
+	})
+	.refine((data) => data.password === data.confirmPassword, {
+		message: 'Passwords must match',
+		path: ['confirmPassword'],
+	});
 
 function RouteComponent() {
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -29,6 +48,17 @@ function RouteComponent() {
 				await signOut();
 				setSuccess(true);
 			}
+		},
+	});
+
+	const form = useAppForm({
+		validators: { onChange: ResetPasswordSchema },
+		defaultValues: {
+			password: '',
+			confirmPassword: '',
+		},
+		onSubmit: async ({ value }) => {
+			resetMutation.mutate({ data: { password: value.password } });
 		},
 	});
 
@@ -52,15 +82,37 @@ function RouteComponent() {
 			{success && <SuccessfulReset />}
 			{/* Show the reset password form if not successful yet */}
 			{!success && (
-				<ResetPasswordForm
-					onResetPassword={(newPassword) => {
-						resetMutation.mutate({
-							data: {
-								password: newPassword,
-							},
-						});
-					}}
-				/>
+				<FormLayout showReturnToLogin>
+					<form
+						onSubmit={(e) => {
+							e.preventDefault();
+							e.stopPropagation();
+							form.handleSubmit();
+						}}
+					>
+						<FieldSet>
+							<FieldLegend>Reset Password</FieldLegend>
+							<FieldDescription>Enter your new password</FieldDescription>
+							<FieldGroup>
+								<form.AppField name="password">
+									{(field) => <field.PasswordField label="New Password" />}
+								</form.AppField>
+								<form.AppField name="confirmPassword">
+									{(field) => (
+										<field.PasswordField label="Confirm New Password" />
+									)}
+								</form.AppField>
+
+								<form.AppForm>
+									<form.SubmitFormButton
+										label="Reset Password"
+										className="w-full"
+									/>
+								</form.AppForm>
+							</FieldGroup>
+						</FieldSet>
+					</form>
+				</FormLayout>
 			)}
 		</>
 	);
