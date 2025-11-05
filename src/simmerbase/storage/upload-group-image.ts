@@ -8,16 +8,17 @@ import { compressImageToSize } from './compress-image';
  *
  * @param file - The image file to upload
  * @param groupId - The group ID
- * @param fileName - The file name (e.g., 'banner.jpg' or 'photo-123.jpg')
  * @returns Promise<string> - The full path of the uploaded file (e.g., 'group_images/group-id/banner.jpg')
  * @throws Error if upload fails
  */
 export const uploadGroupImage = createClientOnlyFn(
-	async (file: File, groupId: string, fileName: string): Promise<string> => {
+	async (file: File, groupId: string): Promise<string> => {
 		const supabase = getSupabaseClient();
 
+		// Extract file extension
+		const fileExt = file.name.split('.').pop() || 'jpg';
 		// Build the path: groupId/fileName
-		const path = `${groupId}/${fileName}`;
+		const path = `${groupId}/${crypto.randomUUID()}.${fileExt}`;
 
 		// Compress image to meet 10MB size limit
 		const maxSizeBytes = 10 * 1024 * 1024; // 10MB
@@ -31,10 +32,7 @@ export const uploadGroupImage = createClientOnlyFn(
 		// Upload the file
 		const { data, error } = await supabase.storage
 			.from('group_images')
-			.upload(path, compressedFile, {
-				cacheControl: '3600',
-				upsert: false,
-			});
+			.upload(path, compressedFile);
 
 		if (error) {
 			throw new Error(`Group image upload failed: ${error.message}`);

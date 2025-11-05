@@ -12,7 +12,7 @@ import { compressImageToSize } from './compress-image';
  * @throws Error if upload fails
  */
 export const uploadAvatar = createClientOnlyFn(
-	async (file: File, profileId: string): Promise<string> => {
+	async (file: File): Promise<string> => {
 		const supabase = getSupabaseClient();
 
 		// Compress image to meet 1MB size limit
@@ -26,16 +26,12 @@ export const uploadAvatar = createClientOnlyFn(
 
 		// Extract file extension
 		const fileExt = file.name.split('.').pop() || 'jpg';
-		const fileName = `avatar_${profileId}.${fileExt}`;
+		const fileName = `${crypto.randomUUID()}.${fileExt}`;
 
 		// Upload the file
 		const { data, error } = await supabase.storage
 			.from('avatars')
-			.upload(fileName, compressedFile, {
-				cacheControl: '3600',
-				upsert: false,
-			});
-
+			.upload(fileName, compressedFile);
 		if (error) {
 			throw new Error(`Avatar upload failed: ${error.message}`);
 		}
