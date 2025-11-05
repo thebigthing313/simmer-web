@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
+import { H2, P } from '@/components/typography';
 import { FormLayout } from './-components/form-layout';
 
 export const Route = createFileRoute('/(auth)/confirm-email')({
@@ -7,15 +8,9 @@ export const Route = createFileRoute('/(auth)/confirm-email')({
 
 function RouteComponent() {
 	return (
-		<FormLayout
-			title="Thank you for joining SIMMER!"
-			description="Please check your email to verify your account."
-		>
-			<div className="flex w-full justify-center">
-				<Link className="hover:underline" to="/login">
-					Return to Login Page
-				</Link>
-			</div>
+		<FormLayout showReturnToLogin>
+			<H2>Thank you for joining SIMMER!</H2>
+			<P>Please check your email to verify your account.</P>
 		</FormLayout>
 	);
 }
