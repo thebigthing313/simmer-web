@@ -10,7 +10,7 @@ create type unit_type as enum (
 
 create type unit_system as enum (
     'si',
-    'metric',
+    'imperial',
     'us_customary'
 );
 
