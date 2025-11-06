@@ -27,6 +27,8 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 interface PhoneInputProps {
+	id: string;
+	name: string;
 	value?: PhoneNumber;
 	onChange?: (value: PhoneNumber | undefined) => void;
 	className?: string;
@@ -45,7 +47,9 @@ function getCountryCode(): CountryCode {
 }
 
 export function PhoneInput({
+	id,
 	value,
+	name,
 	onChange,
 	className,
 	showExt = true,
@@ -103,7 +107,7 @@ export function PhoneInput({
 
 	return (
 		<div className={cn('flex gap-2', className)}>
-			<ButtonGroup>
+			<ButtonGroup className={showExt ? 'w-3/4' : 'w-full	'}>
 				<FlagButton onSelect={setCountryCode} currentCode={countryCode} />
 				<Input
 					type="text"
@@ -114,9 +118,11 @@ export function PhoneInput({
 				/>
 			</ButtonGroup>
 			{showExt && (
-				<InputGroup className="w-[120px]">
+				<InputGroup className="w-1/4">
 					<InputGroupAddon align="inline-start">ext.</InputGroupAddon>
 					<InputGroupInput
+						id={id}
+						name={name}
 						type="text"
 						value={ext}
 						onChange={handleExtChange}
