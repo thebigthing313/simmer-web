@@ -5,6 +5,8 @@ create table lookup_states_us (
     created_at timestamp with time zone default now() not null
 );
 
+alter table lookup_states_us enable row level security;
+
 create policy "select: anyone"
 on lookup_states_us
 for select

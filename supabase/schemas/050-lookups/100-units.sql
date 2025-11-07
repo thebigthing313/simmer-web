@@ -19,7 +19,7 @@ create table lookup_units (
     unit_name text not null unique,
     abbreviation text not null unique,
     unit_type unit_type not null,
-    unit_system unit_system not null,
+    unit_system unit_system,
 
     -- This column holds the ID of the Base Unit for this type (e.g., 'Gram' for 'Kilogram')
     base_unit_id uuid references lookup_units(id),
@@ -44,6 +44,8 @@ create table lookup_units (
         (base_unit_id = id and conversion_factor = 1.0) or base_unit_id != id
     )
 );
+
+alter table lookup_units enable row level security;
 
 create policy "select: anyone"
 on lookup_units
