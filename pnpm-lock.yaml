@@ -104,15 +104,12 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.0.6
         version: 4.1.16(vite@7.1.12(@types/node@22.18.13)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6))
-      '@tanstack/db':
-        specifier: ^0.4.16
-        version: 0.4.18(typescript@5.9.3)
       '@tanstack/match-sorter-utils':
         specifier: ^8.19.4
         version: 8.19.4
       '@tanstack/query-db-collection':
         specifier: ^0.3.0
-        version: 0.3.0(@tanstack/db@0.4.18(typescript@5.9.3))(@tanstack/query-core@5.90.6)(typescript@5.9.3)
+        version: 0.3.0(@tanstack/db@0.4.20(typescript@5.9.3))(@tanstack/query-core@5.90.6)(typescript@5.9.3)
       '@tanstack/react-db':
         specifier: ^0.1.43
         version: 0.1.43(react@19.2.0)(typescript@5.9.3)
@@ -191,6 +188,9 @@ importers:
       react-dom:
         specifier: ^19.2.0
         version: 19.2.0(react@19.2.0)
+      react-error-boundary:
+        specifier: ^6.0.0
+        version: 6.0.0(react@19.2.0)
       react-hook-form:
         specifier: ^7.65.0
         version: 7.66.0(react@19.2.0)
@@ -1712,11 +1712,6 @@ packages:
     peerDependencies:
       typescript: '>=4.7'
 
-  '@tanstack/db@0.4.18':
-    resolution: {integrity: sha512-Fe53ZP7Hpqh34ClfsUn6KK5KjNMHamSu9a+JhbcS9Bc12exvj2Ul6gYjKLk5x94GybeQz6hCs+3hQM6VZgvTlw==}
-    peerDependencies:
-      typescript: '>=4.7'
-
   '@tanstack/db@0.4.20':
     resolution: {integrity: sha512-D5cCW9O+bjaIiLEY00djhEUnsdw7ARdezXr917jt95VNkQ8RX816oBoAsWAgphMcIoNvpB2nI1ccyLSCrztW6A==}
     peerDependencies:
@@ -2947,6 +2942,11 @@ packages:
     resolution: {integrity: sha512-UlbRu4cAiGaIewkPyiRGJk0imDN2T3JjieT6spoL2UeSf5od4n5LB/mQ4ejmxhCFT1tYe8IvaFulzynWovsEFQ==}
     peerDependencies:
       react: ^19.2.0
+
+  react-error-boundary@6.0.0:
+    resolution: {integrity: sha512-gdlJjD7NWr0IfkPlaREN2d9uUZUlksrfOx7SX62VRerwXbMY6ftGCIZua1VG1aXFNOimhISsTq+Owp725b9SiA==}
+    peerDependencies:
+      react: '>=16.13.1'
 
   react-hook-form@7.66.0:
     resolution: {integrity: sha512-xXBqsWGKrY46ZqaHDo+ZUYiMUgi8suYu5kdrS20EG8KiL7VRQitEbNjm+UcrDYrNi1YLyfpmAeGjCZYXLT9YBw==}
@@ -4944,13 +4944,6 @@ snapshots:
       sorted-btree: 1.8.1
       typescript: 5.9.3
 
-  '@tanstack/db@0.4.18(typescript@5.9.3)':
-    dependencies:
-      '@standard-schema/spec': 1.0.0
-      '@tanstack/db-ivm': 0.1.12(typescript@5.9.3)
-      '@tanstack/pacer': 0.1.0
-      typescript: 5.9.3
-
   '@tanstack/db@0.4.20(typescript@5.9.3)':
     dependencies:
       '@standard-schema/spec': 1.0.0
@@ -5030,10 +5023,10 @@ snapshots:
 
   '@tanstack/query-core@5.90.6': {}
 
-  '@tanstack/query-db-collection@0.3.0(@tanstack/db@0.4.18(typescript@5.9.3))(@tanstack/query-core@5.90.6)(typescript@5.9.3)':
+  '@tanstack/query-db-collection@0.3.0(@tanstack/db@0.4.20(typescript@5.9.3))(@tanstack/query-core@5.90.6)(typescript@5.9.3)':
     dependencies:
       '@standard-schema/spec': 1.0.0
-      '@tanstack/db': 0.4.18(typescript@5.9.3)
+      '@tanstack/db': 0.4.20(typescript@5.9.3)
       '@tanstack/query-core': 5.90.6
       typescript: 5.9.3
 
@@ -6317,6 +6310,11 @@ snapshots:
     dependencies:
       react: 19.2.0
       scheduler: 0.27.0
+
+  react-error-boundary@6.0.0(react@19.2.0):
+    dependencies:
+      '@babel/runtime': 7.28.4
+      react: 19.2.0
 
   react-hook-form@7.66.0(react@19.2.0):
     dependencies:
