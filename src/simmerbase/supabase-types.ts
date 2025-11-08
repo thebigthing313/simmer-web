@@ -38,9 +38,7 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string | null
-          deleted_at: string | null
-          deleted_by: string | null
-          expiration_date: string | null
+          expiration_date: string
           group_id: string
           id: string
           is_accepted: boolean
@@ -52,9 +50,7 @@ export type Database = {
         Insert: {
           created_at?: string
           created_by?: string | null
-          deleted_at?: string | null
-          deleted_by?: string | null
-          expiration_date?: string | null
+          expiration_date: string
           group_id: string
           id?: string
           is_accepted?: boolean
@@ -66,9 +62,7 @@ export type Database = {
         Update: {
           created_at?: string
           created_by?: string | null
-          deleted_at?: string | null
-          deleted_by?: string | null
-          expiration_date?: string | null
+          expiration_date?: string
           group_id?: string
           id?: string
           is_accepted?: boolean
@@ -91,8 +85,6 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string | null
-          deleted_at: string | null
-          deleted_by: string | null
           group_id: string
           id: string
           is_active: boolean
@@ -104,8 +96,6 @@ export type Database = {
         Insert: {
           created_at?: string
           created_by?: string | null
-          deleted_at?: string | null
-          deleted_by?: string | null
           group_id: string
           id?: string
           is_active?: boolean
@@ -117,8 +107,6 @@ export type Database = {
         Update: {
           created_at?: string
           created_by?: string | null
-          deleted_at?: string | null
-          deleted_by?: string | null
           group_id?: string
           id?: string
           is_active?: boolean
@@ -149,8 +137,6 @@ export type Database = {
           address: string
           created_at: string
           created_by: string | null
-          deleted_at: string | null
-          deleted_by: string | null
           fax: string | null
           group_name: string
           id: string
@@ -165,8 +151,6 @@ export type Database = {
           address: string
           created_at?: string
           created_by?: string | null
-          deleted_at?: string | null
-          deleted_by?: string | null
           fax?: string | null
           group_name: string
           id?: string
@@ -181,8 +165,6 @@ export type Database = {
           address?: string
           created_at?: string
           created_by?: string | null
-          deleted_at?: string | null
-          deleted_by?: string | null
           fax?: string | null
           group_name?: string
           id?: string
@@ -195,14 +177,103 @@ export type Database = {
         }
         Relationships: []
       }
+      locations: {
+        Row: {
+          address: string | null
+          created_at: string
+          created_by: string | null
+          geom: unknown
+          group_id: string
+          id: string
+          location_name: string
+          notes: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          created_by?: string | null
+          geom: unknown
+          group_id: string
+          id?: string
+          location_name: string
+          notes?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          created_by?: string | null
+          geom?: unknown
+          group_id?: string
+          id?: string
+          location_name?: string
+          notes?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "locations_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lookup_units: {
+        Row: {
+          abbreviation: string
+          base_unit_id: string | null
+          conversion_factor: number
+          conversion_offset: number
+          created_at: string
+          id: string
+          unit_name: string
+          unit_system: Database["public"]["Enums"]["unit_system"] | null
+          unit_type: Database["public"]["Enums"]["unit_type"]
+        }
+        Insert: {
+          abbreviation: string
+          base_unit_id?: string | null
+          conversion_factor: number
+          conversion_offset?: number
+          created_at?: string
+          id?: string
+          unit_name: string
+          unit_system?: Database["public"]["Enums"]["unit_system"] | null
+          unit_type: Database["public"]["Enums"]["unit_type"]
+        }
+        Update: {
+          abbreviation?: string
+          base_unit_id?: string | null
+          conversion_factor?: number
+          conversion_offset?: number
+          created_at?: string
+          id?: string
+          unit_name?: string
+          unit_system?: Database["public"]["Enums"]["unit_system"] | null
+          unit_type?: Database["public"]["Enums"]["unit_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lookup_units_base_unit_id_fkey"
+            columns: ["base_unit_id"]
+            isOneToOne: false
+            referencedRelation: "lookup_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           bio: string | null
           created_at: string
           created_by: string | null
-          deleted_at: string | null
-          deleted_by: string | null
           first_name: string
           id: string
           last_name: string
@@ -215,8 +286,6 @@ export type Database = {
           bio?: string | null
           created_at?: string
           created_by?: string | null
-          deleted_at?: string | null
-          deleted_by?: string | null
           first_name: string
           id?: string
           last_name: string
@@ -229,8 +298,6 @@ export type Database = {
           bio?: string | null
           created_at?: string
           created_by?: string | null
-          deleted_at?: string | null
-          deleted_by?: string | null
           first_name?: string
           id?: string
           last_name?: string
@@ -244,8 +311,6 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string | null
-          deleted_at: string | null
-          deleted_by: string | null
           geom: unknown
           group_id: string | null
           id: string
@@ -257,8 +322,6 @@ export type Database = {
         Insert: {
           created_at?: string
           created_by?: string | null
-          deleted_at?: string | null
-          deleted_by?: string | null
           geom: unknown
           group_id?: string | null
           id?: string
@@ -270,8 +333,6 @@ export type Database = {
         Update: {
           created_at?: string
           created_by?: string | null
-          deleted_at?: string | null
-          deleted_by?: string | null
           geom?: unknown
           group_id?: string | null
           id?: string
@@ -297,45 +358,6 @@ export type Database = {
           },
         ]
       }
-      user_settings: {
-        Row: {
-          created_at: string
-          created_by: string | null
-          deleted_at: string | null
-          deleted_by: string | null
-          id: string
-          setting_name: Database["public"]["Enums"]["setting_names"]
-          setting_value: string | null
-          updated_at: string | null
-          updated_by: string | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          deleted_by?: string | null
-          id?: string
-          setting_name: Database["public"]["Enums"]["setting_names"]
-          setting_value?: string | null
-          updated_at?: string | null
-          updated_by?: string | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          deleted_by?: string | null
-          id?: string
-          setting_name?: Database["public"]["Enums"]["setting_names"]
-          setting_value?: string | null
-          updated_at?: string | null
-          updated_by?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
@@ -346,10 +368,6 @@ export type Database = {
         Args: { p_id: string; p_type: string }
         Returns: boolean
       }
-      soft_delete_record: {
-        Args: { p_record_ids: string[]; p_table_name: string }
-        Returns: undefined
-      }
       user_has_group_role: {
         Args: { group_id: string; group_role: string }
         Returns: boolean
@@ -358,7 +376,15 @@ export type Database = {
     }
     Enums: {
       group_role: "owner" | "admin" | "manager" | "collector" | "member"
-      setting_names: "user_default_group_id"
+      unit_system: "si" | "imperial" | "us_customary"
+      unit_type:
+        | "weight"
+        | "distance"
+        | "area"
+        | "volume"
+        | "temperature"
+        | "time"
+        | "count"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -490,7 +516,16 @@ export const Constants = {
   public: {
     Enums: {
       group_role: ["owner", "admin", "manager", "collector", "member"],
-      setting_names: ["user_default_group_id"],
+      unit_system: ["si", "imperial", "us_customary"],
+      unit_type: [
+        "weight",
+        "distance",
+        "area",
+        "volume",
+        "temperature",
+        "time",
+        "count",
+      ],
     },
   },
 } as const
