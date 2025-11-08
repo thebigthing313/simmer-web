@@ -20,7 +20,6 @@ export function SubmitFormButton({
 					variant="default"
 					aria-busy={isSubmitting}
 					disabled={isSubmitting}
-					onClick={form.handleSubmit}
 					{...props}
 				>
 					<span>
