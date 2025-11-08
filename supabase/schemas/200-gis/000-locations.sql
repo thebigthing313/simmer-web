@@ -8,7 +8,7 @@ create table public.locations (
     created_at timestamptz not null default now(),
     updated_at timestamptz not null default now(),
     created_by uuid references auth.users (id) on delete set null,
-    updated_by uuid references auth.users (id) on delete set null,
+    updated_by uuid references auth.users (id) on delete set null
 );
 
 create trigger handle_created_trigger before insert on public.locations for each row

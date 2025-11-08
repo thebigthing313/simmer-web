@@ -10,7 +10,7 @@ create table public.groups (
     "created_at" timestamp with time zone not null default now(),
     "created_by" uuid references auth.users (id) on delete restrict,
     "updated_at" timestamp with time zone,
-    "updated_by" uuid references auth.users (id) on delete restrict,
+    "updated_by" uuid references auth.users (id) on delete restrict
 );
 
 create trigger handle_updated_trigger before

@@ -6,7 +6,7 @@ create table if not exists simmer.deleted_data (
     data jsonb not null
 );
 
-create function if not exists simmer.soft_delete()
+create or replace function simmer.soft_delete()
 returns trigger
 set search_path = ''
 security definer
