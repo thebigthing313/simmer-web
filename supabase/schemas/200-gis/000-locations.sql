@@ -1,24 +1,24 @@
-create table if not exists public.regions (
+create table public.locations (
     id uuid primary key default gen_random_uuid(),
-    group_id uuid references public.groups (id) on delete cascade,
-    region_name text not null,
-    geom geometry (MultiPolygon, 4326) not null,
-    parent_id uuid references public.regions (id) on delete set null,
+    group_id uuid references groups(id) not null,
+    location_name text not null,
+    address text,
+    geom geometry(Point, 4326) not null,
+    notes text,
     created_at timestamptz not null default now(),
     updated_at timestamptz not null default now(),
     created_by uuid references auth.users (id) on delete set null,
     updated_by uuid references auth.users (id) on delete set null,
-    constraint regions_parent_check check (id<>parent_id)
 );
 
-create trigger handle_created_trigger before insert on public.regions for each row
+create trigger handle_created_trigger before insert on public.locations for each row
 execute function simmer.set_created_by ();
 
 create trigger handle_updated_trigger before
-update on public.regions for each row when (old.* is distinct from new.*)
+update on public.locations for each row when (old.* is distinct from new.*)
 execute function public.set_updated_record_fields ();
 
 create trigger soft_delete_trigger
-before delete on public.regions
+before delete on public.locations
 for each row
 execute function simmer.soft_delete();

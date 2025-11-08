@@ -9,8 +9,6 @@ create table if not exists public.profiles (
     "created_by" uuid references auth.users (id) on delete restrict,
     "updated_at" timestamp with time zone,
     "updated_by" uuid references auth.users (id) on delete restrict,
-    "deleted_at" timestamp with time zone,
-    "deleted_by" uuid references auth.users (id) on delete restrict,
     unique (user_id)
 );
 
@@ -69,3 +67,8 @@ or
 update
 or delete on public.profiles for each row
 execute function simmer.profile_to_app_metadata ();
+
+create trigger soft_delete_trigger
+before delete on public.profiles
+for each row
+execute function simmer.soft_delete();

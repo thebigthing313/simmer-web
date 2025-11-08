@@ -1,4 +1,4 @@
-create type unit_type as enum (
+create type public.unit_type as enum (
     'weight',
     'distance',
     'area',
@@ -8,13 +8,13 @@ create type unit_type as enum (
     'count'
 );
 
-create type unit_system as enum (
+create type public.unit_system as enum (
     'si',
     'imperial',
     'us_customary'
 );
 
-create table lookup_units (
+create table public.lookup_units (
     id uuid primary key default gen_random_uuid(),
     unit_name text not null unique,
     abbreviation text not null unique,
@@ -22,7 +22,7 @@ create table lookup_units (
     unit_system unit_system,
 
     -- This column holds the ID of the Base Unit for this type (e.g., 'Gram' for 'Kilogram')
-    base_unit_id uuid references lookup_units(id),
+    base_unit_id uuid references public.lookup_units(id),
 
     -- The factor to multiply by to convert *to* the base unit
     -- Example: For 'Kilogram', factor is 1000. For 'Ounce', factor is 0.0283495 (to kg)
@@ -45,29 +45,34 @@ create table lookup_units (
     )
 );
 
-alter table lookup_units enable row level security;
+alter table public.lookup_units enable row level security;
 
 create policy "select: anyone"
-on lookup_units
+on public.lookup_units
 for select
 to public
 using (true);
 
 create policy "insert: none"
-on lookup_units
+on public.lookup_units
 for insert
 to public
 with check (false);
 
 create policy "update: none"
-on lookup_units
+on public.lookup_units
 for update
 to public
 using (false)
 with check (false);
 
 create policy "delete: none"
-on lookup_units
+on public.lookup_units
 for delete
 to public
 using (false);
+
+create trigger soft_delete_trigger
+before delete on public.lookup_units
+for each row
+execute function simmer.soft_delete();

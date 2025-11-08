@@ -8,15 +8,13 @@ create type public.group_role as enum(
 
 create table public.group_profiles (
     id uuid not null default gen_random_uuid() primary key,
-    group_id uuid not null references public.groups (id) on delete cascade,
-    profile_id uuid not null references public.profiles (id) on delete cascade,
+    group_id uuid not null references public.groups (id) on delete restrict,
+    profile_id uuid not null references public.profiles (id) on delete restrict,
     role public.group_role not null,
     created_at timestamp with time zone not null default now(),
-    created_by uuid references auth.users (id) on delete restrict,
+    created_by uuid references auth.users (id) on delete set null,
     updated_at timestamp with time zone,
-    updated_by uuid references auth.users (id) on delete restrict,
-    deleted_at timestamp with time zone,
-    deleted_by uuid references auth.users (id) on delete restrict,
+    updated_by uuid references auth.users (id) on delete set null,
     is_active boolean not null default true,
     unique (group_id, profile_id, role)
 );
@@ -116,3 +114,8 @@ or
 update
 or delete on public.group_profiles for each row
 execute function simmer.group_role_to_app_metadata ();
+
+create trigger soft_delete_trigger
+before delete on public.group_profiles
+for each row
+execute function simmer.soft_delete();

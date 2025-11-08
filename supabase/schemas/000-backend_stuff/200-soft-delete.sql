@@ -1,50 +1,20 @@
-create or replace function public.soft_delete_record (p_record_ids uuid[], p_table_name text) returns void language plpgsql
-set
-    search_path = '' security invoker as $$
-    declare
-        v_table_exists boolean;
-        v_has_deleted_columns boolean;
-        v_record_count integer;
-    begin
-        -- Step 1: Verify the table exists
-        select exists (
-            select 1
-            from information_schema.tables
-            where table_schema = 'public' and table_name = p_table_name
-        ) into v_table_exists;
+create table if not exists simmer.deleted_data (
+    id uuid primary key default gen_random_uuid(),
+    deleted_at timestamptz not null default now(),
+    original_table text not null,
+    original_id uuid not null,
+    data jsonb not null
+);
 
-        if not v_table_exists then
-            raise exception 'Table "%" does not exist in the "public" schema', p_table_name;
-        end if;
-
-        -- Step 2: Verify the table has "deleted_at" and "deleted_by" columns
-        select exists (
-            select 1
-            from information_schema.columns
-            where table_schema = 'public' and table_name = p_table_name
-            and column_name in ('deleted_at', 'deleted_by')
-            group by table_name
-            having count(*) = 2
-        ) into v_has_deleted_columns;
-
-        if not v_has_deleted_columns then
-            raise exception 'Table "%" does not have both "deleted_at" and "deleted_by" columns', p_table_name;
-        end if;
-
-        -- Step 3: Verify all records exist
-        execute format(
-            'select count(*) from public.%I where id = any($1)',
-            p_table_name
-        ) using p_record_ids into v_record_count;
-
-        if v_record_count != array_length(p_record_ids, 1) then
-            raise exception 'One or more records do not exist in table "%"', p_table_name;
-        end if;
-
-        -- Step 4: Perform the soft delete
-        execute format(
-            'update public.%I set deleted_at = now(), deleted_by = (select auth.uid()) where id = any($1)',
-            p_table_name
-        ) using p_record_ids;
-    end;
+create function if not exists simmer.soft_delete()
+returns trigger
+set search_path = ''
+security definer
+language plpgsql
+as $$
+  begin
+    insert into simmer.deleted_data (original_table, original_id, data)
+    values (TG_TABLE_NAME, OLD.id, row_to_json(OLD)::jsonb);
+    return null;
+  end;
 $$;

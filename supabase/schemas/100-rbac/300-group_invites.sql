@@ -1,16 +1,14 @@
 create table public.group_invites (
     "id" uuid not null default gen_random_uuid() primary key,
-    "group_id" uuid not null references public.groups (id) on delete cascade,
-    "user_id" uuid not null references auth.users (id) on delete cascade,
+    "group_id" uuid not null references public.groups (id) on delete restrict,
+    "user_id" uuid not null references auth.users (id) on delete restrict,
     "role" public.group_role not null,
-    "expiration_date" timestamp with time zone,
+    "expiration_date" timestamp with time zone not null,
     "is_accepted" boolean not null default false,
     "created_at" timestamp with time zone not null default now(),
-    "created_by" uuid references auth.users (id) on delete restrict,
+    "created_by" uuid references auth.users (id) on delete set null,
     "updated_at" timestamp with time zone,
-    "updated_by" uuid references auth.users (id) on delete restrict,
-    "deleted_at" timestamp with time zone,
-    "deleted_by" uuid references auth.users (id) on delete restrict
+    "updated_by" uuid references auth.users (id) on delete set null,
 );
 
 -- prevent multiple invites for the same user in the same group
@@ -53,3 +51,8 @@ update on public.group_invites for each row when (
     and new.is_accepted=true
 )
 execute function simmer.handle_group_invite_accept ();
+
+create trigger soft_delete_trigger
+before delete on public.group_invites
+for each row
+execute function simmer.soft_delete();
