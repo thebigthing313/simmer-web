@@ -16,7 +16,7 @@ export function SubmitFormButton({
 			{(isSubmitting) => (
 				<Button
 					ref={ref}
-					type="button"
+					type="submit"
 					variant="default"
 					aria-busy={isSubmitting}
 					disabled={isSubmitting}
