@@ -1,24 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router';
-import type React from 'react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Button } from '@/components/ui/button';
+import { PhotoUploadDialog } from '@/components/photo-upload-dialog';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from '@/components/ui/dialog';
 import {
 	FieldDescription,
 	FieldGroup,
 	FieldLegend,
 	FieldSet,
 } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
 import { useAppForm } from '@/forms/form-context';
 import { NameFieldGroupFields } from '@/forms/name-field-group';
 import { buildChangeSet } from '@/lib/utils';
@@ -161,45 +151,5 @@ function RouteComponent() {
 				onSubmit={handleAvatarSelect}
 			/>
 		</Card>
-	);
-}
-
-interface PhotoUploadDialogProps {
-	onSubmit: (file: File) => Promise<void>;
-}
-
-function PhotoUploadDialog({
-	open,
-	onOpenChange,
-	onSubmit,
-}: PhotoUploadDialogProps & React.ComponentPropsWithoutRef<typeof Dialog>) {
-	const [file, setFile] = useState<File | null>(null);
-
-	return (
-		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Upload Photo</DialogTitle>
-					<DialogDescription>
-						Please note that the image will be compressed to reduce file size.
-					</DialogDescription>
-				</DialogHeader>
-				<Input
-					type="file"
-					onChange={(e) => setFile(e.target.files?.[0] || null)}
-				/>
-				<DialogFooter>
-					<Button
-						onClick={() => {
-							if (file) {
-								onSubmit(file);
-							}
-						}}
-					>
-						Upload
-					</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
 	);
 }
