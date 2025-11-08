@@ -1,5 +1,5 @@
 // Auto-generated schema file for regions table
-// Generated on: 2025-11-01T22:19:55.398Z
+// Generated on: 2025-11-08T04:29:50.088Z
 //
 // IMPORTANT: Automatic preprocessing is enabled for date fields:
 // - Fields ending in '_at' (timestamps): ISO strings are automatically converted to Date objects
@@ -14,8 +14,6 @@ import { GeoJSONSchema } from './fields';
 export const ZodRegionsRow = z.object({
 	created_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).optional(),
 	created_by: z.uuid().nullable().optional(),
-	deleted_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).nullable().optional(),
-	deleted_by: z.uuid().nullable().optional(),
 	geom: GeoJSONSchema,
 	group_id: z.uuid().nullable(),
 	id: z.uuid(),
@@ -39,8 +37,6 @@ export const ZodRegionsUpdate = ZodRegionsInsert.partial();
 export const ZodRegionsRowToDb = z.object({
 	created_at: z.preprocess((val) => val instanceof Date ? val.toISOString() : val, z.string()).optional(),
 	created_by: z.uuid().nullable().optional(),
-	deleted_at: z.preprocess((val) => val instanceof Date ? val.toISOString() : val, z.string()).nullable().optional(),
-	deleted_by: z.uuid().nullable().optional(),
 	geom: GeoJSONSchema,
 	group_id: z.uuid().nullable(),
 	id: z.uuid(),

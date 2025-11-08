@@ -1,5 +1,5 @@
 // Auto-generated schema file for group_invites table
-// Generated on: 2025-11-01T22:19:43.077Z
+// Generated on: 2025-11-08T04:29:43.951Z
 //
 // IMPORTANT: Automatic preprocessing is enabled for date fields:
 // - Fields ending in '_at' (timestamps): ISO strings are automatically converted to Date objects
@@ -13,9 +13,7 @@ import z from 'zod';
 export const ZodGroupInvitesRow = z.object({
 	created_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).optional(),
 	created_by: z.uuid().nullable().optional(),
-	deleted_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).nullable().optional(),
-	deleted_by: z.uuid().nullable().optional(),
-	expiration_date: z.preprocess((val) => typeof val === "string" ? new Date(val.includes("T") ? val : `${val}T00:00:00Z`) : val, z.date()).nullable(),
+	expiration_date: z.preprocess((val) => typeof val === "string" ? new Date(val.includes("T") ? val : `${val}T00:00:00Z`) : val, z.date()),
 	group_id: z.uuid(),
 	id: z.uuid(),
 	is_accepted: z.boolean(),
@@ -26,7 +24,7 @@ export const ZodGroupInvitesRow = z.object({
 });
 
 export const ZodGroupInvitesInsert = z.object({
-	expiration_date: z.preprocess((val) => typeof val === "string" ? new Date(val.includes("T") ? val : `${val}T00:00:00Z`) : val, z.date()).nullable().optional(),
+	expiration_date: z.preprocess((val) => typeof val === "string" ? new Date(val.includes("T") ? val : `${val}T00:00:00Z`) : val, z.date()),
 	group_id: z.uuid(),
 	id: z.uuid().optional(),
 	is_accepted: z.boolean().optional(),
@@ -40,9 +38,7 @@ export const ZodGroupInvitesUpdate = ZodGroupInvitesInsert.partial();
 export const ZodGroupInvitesRowToDb = z.object({
 	created_at: z.preprocess((val) => val instanceof Date ? val.toISOString() : val, z.string()).optional(),
 	created_by: z.uuid().nullable().optional(),
-	deleted_at: z.preprocess((val) => val instanceof Date ? val.toISOString() : val, z.string()).nullable().optional(),
-	deleted_by: z.uuid().nullable().optional(),
-	expiration_date: z.preprocess((val) => val instanceof Date ? val.toISOString().split("T")[0] : val, z.string()).nullable(),
+	expiration_date: z.preprocess((val) => val instanceof Date ? val.toISOString().split("T")[0] : val, z.string()),
 	group_id: z.uuid(),
 	id: z.uuid(),
 	is_accepted: z.boolean(),
@@ -53,7 +49,7 @@ export const ZodGroupInvitesRowToDb = z.object({
 });
 
 export const ZodGroupInvitesInsertToDb = z.object({
-	expiration_date: z.preprocess((val) => val instanceof Date ? val.toISOString().split("T")[0] : val, z.string()).nullable().optional(),
+	expiration_date: z.preprocess((val) => val instanceof Date ? val.toISOString().split("T")[0] : val, z.string()),
 	group_id: z.uuid(),
 	id: z.uuid().optional(),
 	is_accepted: z.boolean().optional(),

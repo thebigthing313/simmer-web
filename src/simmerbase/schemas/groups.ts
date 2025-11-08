@@ -1,5 +1,5 @@
 // Auto-generated schema file for groups table
-// Generated on: 2025-11-04T17:00:24.231Z
+// Generated on: 2025-11-08T03:59:03.658Z
 //
 // IMPORTANT: Automatic preprocessing is enabled for date fields:
 // - Fields ending in '_at' (timestamps): ISO strings are automatically converted to Date objects
@@ -15,8 +15,6 @@ export const ZodGroupsRow = z.object({
 	address: z.string(),
 	created_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).optional(),
 	created_by: z.uuid().nullable().optional(),
-	deleted_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).nullable().optional(),
-	deleted_by: z.uuid().nullable().optional(),
 	fax: z.string().nullable(),
 	group_name: z.string(),
 	id: z.uuid(),
@@ -46,8 +44,6 @@ export const ZodGroupsRowToDb = z.object({
 	address: z.string(),
 	created_at: z.preprocess((val) => val instanceof Date ? val.toISOString() : val, z.string()).optional(),
 	created_by: z.uuid().nullable().optional(),
-	deleted_at: z.preprocess((val) => val instanceof Date ? val.toISOString() : val, z.string()).nullable().optional(),
-	deleted_by: z.uuid().nullable().optional(),
 	fax: z.string().nullable(),
 	group_name: z.string(),
 	id: z.uuid(),
