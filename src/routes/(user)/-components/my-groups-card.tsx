@@ -6,6 +6,7 @@ import {
 	Card,
 	CardContent,
 	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
@@ -15,13 +16,10 @@ import {
 	EmptyDescription,
 	EmptyTitle,
 } from '@/components/ui/empty';
-import { Spinner } from '@/components/ui/spinner';
-import { useUserGroups } from '@/simmerbase/db/hooks/use-user-groups';
+import { useGroups } from '@/simmerbase/db/hooks/use-groups';
 
 export function MyGroupsCard() {
-	const { data: groups, isLoading, isError } = useUserGroups();
-	if (isLoading) return <Spinner />;
-	if (isError) return <div>Error loading groups.</div>;
+	const { data: groups } = useGroups({ isActiveMember: true });
 
 	return (
 		<Card>
@@ -56,6 +54,13 @@ export function MyGroupsCard() {
 					<EmptyGroupCardGroup />
 				)}
 			</CardContent>
+			{groups.length > 0 && (
+				<CardFooter>
+					<Button asChild>
+						<Link to="/create-group">Create New Group</Link>
+					</Button>
+				</CardFooter>
+			)}
 		</Card>
 	);
 }
