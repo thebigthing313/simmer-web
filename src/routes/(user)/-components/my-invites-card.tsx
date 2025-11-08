@@ -10,30 +10,19 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import { Empty, EmptyDescription, EmptyTitle } from '@/components/ui/empty';
+import { group_invites } from '@/simmerbase/db/collections/group_invites';
 import { group_profiles } from '@/simmerbase/db/collections/group_profiles';
 import { groups } from '@/simmerbase/db/collections/groups';
-import { useGroupInvites } from '@/simmerbase/db/hooks/use-group-invites';
-import { useGroups } from '@/simmerbase/db/hooks/use-groups';
 import { acceptGroupInvite } from '@/simmerbase/functions/accept-group-invite';
 
 export function MyInvitesCard() {
 	const navigate = useNavigate();
 	const { user_id } = useRouteContext({ from: '/(user)' });
-	const { collection: groups_invited_to } = useGroups({ isInvitedTo: true });
-	const { collection: group_invites } = useGroupInvites();
-
-	async function handleAccept(id: string, slug: string) {
-		await acceptGroupInvite(id);
-		await groups.utils.refetch();
-		await group_profiles.utils.refetch();
-		navigate({ to: '/$groupSlug', params: { groupSlug: slug } });
-	}
-
 	const { data } = useLiveSuspenseQuery(
 		(q) =>
 			q
-				.from({ group_invite: group_invites })
-				.innerJoin({ group: groups_invited_to }, ({ group, group_invite }) =>
+				.from({ group: groups })
+				.innerJoin({ group_invite: group_invites }, ({ group, group_invite }) =>
 					eq(group_invite.group_id, group.id),
 				)
 				.where(({ group_invite }) => eq(group_invite.user_id, user_id))
@@ -41,6 +30,13 @@ export function MyInvitesCard() {
 				.orderBy(({ group }) => group.group_name, 'asc'),
 		[user_id],
 	);
+
+	async function handleAccept(id: string, slug: string) {
+		await acceptGroupInvite(id);
+		await groups.utils.refetch();
+		await group_profiles.utils.refetch();
+		navigate({ to: '/$groupSlug', params: { groupSlug: slug } });
+	}
 
 	return (
 		<Card>
@@ -65,7 +61,7 @@ export function MyInvitesCard() {
 										handleAccept(row.group_invite.id, row.group.short_name)
 									}
 								>
-									<GroupCard group={cardInfo} />
+									<GroupCard {...cardInfo} />
 								</Button>
 							);
 						})

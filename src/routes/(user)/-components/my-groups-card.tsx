@@ -1,3 +1,4 @@
+import { eq, useLiveSuspenseQuery } from '@tanstack/react-db';
 import { Link } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
 import { GroupCard, GroupCardGroup } from '@/components/blocks/group-item';
@@ -16,10 +17,19 @@ import {
 	EmptyDescription,
 	EmptyTitle,
 } from '@/components/ui/empty';
-import { useGroups } from '@/simmerbase/db/hooks/use-groups';
+import { group_profiles } from '@/simmerbase/db/collections/group_profiles';
+import { groups } from '@/simmerbase/db/collections/groups';
 
 export function MyGroupsCard() {
-	const { data: groups } = useGroups({ isActiveMember: true });
+	const { data } = useLiveSuspenseQuery((q) =>
+		q
+			.from({ group: groups })
+			.innerJoin(
+				{ group_profile: group_profiles },
+				({ group, group_profile }) => eq(group.id, group_profile.group_id),
+			)
+			.select(({ group }) => ({ ...group })),
+	);
 
 	return (
 		<Card>
@@ -30,22 +40,23 @@ export function MyGroupsCard() {
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
-				{groups.length > 0 ? (
+				{data.length > 0 ? (
 					<GroupCardGroup key="user-groups">
-						{groups.map((group) => {
+						{data.map((group) => {
 							const cardInfo = {
 								logo_url: group.logo_url ?? undefined,
 								group_name: group.group_name,
 								address: group.address,
 								phone: group.phone,
 							};
+
 							return (
 								<Link
 									key={`link-${group.id}`}
 									to="/$groupSlug"
 									params={{ groupSlug: group.short_name }}
 								>
-									<GroupCard key={`gc-${group.id}`} group={cardInfo} />
+									<GroupCard key={`gc-${group.id}`} {...cardInfo} />
 								</Link>
 							);
 						})}
@@ -54,7 +65,7 @@ export function MyGroupsCard() {
 					<EmptyGroupCardGroup />
 				)}
 			</CardContent>
-			{groups.length > 0 && (
+			{data.length > 0 && (
 				<CardFooter>
 					<Button asChild>
 						<Link to="/create-group">Create New Group</Link>
