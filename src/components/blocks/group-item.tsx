@@ -14,26 +14,24 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
  * Props for the GroupCard component.
  */
 interface GroupCardProps {
-	/** The group data object containing logo, name, address, and phone.*/
-	group: {
-		/** URL of the group's logo (optional). */
-		logo_url?: string;
-		/** Name of the group. */
-		group_name: string;
-		/** Address of the group. */
-		address: string;
-		/** Phone number of the group. */
-		phone: string;
-	};
+	/** URL of the group's logo (optional). */
+	logo_url?: string;
+	/** Name of the group. */
+	group_name: string;
+	/** Address of the group. */
+	address: string;
+	/** Phone number of the group. */
+	phone: string;
 }
 
 export function GroupCard({
-	group,
+	logo_url,
+	group_name,
+	address,
+	phone,
 	className,
 	ref,
 }: GroupCardProps & React.ComponentPropsWithRef<'div'>) {
-	const { logo_url, group_name, address, phone } = group;
-
 	const parsedPhone = parsePhoneNumber(phone, 'US').formatNational();
 
 	return (
