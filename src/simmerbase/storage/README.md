@@ -41,31 +41,6 @@ const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) =>
   }
 };
 ```
-
-#### `updateAvatar(file: File, profileId: string): Promise<string>`
-
-Updates an existing avatar image. Automatically replaces the old file.
-
-**Parameters:**
-- `file`: The new image file
-- `profileId`: The user's profile ID
-
-**Returns:** Full path string (e.g., `'avatars/avatar_123.jpg'`)
-
-**Example:**
-```typescript
-import { updateAvatar } from '@/simmerbase/storage';
-
-const handleAvatarUpdate = async (file: File, userId: string) => {
-  try {
-    const fullPath = await updateAvatar(file, userId);
-    console.log('Avatar updated:', fullPath);
-  } catch (error) {
-    console.error('Update failed:', error);
-  }
-};
-```
-
 ---
 
 ### Group Image Operations
