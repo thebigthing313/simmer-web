@@ -11,14 +11,9 @@ import {
 } from '@/components/ui/field';
 import { useAppForm } from '@/forms/form-context';
 import { NameFieldGroupFields } from '@/forms/name-field-group';
-import { buildChangeSet } from '@/lib/utils';
 import { profiles } from '@/simmerbase/db/collections/profiles';
 import { useProfile } from '@/simmerbase/db/hooks/use-profile';
-import {
-	type ZodProfilesRowType,
-	ZodProfilesUpdate,
-	type ZodProfilesUpdateType,
-} from '@/simmerbase/schemas/profiles';
+import type { ZodProfilesRowType } from '@/simmerbase/schemas/profiles';
 import { uploadAvatar } from '@/simmerbase/storage';
 
 export const Route = createFileRoute('/(user)/profile')({
@@ -63,18 +58,11 @@ function RouteComponent() {
 			if (value === defaultValues) {
 				toast.info('No changes to save.');
 			} else {
-				const changes = ZodProfilesUpdate.parse(
-					buildChangeSet<ZodProfilesUpdateType>(defaultValues, value),
-				);
-
-				// Update using Immer-style mutations (mutate the draft, don't return a new object)
 				profiles.update(profile_id, (draft) => {
-					// Mutate the draft directly for each changed field
-					for (const [key, value] of Object.entries(changes)) {
-						// biome-ignore lint/suspicious/noExplicitAny: Dynamic property assignment
-						(draft as any)[key] = value;
-					}
-					// Don't return anything - Immer tracks the mutations
+					draft.first_name = value.first_name;
+					draft.last_name = value.last_name;
+					draft.bio = value.bio;
+					draft.avatar_url = value.avatar_url;
 				});
 
 				toast.success('Changes saved successfully.');
