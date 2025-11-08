@@ -4,7 +4,6 @@ import {
 	type CountryCode,
 	getCountries,
 	isSupportedCountry,
-	type PhoneNumber,
 	parsePhoneNumber,
 } from 'libphonenumber-js/min';
 import React, { useCallback, useMemo } from 'react';
@@ -29,8 +28,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 interface PhoneInputProps {
 	id: string;
 	name: string;
-	value?: PhoneNumber;
-	onChange?: (value: PhoneNumber | undefined) => void;
+	value?: string;
+	onChange?: (value: string | undefined) => void;
 	className?: string;
 	showExt?: boolean;
 }
@@ -69,8 +68,18 @@ export function PhoneInput({
 
 	React.useEffect(() => {
 		if (value) {
-			setRawPhone(value.nationalNumber);
-			setExt(value.ext || '');
+			try {
+				const parsed = parsePhoneNumber(value);
+				setRawPhone(parsed.nationalNumber);
+				setExt(parsed.ext || '');
+			} catch {
+				const digits = value.replace(/\D/g, '');
+				setRawPhone(digits);
+				setExt('');
+			}
+		} else {
+			setRawPhone('');
+			setExt('');
 		}
 	}, [value]);
 
@@ -97,13 +106,15 @@ export function PhoneInput({
 		try {
 			const fullText = ext ? `${rawPhone};${ext}` : rawPhone;
 			const parsed = parsePhoneNumber(fullText, countryCode);
-			onChange?.(parsed);
 			setIsValid(true);
+			const formatted = parsed.formatInternational();
+			onChange?.(formatted);
 		} catch {
-			onChange?.(undefined);
 			setIsValid(false);
+			const fullString = ext ? `${displayPhone} ext. ${ext}` : displayPhone;
+			onChange?.(fullString);
 		}
-	}, [rawPhone, ext, countryCode, onChange]);
+	}, [rawPhone, ext, countryCode, onChange, displayPhone]);
 
 	return (
 		<div className={cn('flex gap-2', className)}>
