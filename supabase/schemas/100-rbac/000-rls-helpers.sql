@@ -16,7 +16,49 @@ set
       select 1
       from jsonb_array_elements(auth.jwt() -> 'app_metadata' -> 'groups') as group_obj
       where group_obj ->> 'group_id' = group_id::text
-        and group_obj ->> 'role' = group_role
+        and (
+          (case group_obj ->> 'role'
+            when 'owner' then 5
+            when 'admin' then 4
+            when 'manager' then 3
+            when 'collector' then 2
+            when 'lab' then 2
+            when 'member' then 1
+            else 0
+          end) > (
+            case group_role
+              when 'owner' then 5
+              when 'admin' then 4
+              when 'manager' then 3
+              when 'collector' then 2
+              when 'lab' then 2
+              when 'member' then 1
+              else 999
+            end
+          )
+          or (
+            (case group_obj ->> 'role'
+              when 'owner' then 5
+              when 'admin' then 4
+              when 'manager' then 3
+              when 'collector' then 2
+              when 'lab' then 2
+              when 'member' then 1
+              else 0
+            end) = (
+              case group_role
+                when 'owner' then 5
+                when 'admin' then 4
+                when 'manager' then 3
+                when 'collector' then 2
+                when 'lab' then 2
+                when 'member' then 1
+                else 999
+              end
+            )
+            and group_obj ->> 'role' = group_role
+          )
+        )
     ),
     false
   );
