@@ -26,6 +26,7 @@ interface JwtClaims {
 
 export const GroupSchema = z.object({
 	group_id: z.string(),
+	short_name: z.string(),
 	role: z.string(),
 });
 
