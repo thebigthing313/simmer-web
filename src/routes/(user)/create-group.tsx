@@ -9,6 +9,7 @@ import {
 	FieldSet,
 } from '@/components/ui/field';
 import { useAppForm } from '@/forms/form-context';
+import { refreshSession } from '@/simmerbase/auth/refresh-session';
 import { group_profiles } from '@/simmerbase/db/collections/group_profiles';
 import { groups } from '@/simmerbase/db/collections/groups';
 import { validateShortName } from '@/simmerbase/functions/validate-short-name';
@@ -42,8 +43,6 @@ const ShortNameSchema = z
 	});
 
 function RouteComponent() {
-	console.log('Group Collection IsReady:', groups.isReady());
-	console.log('Group Collection State:', groups.state);
 	const navigate = useNavigate();
 	const form = useAppForm({
 		defaultValues: defaultValues,
@@ -57,6 +56,7 @@ function RouteComponent() {
 				await tx.isPersisted.promise;
 				await groups.utils.refetch();
 				await group_profiles.utils.refetch();
+				await refreshSession();
 				navigate({
 					to: '/$groupSlug',
 					params: { groupSlug: insertValue.short_name },
@@ -113,11 +113,11 @@ function RouteComponent() {
 							</form.AppField>
 							<form.AppField name="fax">
 								{(field) => <field.PhoneField label="Fax" showExt={false} />}
+							</form.AppField>{' '}
+							<form.AppField name="website_url">
+								{(field) => <field.TextField label="Website URL" />}
 							</form.AppField>
 						</FieldGroup>
-						<form.AppField name="website_url">
-							{(field) => <field.TextField label="Website URL" />}
-						</form.AppField>
 					</FieldSet>
 				</CardContent>
 				<CardFooter className="flex justify-end gap-2 mt-4">
