@@ -3,6 +3,7 @@ create type public.group_role as enum(
     'admin',
     'manager',
     'collector',
+    'lab',
     'member'
 );
 
@@ -36,6 +37,7 @@ set
         v_user_id uuid;
         v_profile_id uuid;
         v_group_id text;
+        v_short_name text;
         v_role text;
     begin
         -- Use NEW for insert/update, OLD for delete
@@ -48,6 +50,9 @@ set
             v_group_id := NEW.group_id::text;
             v_role := NEW.role::text;
         end if;
+
+        -- Fetch short_name from groups table
+        select short_name into v_short_name from public.groups where id = v_group_id::uuid;
 
         -- Resolve profile -> user mapping
         select user_id
@@ -73,11 +78,11 @@ set
         -- Extract or initialize the groups array
         v_groups := coalesce(v_app_meta->'groups', '[]'::jsonb);
 
-        -- Remove any existing entry for this group_id
+        -- Remove any existing entry for this short_name
         v_groups := (
             select jsonb_agg(elem)
             from jsonb_array_elements(v_groups) elem
-            where elem->>'group_id' != v_group_id
+            where elem->>'short_name' != v_short_name
         );
         if v_groups is null then
             v_groups := '[]'::jsonb;
@@ -87,6 +92,7 @@ set
         if TG_OP != 'DELETE' then
             v_group_obj := jsonb_build_object(
                 'group_id', v_group_id,
+                'short_name', v_short_name,
                 'role', v_role
             );
             v_groups := v_groups || v_group_obj;

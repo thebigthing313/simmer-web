@@ -1,7 +1,7 @@
 create table public.group_invites (
     "id" uuid not null default gen_random_uuid() primary key,
     "group_id" uuid not null references public.groups (id) on delete restrict,
-    "user_id" uuid not null references auth.users (id) on delete restrict,
+    "user_email" text not null,
     "role" public.group_role not null,
     "expiration_date" timestamp with time zone not null,
     "is_accepted" boolean not null default false,
@@ -12,8 +12,7 @@ create table public.group_invites (
 );
 
 -- prevent multiple invites for the same user in the same group
-create unique index on public.group_invites (group_id, user_id);
-
+create unique index on public.group_invites (group_id, user_email);
 create trigger handle_created_trigger before insert on public.group_invites for each row
 execute function simmer.set_created_by ();
 
@@ -32,7 +31,7 @@ begin
             insert into public.group_profiles (group_id, profile_id, role)
             select NEW.group_id, p.id, NEW.role
             from public.profiles p
-            where p.user_id = NEW.user_id
+            where p.user_id = auth.uid()
             and not exists (
                 select 1 from public.group_profiles gp
                 where gp.group_id = NEW.group_id and gp.profile_id = p.id

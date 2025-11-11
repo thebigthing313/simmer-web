@@ -5,7 +5,7 @@ on public.group_invites
 for select
 to authenticated
 using (
-    (user_id=(select auth.uid ()))
+    (user_email=(select auth.email ()))
     or
     (public.user_has_group_role (group_id, 'owner'))
 );
@@ -25,14 +25,14 @@ to authenticated
 using (
     public.user_has_group_role (group_id, 'owner')
     or
-    user_id=(select auth.uid ())
+    (user_email=(select auth.email ()))
 )
     
 with check (
     -- permit updates where the new state is NOT accepting the invite,
     -- or the requester is the invitee (they may accept)
     (is_accepted is not true)
-    or (user_id=(select auth.uid ()))
+    or (user_email=(select auth.email ()))
 );
 
 create policy "delete: none"
@@ -40,7 +40,7 @@ on public.group_invites
 for delete
 to authenticated
 using (
-    (user_id = (select auth.uid ()) or public.user_has_group_role (group_id, 'owner'))
+    ((user_email=(select auth.email ())) or public.user_has_group_role (group_id, 'owner'))
     and
     is_accepted = false
 );

@@ -14,7 +14,7 @@ using (
         where
             gi.group_id=groups.id
             and
-            gi.user_id=(select auth.uid ())
+            gi.user_email=(select auth.email ())
             and
             gi.is_accepted=false
             and
