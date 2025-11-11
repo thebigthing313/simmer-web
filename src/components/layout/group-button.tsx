@@ -1,3 +1,4 @@
+import { getSupabaseUrl } from '@/simmerbase/storage/get-supabase-url';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../ui/sidebar';
 
 interface GroupButtonProps {
@@ -13,6 +14,7 @@ export function GroupButton({
 	logo_url,
 	onClick,
 }: GroupButtonProps) {
+	const imageSrc = !logo_url ? undefined : getSupabaseUrl(logo_url);
 	return (
 		<SidebarMenu>
 			<SidebarMenuItem>
@@ -21,9 +23,9 @@ export function GroupButton({
 					className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 					onClick={onClick}
 				>
-					<div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+					<div className="bg-background text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
 						<img
-							src={logo_url ?? '/simmer-favicon.svg'}
+							src={imageSrc ?? '/simmer-favicon.svg'}
 							alt={`${name ?? 'simmer'} logo`}
 							className="size-8"
 						/>
