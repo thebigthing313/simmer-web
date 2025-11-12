@@ -1,5 +1,5 @@
 import { eq, useLiveSuspenseQuery } from '@tanstack/react-db';
-import { Link } from '@tanstack/react-router';
+import { Link, useRouteContext } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
 import { GroupCard, GroupCardGroup } from '@/components/blocks/group-item';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,7 @@ import { group_profiles } from '@/simmerbase/db/collections/group_profiles';
 import { groups } from '@/simmerbase/db/collections/groups';
 
 export function MyGroupsCard() {
+	const { profile_id } = useRouteContext({ from: '/(user)/' });
 	const { data } = useLiveSuspenseQuery((q) =>
 		q
 			.from({ group: groups })
@@ -28,6 +29,7 @@ export function MyGroupsCard() {
 				{ group_profile: group_profiles },
 				({ group, group_profile }) => eq(group.id, group_profile.group_id),
 			)
+			.where(({ group_profile }) => eq(group_profile.profile_id, profile_id))
 			.select(({ group }) => ({ ...group })),
 	);
 
