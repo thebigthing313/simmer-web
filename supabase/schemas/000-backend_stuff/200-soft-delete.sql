@@ -15,6 +15,6 @@ as $$
   begin
     insert into simmer.deleted_data (original_table, original_id, data)
     values (TG_TABLE_NAME, OLD.id, row_to_json(OLD)::jsonb);
-    return null;
+    return OLD;
   end;
 $$;
