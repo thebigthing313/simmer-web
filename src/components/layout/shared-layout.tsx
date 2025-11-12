@@ -19,6 +19,7 @@ import {
 	SidebarTrigger,
 } from '../ui/sidebar';
 import { GroupButton } from './group-button';
+import { SharedBreadcrumb } from './shared-breadcrumb';
 
 export function SharedLayout({ children }: React.ComponentPropsWithRef<'div'>) {
 	return <SidebarProvider>{children}</SidebarProvider>;
@@ -80,6 +81,7 @@ export function SharedSidebarInset({
 							orientation="vertical"
 							className="mr-2 data-[orientation=vertical]:h-4"
 						/>
+						<SharedBreadcrumb />
 					</div>
 					<div className="flex items-center gap-2 px-4">
 						<ThemeModeToggle />
@@ -87,7 +89,8 @@ export function SharedSidebarInset({
 					</div>
 				</div>
 			</header>
-			<div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+			<Separator orientation="horizontal" decorative={true} />
+			<div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
 		</SidebarInset>
 	);
 }
