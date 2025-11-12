@@ -63,7 +63,10 @@
     "@tanstack/react-table": "^8.21.2",
     "@tanstack/router-plugin": "^1.132.0",
     "@tanstack/store": "^0.7.0",
+    "@tmcw/togeojson": "^7.1.2",
+    "@types/geojson": "^7946.0.16",
     "@types/mapbox-gl": "^3.4.1",
+    "@xmldom/xmldom": "^0.8.11",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -71,6 +74,7 @@
     "embla-carousel-react": "^8.6.0",
     "flag-icons": "^7.5.0",
     "input-otp": "^1.4.2",
+    "jszip": "^3.10.1",
     "libphonenumber-js": "^1.12.25",
     "lucide-react": "^0.544.0",
     "mapbox-gl": "^3.16.0",
@@ -91,7 +95,8 @@
     "vaul": "^1.1.2",
     "vite-tsconfig-paths": "^5.1.4",
     "zod": "^4.1.11",
-    "zod-geojson": "^1.2.0"
+    "zod-geojson": "^1.2.0",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
