@@ -45,7 +45,7 @@ export type Database = {
           role: Database["public"]["Enums"]["group_role"]
           updated_at: string | null
           updated_by: string | null
-          user_id: string
+          user_email: string
         }
         Insert: {
           created_at?: string
@@ -57,7 +57,7 @@ export type Database = {
           role: Database["public"]["Enums"]["group_role"]
           updated_at?: string | null
           updated_by?: string | null
-          user_id: string
+          user_email: string
         }
         Update: {
           created_at?: string
@@ -69,7 +69,7 @@ export type Database = {
           role?: Database["public"]["Enums"]["group_role"]
           updated_at?: string | null
           updated_by?: string | null
-          user_id?: string
+          user_email?: string
         }
         Relationships: [
           {
@@ -364,9 +364,22 @@ export type Database = {
     }
     Functions: {
       get_user_profile_id: { Args: never; Returns: string }
+      insert_region: {
+        Args: {
+          p_geom: Json
+          p_group_id: string
+          p_parent_id?: string
+          p_region_name: string
+        }
+        Returns: undefined
+      }
       is_group_mate: {
         Args: { p_id: string; p_type: string }
         Returns: boolean
+      }
+      update_region: {
+        Args: { p_geom: Json; p_region_id: string }
+        Returns: undefined
       }
       user_has_group_role: {
         Args: { group_id: string; group_role: string }
@@ -375,7 +388,7 @@ export type Database = {
       user_is_group_member: { Args: { group_id: string }; Returns: boolean }
     }
     Enums: {
-      group_role: "owner" | "admin" | "manager" | "collector" | "member"
+      group_role: "owner" | "admin" | "manager" | "collector" | "lab" | "member"
       unit_system: "si" | "imperial" | "us_customary"
       unit_type:
         | "weight"
@@ -515,7 +528,7 @@ export const Constants = {
   },
   public: {
     Enums: {
-      group_role: ["owner", "admin", "manager", "collector", "member"],
+      group_role: ["owner", "admin", "manager", "collector", "lab", "member"],
       unit_system: ["si", "imperial", "us_customary"],
       unit_type: [
         "weight",
