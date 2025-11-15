@@ -23,28 +23,26 @@ function generate(table: Table) {
 		table,
 	);
 
-	// Detect which audit fields exist in the table (excluding id)
-	const auditFields = [
-		'created_at',
-		'created_by',
-		'updated_at',
-		'updated_by',
-		'deleted_at',
-		'deleted_by',
-	];
+	// Detect which audit and geom fields exist in the table (excluding id)
+	const auditFields = ['created_at', 'created_by', 'updated_at', 'updated_by'];
 	const existingAuditFields = auditFields.filter((field) => field in rowFields);
+	const geomFields = Object.keys(rowFields).filter((field) =>
+		field.includes('geom'),
+	);
+	const fieldsToMarkOptional = existingAuditFields.concat(geomFields);
+	const fieldsToOmit = fieldsToMarkOptional;
 
-	// generate Zod Row with audit fields marked as optional
-	const zodRow = generateZod(rowFields, existingAuditFields, enums);
+	// generate Zod Row with audit and geom fields marked as optional
+	const zodRow = generateZod(rowFields, fieldsToMarkOptional, enums);
 
 	// Generate Insert schema with correct optional fields
-	const zodInsert = generateZodInsert(insertFields, existingAuditFields, enums);
+	const zodInsert = generateZodInsert(insertFields, fieldsToOmit, enums);
 
 	// Generate DB format schemas (convert Date back to string)
-	const zodRowToDb = generateZodToDb(rowFields, existingAuditFields, enums);
+	const zodRowToDb = generateZodToDb(rowFields, fieldsToMarkOptional, enums);
 	const zodInsertToDb = generateZodInsertToDb(
 		insertFields,
-		existingAuditFields,
+		fieldsToOmit,
 		enums,
 	);
 
@@ -249,14 +247,14 @@ function parseTypeLiteral(
 
 function generateZod(
 	fields: Record<string, { type: string; optional: boolean }>,
-	auditFieldsToMarkOptional: string[],
+	fieldsToMarkOptional: string[],
 	enums: Record<string, string[]>,
 ): string {
 	const lines = [];
 	for (const [field, { type }] of Object.entries(fields)) {
 		let zodType = mapTypeToZod(field, type, enums);
-		// Mark audit fields as optional (for TanStack DB persistence handler)
-		if (auditFieldsToMarkOptional.includes(field)) {
+		// Mark fields as optional (for TanStack DB persistence handler)
+		if (fieldsToMarkOptional.includes(field)) {
 			zodType += '.optional()';
 		}
 		lines.push(`\t${field}: ${zodType},`);
@@ -266,13 +264,13 @@ function generateZod(
 
 function generateZodInsert(
 	insertFields: Record<string, { type: string; optional: boolean }>,
-	auditFieldsToOmit: string[],
+	fieldsToOmit: string[],
 	enums: Record<string, string[]>,
 ): string {
 	const lines = [];
 	for (const [field, { type, optional }] of Object.entries(insertFields)) {
-		// Skip audit fields that will be omitted
-		if (auditFieldsToOmit.includes(field)) continue;
+		// Skip fields that will be omitted
+		if (fieldsToOmit.includes(field)) continue;
 
 		let zodType = mapTypeToZod(field, type, enums);
 		// Add .optional() for fields that are optional in Insert
@@ -286,14 +284,14 @@ function generateZodInsert(
 
 function generateZodToDb(
 	fields: Record<string, { type: string; optional: boolean }>,
-	auditFieldsToMarkOptional: string[],
+	fieldsToMarkOptional: string[],
 	enums: Record<string, string[]>,
 ): string {
 	const lines = [];
 	for (const [field, { type }] of Object.entries(fields)) {
 		let zodType = mapTypeToZodDb(field, type, enums);
-		// Mark audit fields as optional (for TanStack DB persistence handler)
-		if (auditFieldsToMarkOptional.includes(field)) {
+		// Mark fields as optional (for TanStack DB persistence handler)
+		if (fieldsToMarkOptional.includes(field)) {
 			zodType += '.optional()';
 		}
 		lines.push(`\t${field}: ${zodType},`);
@@ -303,13 +301,13 @@ function generateZodToDb(
 
 function generateZodInsertToDb(
 	insertFields: Record<string, { type: string; optional: boolean }>,
-	auditFieldsToOmit: string[],
+	fieldsToOmit: string[],
 	enums: Record<string, string[]>,
 ): string {
 	const lines = [];
 	for (const [field, { type, optional }] of Object.entries(insertFields)) {
-		// Skip audit fields that will be omitted
-		if (auditFieldsToOmit.includes(field)) continue;
+		// Skip fields that will be omitted
+		if (fieldsToOmit.includes(field)) continue;
 
 		let zodType = mapTypeToZodDb(field, type, enums);
 		// Add .optional() for fields that are optional in Insert
