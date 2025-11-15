@@ -72,7 +72,7 @@ export function SharedSidebarInset({
 	children,
 }: SharedSidebarInsetProps & React.ComponentPropsWithRef<'div'>) {
 	return (
-		<SidebarInset>
+		<SidebarInset className="max-h-screen grid grid-rows-[auto_auto_1fr]">
 			<header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
 				<div className="flex w-full justify-between">
 					<div className="flex items-center gap-2 px-4">
@@ -90,7 +90,9 @@ export function SharedSidebarInset({
 				</div>
 			</header>
 			<Separator orientation="horizontal" decorative={true} />
-			<div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
+			<div id="main-content" className="p-4">
+				{children}
+			</div>
 		</SidebarInset>
 	);
 }
