@@ -186,3 +186,10 @@ code {
     @apply bg-background text-foreground;
   }
 }
+
+
+
+html, body, #root, .main-content {
+  height: 100%;
+  overflow: hidden; /* Prevent browser scroll */
+}
