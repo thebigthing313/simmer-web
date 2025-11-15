@@ -1,5 +1,5 @@
 // Auto-generated schema file for locations table
-// Generated on: 2025-11-08T04:29:57.811Z
+// Generated on: 2025-11-11T01:56:12.818Z
 //
 // IMPORTANT: Automatic preprocessing is enabled for date fields:
 // - Fields ending in '_at' (timestamps): ISO strings are automatically converted to Date objects
@@ -15,7 +15,7 @@ export const ZodLocationsRow = z.object({
 	address: z.string().nullable(),
 	created_at: z.preprocess((val) => typeof val === "string" ? new Date(val) : val, z.date()).optional(),
 	created_by: z.uuid().nullable().optional(),
-	geom: GeoJSONSchema,
+	geom: GeoJSONSchema.optional(),
 	group_id: z.uuid(),
 	id: z.uuid(),
 	location_name: z.string(),
@@ -26,7 +26,6 @@ export const ZodLocationsRow = z.object({
 
 export const ZodLocationsInsert = z.object({
 	address: z.string().nullable().optional(),
-	geom: GeoJSONSchema,
 	group_id: z.uuid(),
 	id: z.uuid().optional(),
 	location_name: z.string(),
@@ -40,7 +39,7 @@ export const ZodLocationsRowToDb = z.object({
 	address: z.string().nullable(),
 	created_at: z.preprocess((val) => val instanceof Date ? val.toISOString() : val, z.string()).optional(),
 	created_by: z.uuid().nullable().optional(),
-	geom: GeoJSONSchema,
+	geom: GeoJSONSchema.optional(),
 	group_id: z.uuid(),
 	id: z.uuid(),
 	location_name: z.string(),
@@ -51,7 +50,6 @@ export const ZodLocationsRowToDb = z.object({
 
 export const ZodLocationsInsertToDb = z.object({
 	address: z.string().nullable().optional(),
-	geom: GeoJSONSchema,
 	group_id: z.uuid(),
 	id: z.uuid().optional(),
 	location_name: z.string(),
